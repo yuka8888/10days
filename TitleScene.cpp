@@ -10,7 +10,7 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	if (Novice::CheckHitKey(DIK_A)) {
+	if (Novice::CheckHitKey(DIK_Q)) {
 		sceneNo = kPlay;
 	}
 }

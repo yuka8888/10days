@@ -115,9 +115,13 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\TextureManager.cpp" />
     <ClCompile Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
+    <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mt.cpp" />
+    <ClCompile Include="PlayerBottom.cpp" />
+    <ClCompile Include="PlayerTop.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="test.cpp" />
@@ -151,8 +155,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\DirectXGame\input\Input.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
+    <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ClearScene.h" />
     <ClInclude Include="IScene.h" />
+    <ClInclude Include="mt.h" />
+    <ClInclude Include="PlayerBottom.h" />
+    <ClInclude Include="PlayerTop.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="test.h" />
