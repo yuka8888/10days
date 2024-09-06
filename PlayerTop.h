@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "mt.h"
 #include "Novice.h"
 
@@ -15,16 +15,29 @@ public:
 
 	void Draw(Camera camera);
 
+	/// <summary>
+	/// 移動
+	/// </summary>
 	void Move();
+
+	AABB GetAABB();
+
+	//当たった場合の処理
+	void OnCollision();
 
 private:
 	//地面座標
-	float kGround = 360.0f;
+	float kGround_ = 360.0f;
+	
+	//幅
+	float kWidth_ = 32.0f;
+	//高さ
+	float kHeight_ = 64.0f;
 
 	//初期位置
-	Vector2 initialPosition_ = {0.0f,kGround };
+	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {0.0f, 0.0f};
+	Vector2 translation_ = {0.0f, kGround_};
 	//拡縮
 	Vector2 scale_ = {1.0f, 1.0f};
 	//回転
@@ -35,10 +48,10 @@ private:
 	Vector2 kAcceleration_ = { 0.0f, -0.5f };
 
 	//地面についているか
-	bool isGround = true;
+	bool isGround_ = true;
 
 	//ジャンプしているか
-	bool isJump = false;
+	bool isJump_ = false;
 
 	//座標関係
 	Matrix3x3 worldMatrix_;
@@ -46,5 +59,8 @@ private:
 
 	//スクリーン座標
 	Vector2 screenPosition_;
+
+	//AABB
+	AABB aabb_;
 };
 

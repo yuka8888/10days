@@ -1,4 +1,4 @@
-﻿#include "PlayerTop.h"
+#include "PlayerTop.h"
 
 PlayerTop::PlayerTop()
 {
@@ -25,7 +25,7 @@ void PlayerTop::Draw(Camera camera)
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
-	Novice::DrawBox((int)screenPosition_.x, (int)screenPosition_.y, 48, 60, 0.0f, RED, kFillModeSolid);
+	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
 }
 
 void PlayerTop::Move()
@@ -42,24 +42,37 @@ void PlayerTop::Move()
 
 
 	//地面についていて上押されたらジャンプ開始
-	if (isGround && (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
-		isGround = false;
-		isJump = true;
+	if (isGround_ && (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
+		isGround_ = false;
+		isJump_ = true;
 
 		velocity_.y = 10.0f;
 	}
 
 	//ジャンプ中
-	if (isJump) {
+	if (isJump_) {
 		velocity_ = velocity_ + kAcceleration_;
 
 		//地面についたら接地状態に切り替え
-		if (velocity_.y < 0 && translation_.y <= 0) {
-			isGround = true;
-			translation_.y = 0;
+		if (velocity_.y < 0 && translation_.y <= kGround_) {
+			isGround_ = true;
+			translation_.y = kGround_;
 			velocity_.y = 0;
 		}
 	}
 
 	translation_ = translation_ + velocity_;
+
+	//aabbの更新
+	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
+	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
+}
+
+AABB PlayerTop::GetAABB()
+{
+	return aabb_;
+}
+
+void PlayerTop::OnCollision()
+{
 }

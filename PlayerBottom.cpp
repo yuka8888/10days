@@ -1,4 +1,4 @@
-﻿#include "PlayerBottom.h"
+#include "PlayerBottom.h"
 PlayerBottom::PlayerBottom()
 {
 }
@@ -24,7 +24,7 @@ void PlayerBottom::Draw(Camera camera)
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
-	Novice::DrawBox((int)screenPosition_.x, (int)screenPosition_.y, 48, 60, 0.0f, BLUE, kFillModeSolid);
+	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, BLUE, kFillModeSolid);
 }
 
 void PlayerBottom::Move()
@@ -41,4 +41,31 @@ void PlayerBottom::Move()
 
 	translation_ = translation_ + velocity_;
 
+	//aabbの更新
+	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
+	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
+
+}
+
+void PlayerBottom::PushBlock()
+{
+
+}
+
+AABB PlayerBottom::GetAABB()
+{
+	return aabb_;
+}
+
+void PlayerBottom::OnCollision()
+{
+	isPushBlock_ = true;
+
+	//移動量を減らす
+	translation_.x = translation_.x - velocity_.x * 0.7f;
+}
+
+Vector2 PlayerBottom::GetVelocity()
+{
+	return velocity_;
 }

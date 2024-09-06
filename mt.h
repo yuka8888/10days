@@ -23,6 +23,16 @@ struct Camera final {
 
 };
 
+struct AABB {
+	Vector2 min{};
+	Vector2 max{};
+};
+
+struct Block {
+	AABB aabb_;
+	Vector2 velocity;
+};
+
 Vector2 operator+(Vector2 num1, Vector2 num2);
 
 Vector2 operator-(Vector2 num1, Vector2 num2);
@@ -46,3 +56,5 @@ Matrix3x3 MakeViewportMatrix(float left, float top, float width, float height);
 Matrix3x3 MakewvpVpMatrix(Matrix3x3 worldMatrix, Matrix3x3 cameraWorldMatrix, Vertex vertex, Vector2 viewPortPosition, Vector2 viewPortSize);
 
 Matrix3x3 MakevpVpMatrix(Matrix3x3 worldMatrix, Vertex vertex, Vector2 viewPortPosition, Vector2 viewPortSize);
+
+bool isCollision(const AABB& aabb1, const AABB& aabb2);

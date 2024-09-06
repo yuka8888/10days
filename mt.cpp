@@ -1,4 +1,4 @@
-﻿#include "mt.h"
+#include "mt.h"
 
 Vector2 operator+(Vector2 num1, Vector2 num2) {
 	num1.x += num2.x;
@@ -213,4 +213,18 @@ Matrix3x3 MakevpVpMatrix(Matrix3x3 worldMatrix, Vertex vertex, Vector2 viewPortP
 
 	Matrix3x3 vpVpMatrix = Multiply(viewMatrix, orthoMatrix);
 	return Multiply(vpVpMatrix, viewportMatrix);
+}
+
+/// <summary>
+/// AABBの当たり判定
+/// </summary>
+/// <param name="aabb1"></param>
+/// <param name="aabb2"></param>
+/// <returns></returns>
+bool isCollision(const AABB& aabb1, const AABB& aabb2) {
+	if ((aabb1.min.x <= aabb2.max.x && aabb1.max.x >= aabb2.min.x) && (aabb1.min.y <= aabb2.max.y && aabb1.max.y >= aabb2.min.y)) {
+		return true;
+	}
+
+	return false;
 }
