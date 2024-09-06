@@ -11,7 +11,9 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void PlayerBottomMoveUpdate();
+
+	void PlayerTopMoveUpdate();
 
 	void Draw(Camera camera);
 
@@ -27,6 +29,7 @@ public:
 	Vector2 GetVelocity();
 
 private:
+
 	//幅
 	float kWidth_ = 32.0f;
 	//高さ

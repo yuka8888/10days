@@ -8,7 +8,7 @@ void TitleScene::Initialize()
 {
 }
 
-void TitleScene::Update()
+void TitleScene::PlayerBottomMoveUpdate()
 {
 	if (Novice::CheckHitKey(DIK_Q)) {
 		sceneNo = kPlay;

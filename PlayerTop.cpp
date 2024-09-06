@@ -12,7 +12,19 @@ void PlayerTop::Initialize()
 {
 }
 
-void PlayerTop::Update()
+void PlayerTop::PlayerBottomMoveUpdate()
+{
+	Jump();
+
+	translation_ = translation_ + velocity_;
+
+	//aabbの更新
+	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
+	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
+
+}
+
+void PlayerTop::PlayerTopMoveUpdate()
 {
 	Move();
 }
@@ -26,6 +38,22 @@ void PlayerTop::Draw(Camera camera)
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
+}
+
+void PlayerTop::Jump()
+{
+	//ジャンプ中
+	if (isJump_) {
+		velocity_ = velocity_ + kAcceleration_;
+
+		//地面についたら接地状態に切り替え
+		if (velocity_.y < 0 && translation_.y <= kGround_) {
+			isGround_ = true;
+			translation_.y = kGround_;
+			velocity_.y = 0;
+		}
+	}
+
 }
 
 void PlayerTop::Move()
@@ -47,18 +75,6 @@ void PlayerTop::Move()
 		isJump_ = true;
 
 		velocity_.y = 10.0f;
-	}
-
-	//ジャンプ中
-	if (isJump_) {
-		velocity_ = velocity_ + kAcceleration_;
-
-		//地面についたら接地状態に切り替え
-		if (velocity_.y < 0 && translation_.y <= kGround_) {
-			isGround_ = true;
-			translation_.y = kGround_;
-			velocity_.y = 0;
-		}
 	}
 
 	translation_ = translation_ + velocity_;

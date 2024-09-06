@@ -8,7 +8,7 @@ void ClearScene::Initialize()
 {
 }
 
-void ClearScene::Update()
+void ClearScene::PlayerBottomMoveUpdate()
 {
 	if (Novice::CheckHitKey(DIK_RETURN)) {
 		sceneNo = kTitle;

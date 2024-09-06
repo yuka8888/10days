@@ -28,19 +28,58 @@ void PlayScene::Initialize()
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 }
 
-void PlayScene::Update()
+void PlayScene::PlayerBottomMoveUpdate()
 {
+	// キー入力を受け取る
+	memcpy(preKeys, keys, 256);
+	Novice::GetHitKeyStateAll(keys);
+
+	switch (phase) {
+		case Phase::kMovePlayerTop:
+
+			//プレイヤーの更新
+			playerTop_->PlayerTopMoveUpdate();
+			playerBottom_->PlayerBottomMoveUpdate();
+
+			//フェーズを変える
+			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+				phase = Phase::kMovePlayerBottom;
+			}
+
+			break;
+
+		case Phase::kMovePlayerBottom:
+
+			//プレイヤーの更新
+			playerTop_->PlayerBottomMoveUpdate();
+			playerBottom_->PlayerBottomMoveUpdate();
+
+			//フェーズを変える
+			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+				phase = Phase::kMovePlayerTop;
+			}
+
+			break;
+
+		case Phase::kMoveAll:
+			//プレイヤーの更新
+			playerTop_->PlayerBottomMoveUpdate();
+			playerBottom_->PlayerBottomMoveUpdate();
+
+			break;
+	}
 
 	//プレイヤーの更新
-	playerTop_->Update();
-	playerBottom_->Update();
+	playerTop_->PlayerBottomMoveUpdate();
+	playerBottom_->PlayerBottomMoveUpdate();
+
 
 	//当たり判定をとる
 	CheckCollision();
 
-	if (Novice::CheckHitKey(DIK_SPACE)) {
-		sceneNo = kClear;
-	}
+	//if (Novice::CheckHitKey(DIK_SPACE)) {
+	//	sceneNo = kClear;
+	//}
 
 
 

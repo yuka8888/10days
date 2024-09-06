@@ -11,9 +11,22 @@ public:
 
 	void Initialize();
 
-	void Update();
+	/// <summary>
+	/// 下のプレイヤーが動くときの更新処理
+	/// </summary>
+	void PlayerBottomMoveUpdate();
+
+	/// <summary>
+	/// 上のプレイヤーが動くときの更新処理
+	/// </summary>
+	void PlayerTopMoveUpdate();
 
 	void Draw(Camera camera);
+
+	/// <summary>
+	/// ジャンプ
+	/// </summary>
+	void Jump();
 
 	/// <summary>
 	/// 移動
@@ -26,6 +39,7 @@ public:
 	void OnCollision();
 
 private:
+
 	//地面座標
 	float kGround_ = 360.0f;
 	

@@ -15,7 +15,7 @@ public:
 
 	void Initialize() override;
 
-	void Update() override;
+	void PlayerBottomMoveUpdate() override;
 
 	void Draw() override;
 
@@ -27,6 +27,16 @@ public:
 	void DrawMap();
 
 private:
+	//ゲームのフェーズ
+	enum class Phase {
+		kMovePlayerTop, //女の子が動く
+		kMovePlayerBottom, //男の子が動く
+		kMoveAll, //どっちも動く
+	};
+
+	//現在のフェーズ
+	Phase phase = Phase::kMovePlayerTop;
+
 	float kWindowHeight = 720.0f;
 	float kWindowWidth = 1280.0f;
 
@@ -56,6 +66,9 @@ private:
 	//ブロック
 	Block block[10];
 
+	// キー入力結果を受け取る箱
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	
 };

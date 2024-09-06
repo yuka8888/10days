@@ -9,7 +9,7 @@ public:
 
 
 	void Initialize() override;
-	void Update() override;
+	void PlayerBottomMoveUpdate() override;
 	void Draw() override;
 
 private:

@@ -11,9 +11,13 @@ void PlayerBottom::Initialize()
 {
 }
 
-void PlayerBottom::Update()
+void PlayerBottom::PlayerBottomMoveUpdate()
 {
 	Move();
+}
+
+void PlayerBottom::PlayerTopMoveUpdate()
+{
 }
 
 void PlayerBottom::Draw(Camera camera)
