@@ -64,7 +64,7 @@ private:
 	static inline const float kBlockHeight_ = 48.0f;
 
 	//縦の要素数
-	static inline const uint32_t kNumBlockVirtical_ = 20;
+	static inline const uint32_t kNumBlockVirtical_ = 16;
 	//横の要素数
 	static inline const uint32_t kNumBlockHorizontal_ = 40;
 
