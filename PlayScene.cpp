@@ -26,9 +26,41 @@ void PlayScene::Initialize()
 	// マップチップ
 	mapChipField_ = new MapChipManager;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
+
+
+	//ブロックの情報を入れる
+	// 要素数
+	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
+	uint32_t numBlockHorizonal = mapChipField_->GetNumBlockHorizontal();
+
+	uint32_t k = 0;
+
+
+	for (uint32_t i = 0; i < numBlockVirtical; i++) {
+		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
+
+			switch (mapChipField_->GetMapChipDate().data[i][j]) {
+				case MapChipType::kBlock:
+					//ブロックの初期位置を取得
+					block[k].initialPosition = { j * kBlockWidth + block[k].velocity.x, i * kBlockHeight + block[k].velocity.y };
+					
+					//ブロックのaabbを計算
+					block[k].aabb_.max = { j * kBlockWidth + block[k].velocity.x + kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y + kBlockHeight / 2 };
+					block[k].aabb_.min = { j * kBlockWidth + block[k].velocity.x - kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y - kBlockHeight / 2 };
+
+					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth / 2), (int)(screenPosition_.y - kBlockHeight / 2), (int)kBlockWidth, (int)kBlockHeight, 0.0f, BLACK, kFillModeSolid);
+
+					k++;
+
+					break;
+			}
+
+		}
+	}
+
 }
 
-void PlayScene::PlayerBottomMoveUpdate()
+void PlayScene::Update()
 {
 	// キー入力を受け取る
 	memcpy(preKeys, keys, 256);
@@ -36,10 +68,9 @@ void PlayScene::PlayerBottomMoveUpdate()
 
 	switch (phase) {
 		case Phase::kMovePlayerTop:
-
 			//プレイヤーの更新
-			playerTop_->PlayerTopMoveUpdate();
-			playerBottom_->PlayerBottomMoveUpdate();
+			playerTop_->PlayerTopPhaseUpdate();
+			playerBottom_->PlayerTopPhaseUpdate();
 
 			//フェーズを変える
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
@@ -49,10 +80,9 @@ void PlayScene::PlayerBottomMoveUpdate()
 			break;
 
 		case Phase::kMovePlayerBottom:
-
 			//プレイヤーの更新
-			playerTop_->PlayerBottomMoveUpdate();
-			playerBottom_->PlayerBottomMoveUpdate();
+			playerBottom_->PlayerBottomPhaseUpdate();
+			playerTop_->PlayerBottomPhaseUpdate();
 
 			//フェーズを変える
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
@@ -63,19 +93,18 @@ void PlayScene::PlayerBottomMoveUpdate()
 
 		case Phase::kMoveAll:
 			//プレイヤーの更新
-			playerTop_->PlayerBottomMoveUpdate();
-			playerBottom_->PlayerBottomMoveUpdate();
+			playerTop_->PlayerTopPhaseUpdate();
+			playerBottom_->PlayerBottomPhaseUpdate();
 
 			break;
 	}
 
-	//プレイヤーの更新
-	playerTop_->PlayerBottomMoveUpdate();
-	playerBottom_->PlayerBottomMoveUpdate();
-
-
 	//当たり判定をとる
 	CheckCollision();
+
+	//プレイヤーを最終的に移動させる
+	playerTop_->MoveResult();
+	playerBottom_->MoveResult();
 
 	//if (Novice::CheckHitKey(DIK_SPACE)) {
 	//	sceneNo = kClear;
@@ -101,12 +130,32 @@ void PlayScene::Draw()
 void PlayScene::CheckCollision()
 {
 	for (uint32_t i = 0; i < mapChipField_->GetBlockNum(); i++) {
-		//下のプレイヤーとブロックの当たり判定
-		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_)) {
+		//下のプレイヤーとブロックの衝突判定
+		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && playerBottom_->GetDirection() == Direction::kRight) {
 			playerBottom_->OnCollision();
 
 			//ブロックを移動させる
-			block[i].velocity.x += playerBottom_->GetVelocity().x;
+			block[i].velocity.x = (playerBottom_->GetTranslation().x + playerBottom_->GetVelocity().x) - block[i].initialPosition.x + kBlockWidth / 2 + playerBottom_->GetSize().x / 2;
+
+			//ブロックの移動量がマイナスならプラスに直す
+			if (block[i].velocity.x < 0) {
+				block[i].velocity.x *= -1.0f;
+			}
+
+			//ブロックのaabbの計算しなおし
+			block[i].aabb_.max = { block[i].initialPosition.x + block[i].velocity.x + kBlockWidth / 2, block[i].initialPosition.y + block[i].velocity.y + kBlockHeight / 2 };
+			block[i].aabb_.min = { block[i].initialPosition.x + block[i].velocity.x - kBlockWidth / 2, block[i].initialPosition.y + block[i].velocity.y - kBlockHeight / 2 };
+
+			//ブロック同士の衝突判定
+			for (uint32_t j = 0; j < mapChipField_->GetBlockNum(); j++) {
+				if (i == j) {
+				}
+				else if (isCollision(block[i].aabb_, block[j].aabb_)) {
+					block[i].velocity.x = block[j].initialPosition.x + block[j].velocity.x - kBlockWidth - block[i].initialPosition.x;
+					//プレイヤーの位置をブロックと合わせる
+					playerBottom_->PushTwoBlocks(block[i]);
+				}
+			}
 
 		}
 
@@ -122,7 +171,7 @@ void PlayScene::DrawMap()
 	uint32_t k = 0;
 
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
-		for (uint32_t j = 0; j < numBlockHorizonal;j++) {
+		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
 
 			//スクリーン座標に変換
 			worldMatrix_ = MakeAffineMatrix({ 1.0f, 1.0f }, 0.0f, { j * kBlockWidth, i * kBlockHeight });
@@ -144,7 +193,7 @@ void PlayScene::DrawMap()
 					block[k].aabb_.min = { j * kBlockWidth + block[k].velocity.x - kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y - kBlockHeight / 2 };
 
 					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth / 2), (int)(screenPosition_.y - kBlockHeight / 2), (int)kBlockWidth, (int)kBlockHeight, 0.0f, BLACK, kFillModeSolid);
-					
+
 					k++;
 
 					break;

@@ -12,21 +12,21 @@ public:
 	void Initialize();
 
 	/// <summary>
-	/// 下のプレイヤーが動くときの更新処理
+	/// 下のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerBottomMoveUpdate();
+	void PlayerBottomPhaseUpdate();
 
 	/// <summary>
-	/// 上のプレイヤーが動くときの更新処理
+	/// 上のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerTopMoveUpdate();
+	void PlayerTopPhaseUpdate();
+	
+	/// <summary>
+	/// 最終的に移動させる
+	/// </summary>
+	void MoveResult();
 
 	void Draw(Camera camera);
-
-	/// <summary>
-	/// ジャンプ
-	/// </summary>
-	void Jump();
 
 	/// <summary>
 	/// 移動
@@ -39,6 +39,8 @@ public:
 	void OnCollision();
 
 private:
+	//向いている方向
+	Direction direction = Direction::kRightStand;
 
 	//地面座標
 	float kGround_ = 360.0f;
@@ -62,10 +64,10 @@ private:
 	Vector2 kAcceleration_ = { 0.0f, -0.5f };
 
 	//地面についているか
-	bool isGround_ = true;
+	bool isGround = true;
 
 	//ジャンプしているか
-	bool isJump_ = false;
+	bool isJump = false;
 
 	//座標関係
 	Matrix3x3 worldMatrix_;

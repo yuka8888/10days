@@ -11,13 +11,16 @@ void PlayerBottom::Initialize()
 {
 }
 
-void PlayerBottom::PlayerBottomMoveUpdate()
+void PlayerBottom::PlayerBottomPhaseUpdate()
 {
 	Move();
 }
 
-void PlayerBottom::PlayerTopMoveUpdate()
+void PlayerBottom::PlayerTopPhaseUpdate()
 {
+	velocity_ = { 0.0f, 0.0f };
+	isPushTwoBlocks_ = false;
+
 }
 
 void PlayerBottom::Draw(Camera camera)
@@ -33,17 +36,26 @@ void PlayerBottom::Draw(Camera camera)
 
 void PlayerBottom::Move()
 {
+	isPushTwoBlocks_ = false;
+
 	velocity_ = { 0.0f, 0.0f };
+
+	if (direction == Direction::kLeft) {
+		direction = Direction::kLeftStand;
+	}
+	else if (direction == Direction::kRight) {
+		direction = Direction::kRightStand;
+	}
 
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
+		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
 	}
 	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
+		direction = Direction::kRight;
 		velocity_.x = 2.0f;
 	}
-
-	translation_ = translation_ + velocity_;
 
 	//aabbの更新
 	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
@@ -51,9 +63,23 @@ void PlayerBottom::Move()
 
 }
 
-void PlayerBottom::PushBlock()
-{
 
+void PlayerBottom::MoveResult()
+{
+	if (!isPushTwoBlocks_) {
+		translation_ = translation_ + velocity_;
+	}
+	else {
+		translation_.y = translation_.y + velocity_.y;
+	}
+}
+
+void PlayerBottom::PushTwoBlocks(Block block)
+{
+	if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
+		isPushTwoBlocks_ = true;
+		translation_.x = block.initialPosition.x + block.velocity.x - 24.0f - kWidth_ / 2.0f;
+	}
 }
 
 AABB PlayerBottom::GetAABB()
@@ -66,10 +92,30 @@ void PlayerBottom::OnCollision()
 	isPushBlock_ = true;
 
 	//移動量を減らす
-	translation_.x = translation_.x - velocity_.x * 0.7f;
+	velocity_.x = velocity_.x * 0.3f;
 }
 
 Vector2 PlayerBottom::GetVelocity()
 {
 	return velocity_;
+}
+
+Vector2 PlayerBottom::GetTranslation()
+{
+	return translation_;
+}
+
+Direction PlayerBottom::GetDirection()
+{
+	return direction;
+}
+
+void PlayerBottom::isPushTwoBlocks(bool isPushTwoBlocks)
+{
+	isPushTwoBlocks_ = isPushTwoBlocks;
+}
+
+Vector2 PlayerBottom::GetSize()
+{
+	return { kWidth_, kHeight_ };
 }

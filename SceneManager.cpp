@@ -28,7 +28,7 @@ int SceneManager::Run()
 	}
 
 	//更新処理
-	sceneArr_[currentSceneNo_]->PlayerBottomMoveUpdate(); //シーンごとの更新処理
+	sceneArr_[currentSceneNo_]->Update(); //シーンごとの更新処理
 
 	//描画処理
 	sceneArr_[currentSceneNo_]->Draw();

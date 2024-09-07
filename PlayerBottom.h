@@ -11,15 +11,29 @@ public:
 
 	void Initialize();
 
-	void PlayerBottomMoveUpdate();
+	/// <summary>
+	/// 下のキャラクターが動くときの更新処理
+	/// </summary>
+	void PlayerBottomPhaseUpdate();
 
-	void PlayerTopMoveUpdate();
+	/// <summary>
+	/// 上のキャラクターが動くときの更新処理
+	/// </summary>
+	void PlayerTopPhaseUpdate();
 
 	void Draw(Camera camera);
 
+	/// <summary>
+	/// 移動処理
+	/// </summary>
 	void Move();
 
-	void PushBlock();
+	/// <summary>
+	/// 最終的に移動させる
+	/// </summary>
+	void MoveResult();
+
+	void PushTwoBlocks(Block block);
 
 	AABB GetAABB();
 
@@ -28,8 +42,17 @@ public:
 
 	Vector2 GetVelocity();
 
-private:
+	Vector2 GetTranslation();
 
+	Direction GetDirection();
+
+	void isPushTwoBlocks(bool isPushTwoBlocks);
+
+	Vector2 GetSize();
+
+private:
+	//向いている方向
+	Direction direction = Direction::kRightStand;
 	//幅
 	float kWidth_ = 32.0f;
 	//高さ
@@ -47,6 +70,9 @@ private:
 
 	//スクリーン座標
 	Vector2 screenPosition_;
+
+	//ブロックを二個押す
+	bool isPushTwoBlocks_ = false;
 
 	//AABB
 	AABB aabb_;

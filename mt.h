@@ -30,7 +30,15 @@ struct AABB {
 
 struct Block {
 	AABB aabb_;
+	Vector2 initialPosition;
 	Vector2 velocity;
+};
+
+enum Direction {
+	kRight,
+	kRightStand,
+	kLeft,
+	kLeftStand,
 };
 
 Vector2 operator+(Vector2 num1, Vector2 num2);
