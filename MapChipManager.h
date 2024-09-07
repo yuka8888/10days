@@ -48,17 +48,25 @@ public:
 
 	uint32_t GetBlockNum();
 
+	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	Vector2 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+
+	IndexSet GetMapChipIndexSetByPosition(const Vector2& position);
+
 
 private:
 	//幅
-	static inline const float kBlockWidth = 48.0f;
+	static inline const float kBlockWidth_ = 48.0f;
 	//高さ
-	static inline const float kBlockHeight = 48.0f;
+	static inline const float kBlockHeight_ = 48.0f;
 
 	//縦の要素数
-	static inline const uint32_t kNumBlockVirtical = 10;
+	static inline const uint32_t kNumBlockVirtical_ = 20;
 	//横の要素数
-	static inline const uint32_t kNumBlockHorizontal = 20;
+	static inline const uint32_t kNumBlockHorizontal_ = 40;
 
 	//ブロックの個数
 	uint32_t kBlockNum = 0;

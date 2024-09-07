@@ -1,6 +1,10 @@
 #pragma once
+#define NOMINMAX
 #include "mt.h"
 #include "Novice.h"
+#include "algorithm"
+
+class MapChipManager;
 
 class PlayerTop
 {
@@ -38,17 +42,20 @@ public:
 	//当たった場合の処理
 	void OnCollision();
 
+	void SetMapChipField(MapChipManager* mapChipManager);
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
 
-	//地面座標
-	float kGround_ = 360.0f;
 	
 	//幅
 	float kWidth_ = 32.0f;
 	//高さ
 	float kHeight_ = 64.0f;
+
+	//地面座標
+	float kGround_ = 48.0f * 9.0f;
 
 	//初期位置
 	Vector2 initialPosition_ = {0.0f,0.0f };
@@ -64,7 +71,7 @@ private:
 	Vector2 kAcceleration_ = { 0.0f, -0.5f };
 
 	//地面についているか
-	bool isGround = true;
+	bool isGround_ = true;
 
 	//ジャンプしているか
 	bool isJump = false;
@@ -76,7 +83,14 @@ private:
 	//スクリーン座標
 	Vector2 screenPosition_;
 
+	//マップチップ
+	MapChipManager* mapChipManager_ = nullptr;
+
 	//AABB
 	AABB aabb_;
+	Vector2 CornerPosition(const Vector2& center, Corner corner);
+
+	void MapCollisionBottom();
+
 };
 

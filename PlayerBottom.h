@@ -78,5 +78,6 @@ private:
 	AABB aabb_;
 
 	bool isPushBlock_ = false;
+
 };
 

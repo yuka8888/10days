@@ -42,13 +42,13 @@ void PlayScene::Initialize()
 			switch (mapChipField_->GetMapChipDate().data[i][j]) {
 				case MapChipType::kBlock:
 					//ブロックの初期位置を取得
-					block[k].initialPosition = { j * kBlockWidth + block[k].velocity.x, i * kBlockHeight + block[k].velocity.y };
+					block[k].initialPosition = { j * kBlockWidth_ + block[k].velocity.x, i * kBlockHeight_ + block[k].velocity.y };
 					
 					//ブロックのaabbを計算
-					block[k].aabb_.max = { j * kBlockWidth + block[k].velocity.x + kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y + kBlockHeight / 2 };
-					block[k].aabb_.min = { j * kBlockWidth + block[k].velocity.x - kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y - kBlockHeight / 2 };
+					block[k].aabb_.max = { j * kBlockWidth_ + block[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y + kBlockHeight_ / 2 };
+					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth / 2), (int)(screenPosition_.y - kBlockHeight / 2), (int)kBlockWidth, (int)kBlockHeight, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
 
 					k++;
 
@@ -57,6 +57,8 @@ void PlayScene::Initialize()
 
 		}
 	}
+
+	playerTop_->SetMapChipField(mapChipField_);
 
 }
 
@@ -135,7 +137,7 @@ void PlayScene::CheckCollision()
 			playerBottom_->OnCollision();
 
 			//ブロックを移動させる
-			block[i].velocity.x = (playerBottom_->GetTranslation().x + playerBottom_->GetVelocity().x) - block[i].initialPosition.x + kBlockWidth / 2 + playerBottom_->GetSize().x / 2;
+			block[i].velocity.x = (playerBottom_->GetTranslation().x + playerBottom_->GetVelocity().x) - block[i].initialPosition.x + kBlockWidth_ / 2 + playerBottom_->GetSize().x / 2;
 
 			//ブロックの移動量がマイナスならプラスに直す
 			if (block[i].velocity.x < 0) {
@@ -143,15 +145,15 @@ void PlayScene::CheckCollision()
 			}
 
 			//ブロックのaabbの計算しなおし
-			block[i].aabb_.max = { block[i].initialPosition.x + block[i].velocity.x + kBlockWidth / 2, block[i].initialPosition.y + block[i].velocity.y + kBlockHeight / 2 };
-			block[i].aabb_.min = { block[i].initialPosition.x + block[i].velocity.x - kBlockWidth / 2, block[i].initialPosition.y + block[i].velocity.y - kBlockHeight / 2 };
+			block[i].aabb_.max = { block[i].initialPosition.x + block[i].velocity.x + kBlockWidth_ / 2, block[i].initialPosition.y + block[i].velocity.y + kBlockHeight_ / 2 };
+			block[i].aabb_.min = { block[i].initialPosition.x + block[i].velocity.x - kBlockWidth_ / 2, block[i].initialPosition.y + block[i].velocity.y - kBlockHeight_ / 2 };
 
 			//ブロック同士の衝突判定
 			for (uint32_t j = 0; j < mapChipField_->GetBlockNum(); j++) {
 				if (i == j) {
 				}
 				else if (isCollision(block[i].aabb_, block[j].aabb_)) {
-					block[i].velocity.x = block[j].initialPosition.x + block[j].velocity.x - kBlockWidth - block[i].initialPosition.x;
+					block[i].velocity.x = block[j].initialPosition.x + block[j].velocity.x - kBlockWidth_ - block[i].initialPosition.x;
 					//プレイヤーの位置をブロックと合わせる
 					playerBottom_->PushTwoBlocks(block[i]);
 				}
@@ -174,7 +176,7 @@ void PlayScene::DrawMap()
 		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
 
 			//スクリーン座標に変換
-			worldMatrix_ = MakeAffineMatrix({ 1.0f, 1.0f }, 0.0f, { j * kBlockWidth, i * kBlockHeight });
+			worldMatrix_ = MakeAffineMatrix({ 1.0f, 1.0f }, 0.0f, { j * kBlockWidth_, i * kBlockHeight_ });
 			wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_, cameraManager_->GetCamera().worldMatrix, cameraManager_->GetCamera().vertex, cameraManager_->GetCamera().viewPortPosition, cameraManager_->GetCamera().viewPortSize);
 
 			screenPosition_ = Transform({ 0, 0 }, wvpVpMatrix_);
@@ -184,15 +186,15 @@ void PlayScene::DrawMap()
 					break;
 
 				case MapChipType::kGround_:
-					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth / 2), (int)(screenPosition_.y - kBlockWidth / 2), (int)kBlockWidth, (int)kBlockHeight, 0.0f, GREEN, kFillModeSolid);
+					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
 					break;
 
 				case MapChipType::kBlock:
 					//ブロックのaabbを計算
-					block[k].aabb_.max = { j * kBlockWidth + block[k].velocity.x + kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y + kBlockHeight / 2 };
-					block[k].aabb_.min = { j * kBlockWidth + block[k].velocity.x - kBlockWidth / 2, i * kBlockHeight + block[k].velocity.y - kBlockHeight / 2 };
+					block[k].aabb_.max = { j * kBlockWidth_ + block[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y + kBlockHeight_ / 2 };
+					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth / 2), (int)(screenPosition_.y - kBlockHeight / 2), (int)kBlockWidth, (int)kBlockHeight, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
 
 					k++;
 

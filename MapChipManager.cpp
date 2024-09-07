@@ -14,10 +14,10 @@ namespace {
 void MapChipManager::ResetMapChipData()
 {
 	mapChipData_.data.clear();
-	mapChipData_.data.resize(kNumBlockVirtical);
+	mapChipData_.data.resize(kNumBlockVirtical_);
 	for (std::vector<MapChipType>& mapChipDataLine : mapChipData_.data) {
 
-		mapChipDataLine.resize(kNumBlockHorizontal);
+		mapChipDataLine.resize(kNumBlockHorizontal_);
 	}
 
 }
@@ -39,20 +39,20 @@ void MapChipManager::LoadMapChipCsv(const std::string& filePath) {
 	std::string line;
 
 	// CSVからマップチップデータを読み込む
-	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	for (uint32_t i = 0; i < kNumBlockVirtical_; ++i) {
 
 		getline(mapChipCsv, line);
 
 		// 1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);
 
-		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
+		for (uint32_t j = 0; j < kNumBlockHorizontal_; ++j) {
 
 			std::string word;
 			getline(line_stream, word, ',');
 
 			if (mapChipTable.contains(word)) {
-				mapChipData_.data[(i - kNumBlockVirtical + 1) * -1][j] = mapChipTable[word];
+				mapChipData_.data[(i - kNumBlockVirtical_ + 1) * -1][j] = mapChipTable[word];
 
 				//ブロックの個数を取得
 				if (mapChipTable[word] == MapChipType::kBlock) {
@@ -68,12 +68,12 @@ void MapChipManager::LoadMapChipCsv(const std::string& filePath) {
 
 uint32_t MapChipManager::GetNumBlockVirtical()
 {
-	return kNumBlockVirtical;
+	return kNumBlockVirtical_;
 }
 
 uint32_t MapChipManager::GetNumBlockHorizontal()
 {
-	return kNumBlockHorizontal;
+	return kNumBlockHorizontal_;
 }
 
 MapChipData MapChipManager::GetMapChipDate()
@@ -84,4 +84,42 @@ MapChipData MapChipManager::GetMapChipDate()
 uint32_t MapChipManager::GetBlockNum()
 {
 	return kBlockNum;
+}
+
+MapChipType MapChipManager::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
+	//範囲外なら空白にする
+	if (xIndex < 0 || kNumBlockHorizontal_ - 1 < xIndex) {
+		return MapChipType::kBlank;
+	}
+	if (yIndex < 0 || kNumBlockVirtical_ - 1 < yIndex) {
+		return MapChipType::kBlank;
+	}
+
+	return mapChipData_.data[yIndex][xIndex];
+}
+
+Rect MapChipManager::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) {
+	Vector2 center = GetMapChipPositionByIndex(xIndex, yIndex);
+
+	Rect rect;
+
+	rect.left = center.x - kBlockWidth_ / 2.0f;
+	rect.right = center.x + kBlockWidth_ / 2.0f;
+	rect.bottom = center.y - kBlockHeight_ / 2.0f;
+	rect.top = center.y + kBlockWidth_ / 2.0f;
+
+	return rect;
+}
+
+Vector2 MapChipManager::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) {
+	return Vector2(kBlockWidth_ * xIndex, kBlockHeight_ * (kNumBlockVirtical_ - 1 - yIndex));
+}
+
+IndexSet MapChipManager::GetMapChipIndexSetByPosition(const Vector2& position) {
+	IndexSet indexSet = {};
+	indexSet.xIndex = uint32_t((position.x + kBlockWidth_ / 2) / kBlockWidth_);
+	float ypos = (position.y - kBlockHeight_ / 2);
+	float yIndex = (ypos / kBlockHeight_);
+	indexSet.yIndex = uint32_t(yIndex + 1);
+	return indexSet;
 }

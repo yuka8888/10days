@@ -4,11 +4,27 @@
 #include "math.h"
 #include "assert.h"
 
+enum Corner {
+	kRightBottom, // 右下
+	kLeftBottom,  // 左下
+	kRightTop,    // 右上
+	kLeftTop,     // 左上
+
+	kNumCorner // 要素数
+};
+
 struct Matrix3x3 final {
 	float m[3][3];
 };
 
 struct Vertex final {
+	float left;
+	float right;
+	float top;
+	float bottom;
+};
+
+struct VertexPosition final {
 	float left;
 	float right;
 	float top;

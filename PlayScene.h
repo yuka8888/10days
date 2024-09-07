@@ -51,9 +51,9 @@ private:
 	MapChipManager* mapChipField_ = nullptr;
 
 	//幅
-	static inline const float kBlockWidth = 48.0f;
+	static inline const float kBlockWidth_ = 48.0f;
 	//高さ
-	static inline const float kBlockHeight = 48.0f;
+	static inline const float kBlockHeight_ = 48.0f;
 
 
 	//座標関係
