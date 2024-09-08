@@ -112,14 +112,14 @@ Rect MapChipManager::GetRectByIndex(uint32_t xIndex, uint32_t yIndex) {
 }
 
 Vector2 MapChipManager::GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex) {
-	return Vector2(kBlockWidth_ * xIndex, kBlockHeight_ * (kNumBlockVirtical_ - 1 - yIndex));
+	return Vector2(kBlockWidth_ * xIndex, kBlockHeight_ * yIndex);
 }
 
 IndexSet MapChipManager::GetMapChipIndexSetByPosition(const Vector2& position) {
 	IndexSet indexSet = {};
 	indexSet.xIndex = uint32_t((position.x + kBlockWidth_ / 2) / kBlockWidth_);
-	float ypos = (position.y - kBlockHeight_ / 2);
+	float ypos = (position.y + kBlockHeight_ / 2.0f);
 	float yIndex = (ypos / kBlockHeight_);
-	indexSet.yIndex = uint32_t(yIndex + 1);
+	indexSet.yIndex = uint32_t(yIndex);
 	return indexSet;
 }

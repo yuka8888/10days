@@ -30,6 +30,11 @@ public:
 	/// </summary>
 	void MoveResult();
 
+	/// <summary>
+	/// 当たり判定
+	/// </summary>
+	void MapCollision();
+
 	void Draw(Camera camera);
 
 	/// <summary>
@@ -76,6 +81,13 @@ private:
 	//ジャンプしているか
 	bool isJump = false;
 
+	bool isLanding_ = false;
+
+	bool isCollideCeiling_ = false;
+
+	//したが無ロックについているか
+	bool isBottomHit_ = false;
+
 	//座標関係
 	Matrix3x3 worldMatrix_;
 	Matrix3x3 wvpVpMatrix_;
@@ -90,7 +102,12 @@ private:
 	AABB aabb_;
 	Vector2 CornerPosition(const Vector2& center, Corner corner);
 
+	void MapCollisionTop();
 	void MapCollisionBottom();
+	void MapCollisionLeft();
+	void MapCollisionRight();
+
+	void SwitchToOnGround();
 
 };
 
