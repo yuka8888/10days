@@ -32,6 +32,61 @@ void PlayerBottom::Draw(Camera camera)
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, BLUE, kFillModeSolid);
+	switch (direction)
+	{
+	case kRight:
+
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkRight,
+			WHITE);
+
+		break;
+	case kRightStand:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingRight,
+			WHITE);
+		break;
+	case kLeft:
+
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkLeft,
+			WHITE);
+
+		break;
+	case kLeftStand:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingLeft,
+			WHITE);
+		break;
+	case kPushBlock:
+		Novice::DrawQuad(int(screenPosition_.x - pushWidth / 2.0f)-7, int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + pushWidth / 2.0f)-7, int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - pushWidth / 2.0f)-7, int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + pushWidth / 2.0f)-7, int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)pushWidth * (animationTimer / 7), 0, (int)pushWidth, (int)kHeight_, pushBlock,
+			WHITE);
+		break;
+
+	case kRightJump:
+		break;
+	case kLeftJump:
+		break;
+	default:
+		break;
+	}
+
 }
 
 void PlayerBottom::Move()
@@ -40,6 +95,8 @@ void PlayerBottom::Move()
 
 	velocity_ = { 0.0f, 0.0f };
 
+	animationTimer++;
+	AnimationTimerChange();
 	if (direction == Direction::kLeft) {
 		direction = Direction::kLeftStand;
 	}
@@ -56,7 +113,19 @@ void PlayerBottom::Move()
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
 	}
+	////directionを待機に切り替え
+	if (velocity_.x == 0) {
+		if (direction == Direction::kRight) {
 
+			direction = Direction::kRightStand;
+		}
+		else if (direction == Direction::kLeft) {
+			direction = Direction::kLeftStand;
+		}
+	}
+	if (isPushTwoBlocks_ == false && direction == Direction::kPushBlock) {
+		direction = Direction::kRightStand;
+    }
 	//aabbの更新
 	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
 	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
@@ -93,6 +162,7 @@ void PlayerBottom::OnCollision()
 
 	//移動量を減らす
 	velocity_.x = velocity_.x * 0.3f;
+	direction = Direction::kPushBlock;
 }
 
 Vector2 PlayerBottom::GetVelocity()
@@ -118,4 +188,37 @@ void PlayerBottom::isPushTwoBlocks(bool isPushTwoBlocks)
 Vector2 PlayerBottom::GetSize()
 {
 	return { kWidth_, kHeight_ };
+}
+
+void PlayerBottom::AnimationTimerChange()
+{
+	switch (direction)
+	{
+	case kRight:
+		animationTimerReset = 56;
+		break;
+	case kRightStand:
+		animationTimerReset = 60;
+		break;
+	case kLeft:
+		animationTimerReset = 56;
+		break;
+	case kLeftStand:
+		animationTimerReset = 60;
+		break;
+	case kPushBlock:
+		animationTimerReset = 63;
+		break;
+	case kRightJump:
+		break;
+	case kLeftJump:
+		break;
+
+	default:
+		break;
+	}
+
+	if (animationTimer >= animationTimerReset) {
+		animationTimer = 0;
+	}
 }

@@ -50,13 +50,35 @@ public:
 
 	Vector2 GetSize();
 
+	//アニメーションタイマーを状態によって切り替える
+	void AnimationTimerChange();
+
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
 	//幅
 	float kWidth_ = 32.0f;
+	float pushWidth = kWidth_ + 16;
 	//高さ
 	float kHeight_ = 64.0f;
+
+	//アニメーションタイマー
+	int animationTimer = 0;
+	//アニメーションタイマーを0に戻す
+	int animationTimerReset = 0;
+	//プレイヤーの画像
+	//歩き　右
+	int walkRight = Novice::LoadTexture("./Resources./player_boy./player_walkRight_boy.png");
+	//歩き　左
+	int walkLeft = Novice::LoadTexture("./Resources./player_boy./player_walkLeft_boy.png");
+
+	//待機　右
+	int standingRight = Novice::LoadTexture("./Resources./player_boy./player_StandingRight_boy.png");
+	//待機　左
+	int standingLeft = Novice::LoadTexture("./Resources./player_boy./player_StandingLeft_boy.png");
+	//ブロック押す
+	int pushBlock = Novice::LoadTexture("./Resources./player_boy./player_PushRight_boy.png");
 
 	Vector2 initialPosition_ = { 0.0f, 0.0f };
 	Vector2 translation_ = { 0.0f, 56.0f };
