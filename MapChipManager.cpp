@@ -86,6 +86,11 @@ uint32_t MapChipManager::GetBlockNum()
 	return kBlockNum;
 }
 
+Vector2 MapChipManager::GetBlockSize()
+{
+	return {kBlockWidth_, kBlockHeight_};
+}
+
 MapChipType MapChipManager::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
 	//範囲外なら空白にする
 	if (xIndex < 0 || kNumBlockHorizontal_ - 1 < xIndex) {

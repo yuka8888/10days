@@ -43,6 +43,8 @@ public:
 
 	uint32_t GetBlockNum();
 
+	Vector2 GetBlockSize();
+
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 
 	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);

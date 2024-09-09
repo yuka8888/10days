@@ -3,6 +3,7 @@
 #include "mt.h"
 #include "Novice.h"
 #include "algorithm"
+#include "imgui.h"
 
 class MapChipManager;
 
@@ -30,11 +31,6 @@ public:
 	/// </summary>
 	void MoveResult();
 
-	/// <summary>
-	/// 当たり判定
-	/// </summary>
-	void MapCollision();
-
 	void Draw(Camera camera);
 
 	/// <summary>
@@ -46,6 +42,26 @@ public:
 
 	//当たった場合の処理
 	void OnCollision();
+
+	/// <summary>
+	/// マップチップとの当たり判定上
+	/// </summary>
+	void MapCollisionTop();
+
+	/// <summary>
+	/// マップチップとの当たり判定下
+	/// </summary>
+	void MapCollisionBottom();
+
+	/// <summary>
+	/// マップチップの当たり判定右
+	/// </summary>
+	void MapCollisionRight();
+
+	/// <summary>
+	/// マップチップとの当たり判定左
+	/// </summary>
+	void MapCollisionLeft();
 
 	void SetMapChipField(MapChipManager* mapChipManager);
 
@@ -59,12 +75,12 @@ private:
 	float kHeight_ = 64.0f;
 
 	//地面座標
-	float kGround_ = 48.0f * 9.0f;
+	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
 
 	//初期位置
 	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {0.0f, kGround_ + 10.0f};
+	Vector2 translation_ = {50.0f, kGround_};
 
 	//1ループ前の座標
 	Vector2 preTranslation_ = { 0.0f, kGround_ + 10.0f };
@@ -83,8 +99,10 @@ private:
 	//ジャンプしているか
 	bool isJump = false;
 
+	//ブロックの上にいるか
 	bool isLanding_ = false;
 
+	//天井に当たっているか
 	bool isCollideCeiling_ = false;
 	
 	MapChipType collisionBlockType_ = MapChipType::kBlank;
@@ -108,13 +126,6 @@ private:
 	//AABB
 	AABB aabb_;
 	Vector2 CornerPosition(const Vector2& center, Corner corner);
-
-	void MapCollisionTop();
-	void MapCollisionBottom();
-	void MapCollisionLeft();
-	void MapCollisionRight();
-
-	void SwitchToOnGround();
 
 };
 
