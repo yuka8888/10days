@@ -131,18 +131,22 @@ void PlayScene::Draw()
 
 void PlayScene::CheckCollision()
 {
+	isPreBlockAndPlayerBottomCollision = isBlockAndPlayerBottomCollision_;
+	isBlockAndPlayerBottomCollision_ = false;
 	for (uint32_t i = 0; i < mapChipField_->GetBlockNum(); i++) {
 		//下のプレイヤーとブロックの衝突判定
 		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && playerBottom_->GetDirection() == Direction::kRight) {
+			isBlockAndPlayerBottomCollision_ = true;
+
+			//もし最初に触れるならブロックにくっつけるように移動
+			if (isPreBlockAndPlayerBottomCollision == false && isBlockAndPlayerBottomCollision_ == true) {
+				playerBottom_->SetTranslation({ block[i].aabb_.min.x - playerBottom_->GetSize().x / 2.0f, playerBottom_->GetTranslation().y});
+			}
+
 			playerBottom_->OnCollision();
 
 			//ブロックを移動させる
-			block[i].velocity.x = (playerBottom_->GetTranslation().x + playerBottom_->GetVelocity().x) - block[i].initialPosition.x + kBlockWidth_ / 2 + playerBottom_->GetSize().x / 2;
-
-			//ブロックの移動量がマイナスならプラスに直す
-			if (block[i].velocity.x < 0) {
-				block[i].velocity.x *= -1.0f;
-			}
+			block[i].velocity.x = (playerBottom_->GetTranslation().x - block[i].initialPosition.x + kBlockWidth_ / 2 + playerBottom_->GetSize().x / 2);
 
 			//ブロックのaabbの計算しなおし
 			block[i].aabb_.max = { block[i].initialPosition.x + block[i].velocity.x + kBlockWidth_ / 2, block[i].initialPosition.y + block[i].velocity.y + kBlockHeight_ / 2 };
@@ -162,6 +166,7 @@ void PlayScene::CheckCollision()
 		}
 
 	}
+
 }
 
 void PlayScene::DrawMap()

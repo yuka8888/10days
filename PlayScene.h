@@ -55,6 +55,8 @@ private:
 	//高さ
 	static inline const float kBlockHeight_ = 48.0f;
 
+	bool isBlockAndPlayerBottomCollision_ = false;
+	bool isPreBlockAndPlayerBottomCollision = false;
 
 	//座標関係
 	Matrix3x3 worldMatrix_;

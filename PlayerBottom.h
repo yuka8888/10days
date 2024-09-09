@@ -1,6 +1,7 @@
 #pragma once
 #include "mt.h"
 #include "Novice.h"
+#include "imgui.h"
 
 class PlayerBottom
 {
@@ -50,6 +51,8 @@ public:
 
 	Vector2 GetSize();
 
+	void SetTranslation(Vector2 translation);
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -77,7 +80,7 @@ private:
 	//AABB
 	AABB aabb_;
 
-	bool isPushBlock_ = false;
+	int isPushBlock_ = false;
 
 };
 

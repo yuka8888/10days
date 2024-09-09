@@ -61,7 +61,10 @@ void PlayerTop::Draw(Camera camera)
 
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
 
+#ifdef _DEBUG
 	ImGui::DragFloat2("PlayerGirl.Translation", &translation_.x, 0.01f);
+#endif // _DEBUG
+
 }
 
 void PlayerTop::Move()
@@ -77,7 +80,7 @@ void PlayerTop::Move()
 
 	//ジャンプ中
 	//地面についていて上押されたらジャンプ開始
-	if (isGround_ && (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
+	if ((isGround_ || isLanding_)&& (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
 		isGround_ = false;
 		isJump = true;
 

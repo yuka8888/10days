@@ -32,6 +32,12 @@ void PlayerBottom::Draw(Camera camera)
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, BLUE, kFillModeSolid);
+
+#ifdef _DEBUG
+	ImGui::DragFloat2("PlayerBoy.Translation", &translation_.x, 0.01f);
+	ImGui::DragFloat2("PlayerBoy.Velocity", &velocity_.x, 0.01f);
+#endif // _DEBUG
+
 }
 
 void PlayerBottom::Move()
@@ -39,13 +45,6 @@ void PlayerBottom::Move()
 	isPushTwoBlocks_ = false;
 
 	velocity_ = { 0.0f, 0.0f };
-
-	if (direction == Direction::kLeft) {
-		direction = Direction::kLeftStand;
-	}
-	else if (direction == Direction::kRight) {
-		direction = Direction::kRightStand;
-	}
 
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
@@ -56,10 +55,10 @@ void PlayerBottom::Move()
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
 	}
-
-	//aabbの更新
-	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
-	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
+	 
+	//進んだ先のaabbの更新
+	aabb_.max = { translation_.x + velocity_.x + kWidth_ / 2, translation_.y + velocity_.y + kHeight_ / 2 };
+	aabb_.min = { translation_.x + velocity_.x - kWidth_ / 2, translation_.y + velocity_.y - kHeight_ / 2 };
 
 }
 
@@ -92,7 +91,12 @@ void PlayerBottom::OnCollision()
 	isPushBlock_ = true;
 
 	//移動量を減らす
-	velocity_.x = velocity_.x * 0.3f;
+	velocity_.x = velocity_.x * 0.30f;
+
+#ifdef _DEBUG
+	ImGui::InputInt("PlayerBoy.isPushBlock_", &isPushBlock_);
+#endif // _DEBUG
+
 }
 
 Vector2 PlayerBottom::GetVelocity()
@@ -118,4 +122,9 @@ void PlayerBottom::isPushTwoBlocks(bool isPushTwoBlocks)
 Vector2 PlayerBottom::GetSize()
 {
 	return { kWidth_, kHeight_ };
+}
+
+void PlayerBottom::SetTranslation(Vector2 translation)
+{
+	translation_ = translation;
 }
