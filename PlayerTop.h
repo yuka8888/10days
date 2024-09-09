@@ -71,14 +71,15 @@ private:
 	int walkRight = Novice::LoadTexture("./Resources./player_girl./player_walkRight_girl.png");
 	//歩き　左
 	int walkLeft = Novice::LoadTexture("./Resources./player_girl./player_walkLeft_girl.png");
-	//歩きモーション　画像横幅
-	int kWalkSpriteWidth_ = 256;
-	int kWalkSpriteHeight_ = 64;
+	
 	//待機　右
+	int standingRight= Novice::LoadTexture("./Resources./player_girl./player_StandingRight_girl.png");
 	//待機　左
+	int standingLeft= Novice::LoadTexture("./Resources./player_girl./player_StandingLeft_girl.png");
 	//ジャンプ　右
+	int jumpRight= Novice::LoadTexture("./Resources./player_girl./player_JumpRight_girl.png");
 	//ジャンプ　左
-
+	int jumpLeft= Novice::LoadTexture("./Resources./player_girl./player_JumpLeft_girl.png");
 
 
 	//地面座標
@@ -102,7 +103,7 @@ private:
 
 	//ジャンプしているか
 	bool isJump = false;
-
+	
 	bool isLanding_ = false;
 
 	bool isCollideCeiling_ = false;

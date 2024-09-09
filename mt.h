@@ -55,6 +55,8 @@ enum Direction {
 	kRightStand,
 	kLeft,
 	kLeftStand,
+	kRightJump,
+	kLeftJump,
 };
 
 Vector2 operator+(Vector2 num1, Vector2 num2);
