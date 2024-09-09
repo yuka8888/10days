@@ -49,6 +49,8 @@ public:
 
 	void SetMapChipField(MapChipManager* mapChipManager);
 
+	void AnimationTimer();
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -58,6 +60,17 @@ private:
 	float kWidth_ = 32.0f;
 	//高さ
 	float kHeight_ = 64.0f;
+
+
+	//プレイヤーの画像
+	//歩き　右
+	//歩き　左
+	//待機　右
+	//待機　左
+	//ジャンプ　右
+	//ジャンプ　左
+
+
 
 	//地面座標
 	float kGround_ = 48.0f * 9.0f;
