@@ -3,11 +3,6 @@
 #include "string"
 #include "assert.h"
 #include "mt.h"
-enum class MapChipType {
-	kBlank,//空白
-	kGround_,//ブロック
-	kBlock, //ゴール
-};
 
 struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;

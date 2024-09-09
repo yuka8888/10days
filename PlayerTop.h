@@ -65,6 +65,9 @@ private:
 	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
 	Vector2 translation_ = {0.0f, kGround_ + 10.0f};
+
+	//1ループ前の座標
+	Vector2 preTranslation_ = { 0.0f, kGround_ + 10.0f };
 	//拡縮
 	Vector2 scale_ = {1.0f, 1.0f};
 	//回転
@@ -83,6 +86,8 @@ private:
 	bool isLanding_ = false;
 
 	bool isCollideCeiling_ = false;
+	
+	MapChipType collisionBlockType_ = MapChipType::kBlank;
 
 	//したがぶロックについているか
 	bool isBottomHit_ = false;

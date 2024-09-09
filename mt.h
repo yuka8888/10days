@@ -4,6 +4,12 @@
 #include "math.h"
 #include "assert.h"
 
+enum class MapChipType {
+	kBlank,//空白
+	kGround_,//ブロック
+	kBlock, //ゴール
+};
+
 enum Corner {
 	kRightBottom, // 右下
 	kLeftBottom,  // 左下
