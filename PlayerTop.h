@@ -53,7 +53,6 @@ private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
 
-	
 	//幅
 	float kWidth_ = 32.0f;
 	//高さ
@@ -65,7 +64,7 @@ private:
 	//初期位置
 	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {0.0f, kGround_};
+	Vector2 translation_ = {0.0f, kGround_ + 10.0f};
 	//拡縮
 	Vector2 scale_ = {1.0f, 1.0f};
 	//回転
@@ -85,8 +84,11 @@ private:
 
 	bool isCollideCeiling_ = false;
 
-	//したが無ロックについているか
+	//したがぶロックについているか
 	bool isBottomHit_ = false;
+
+	//壁に当たったか
+	bool isContactWall_ = false; 
 
 	//座標関係
 	Matrix3x3 worldMatrix_;
