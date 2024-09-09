@@ -49,7 +49,8 @@ public:
 
 	void SetMapChipField(MapChipManager* mapChipManager);
 
-	void AnimationTimer();
+	//アニメーションタイマーを状態によって切り替える
+	void AnimationTimerChange();
 
 private:
 	//向いている方向
@@ -61,10 +62,18 @@ private:
 	//高さ
 	float kHeight_ = 64.0f;
 
-
+	//アニメーションタイマー
+	int animationTimer = 0;
+	//アニメーションタイマーを0に戻す
+	int animationTimerReset = 0;
 	//プレイヤーの画像
 	//歩き　右
+	int walkRight = Novice::LoadTexture("./Resources./player_girl./player_walkRight_girl.png");
 	//歩き　左
+	int walkLeft = Novice::LoadTexture("./Resources./player_girl./player_walkLeft_girl.png");
+	//歩きモーション　画像横幅
+	int kWalkSpriteWidth_ = 256;
+	int kWalkSpriteHeight_ = 64;
 	//待機　右
 	//待機　左
 	//ジャンプ　右

@@ -68,14 +68,23 @@ void PlayerTop::Draw(Camera camera)
 	wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_, camera.worldMatrix, camera.vertex, camera.viewPortPosition, camera.viewPortSize);
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
-
+	//Novice::DrawSpriteRect
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
+	
+	Novice::DrawSpriteRect(int(screenPosition_.x - kWidth_ / 2.0f),  int(screenPosition_.y - kHeight_ / 2.0f), 
+		kWalkSpriteWidth_ * (animationTimer / 15),0, (int)kWidth_, (int)kHeight_, walkRight, /*float(kWalkSpriteHeight_ / kWalkSpriteWidth_)*/1.0f, 1.0f, 0.0f, WHITE);
+	
 }
 
 void PlayerTop::Move()
 {
 	velocity_.x = 0.0f;
 	isLanding_ = false;
+	animationTimer++;
+
+	//状態によってタイマーのリセット値を変える
+	AnimationTimerChange();
+	
 
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
@@ -130,6 +139,32 @@ void PlayerTop::SetMapChipField(MapChipManager* mapChipManager)
 {
 	mapChipManager_ = mapChipManager;
 }
+
+void PlayerTop::AnimationTimerChange()
+{
+	switch (direction)
+	{
+	case kRight:
+		animationTimerReset = 120;
+		break;
+	case kRightStand:
+		animationTimerReset = 60;
+		break;
+	case kLeft:
+		animationTimerReset = 120;
+		break;
+	case kLeftStand:
+		animationTimerReset = 60;
+		break;
+	default:
+		break;
+	}
+
+	if (animationTimer >= animationTimerReset) {
+		animationTimer = 0;
+	}
+}
+
 
 Vector2 PlayerTop::CornerPosition(const Vector2& center, Corner corner) {
 	Vector2 offsetTable[kNumCorner] = {
