@@ -84,6 +84,10 @@ private:
 	//扉(ゴール)テクスチャ
 	int goalCloseTexture = Novice::LoadTexture("./Resources./mapChip./door_close.png");
 	int goalOpenTexture = Novice::LoadTexture("./Resources./mapChip./door_open.png");
+	//アニメーションタイマー
+	int animationTimer = 0;
+	//アニメーションタイマーを0に戻す
+	int animationTimerReset = 60;
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
