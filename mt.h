@@ -6,8 +6,10 @@
 
 enum class MapChipType {
 	kBlank,//空白
-	kGround_,//ブロック
-	kBlock, //ゴール
+	kGround_,//地面
+	kBlock, //ブロック
+	kKey, //鍵
+	kGoal, //ゴール
 };
 
 enum Corner {

@@ -68,6 +68,8 @@ void PlayScene::Update()
 	memcpy(preKeys, keys, 256);
 	Novice::GetHitKeyStateAll(keys);
 
+	playerTop_->SetCamera(cameraManager_->GetCamera());
+
 	switch (phase) {
 		case Phase::kMovePlayerTop:
 			//プレイヤーの更新
@@ -108,11 +110,7 @@ void PlayScene::Update()
 	playerTop_->MoveResult();
 	playerBottom_->MoveResult();
 
-	//if (Novice::CheckHitKey(DIK_SPACE)) {
-	//	sceneNo = kClear;
-	//}
-
-
+	cameraManager_->SetViewPortPosition(playerTop_->GetCamera().viewPortPosition);
 
 }
 
@@ -120,7 +118,7 @@ void PlayScene::Draw()
 {
 
 	//プレイヤーの描画
-	playerTop_->Draw(cameraManager_->GetCamera());
+	playerTop_->Draw();
 	playerBottom_->Draw(cameraManager_->GetCamera());
 
 
@@ -204,8 +202,28 @@ void PlayScene::DrawMap()
 					k++;
 
 					break;
+
+				case MapChipType::kKey:
+					if (!playerTop_->HaveKey()) {
+						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+					}
+					else {
+
+					}
+					break;
+
+				case MapChipType::kGoal:
+					if (!playerTop_->HaveKey()) {
+						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+					}
+					else {
+						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+					}
+					break;
 			}
 
 		}
 	}
+
+
 }

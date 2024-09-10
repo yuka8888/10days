@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "mt.h"
 class CameraManager
 {
@@ -10,7 +10,7 @@ public:
 	/// </summary>
 	/// <param name=""></param>
 	/// <returns></returns>
-	void AddViewPortPosition(Vector2 velocity);
+	void SetViewPortPosition(Vector2 translation);
 
 	Camera GetCamera();
 

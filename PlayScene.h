@@ -34,6 +34,12 @@ private:
 		kMoveAll, //どっちも動く
 	};
 
+	//現在のステージ
+	uint32_t StageNo = 1;
+
+	//ステージをクリアしたか
+	bool isStageClear = false;
+
 	//現在のフェーズ
 	Phase phase = Phase::kMovePlayerTop;
 

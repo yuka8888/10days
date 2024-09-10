@@ -1,4 +1,4 @@
-﻿#include "CameraManager.h"
+#include "CameraManager.h"
 
 void CameraManager::Initialize()
 {
@@ -23,9 +23,9 @@ void CameraManager::Initialize()
 
 }
 
-void CameraManager::AddViewPortPosition(Vector2 velocity)
+void CameraManager::SetViewPortPosition(Vector2 translation)
 {
-	camera_.viewPortPosition = camera_.viewPortPosition + velocity;
+	camera_.viewPortPosition =  translation;
 }
 
 Camera CameraManager::GetCamera()

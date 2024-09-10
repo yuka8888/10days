@@ -31,7 +31,7 @@ public:
 	/// </summary>
 	void MoveResult();
 
-	void Draw(Camera camera);
+	void Draw();
 
 	/// <summary>
 	/// 移動
@@ -67,6 +67,14 @@ public:
 
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
+	
+	void ScrollMove();
+
+	bool HaveKey();
+
+	void SetCamera(Camera camera);
+
+	Camera GetCamera();
 
 private:
 	//向いている方向
@@ -99,6 +107,11 @@ private:
 	//ジャンプ　左
 	int jumpLeft = Novice::LoadTexture("./Resources./player_girl./player_JumpLeft_girl.png");
 
+	//ゴールしたか
+	bool isGoal = false;
+
+	//鍵を持っているか
+	bool haveKey = false;
 
 	//地面座標
 	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
@@ -142,7 +155,9 @@ private:
 	//座標関係
 	Matrix3x3 worldMatrix_;
 	Matrix3x3 wvpVpMatrix_;
-
+	
+	//カメラ関係
+	Camera camera_;
 	//スクリーン座標
 	Vector2 screenPosition_;
 

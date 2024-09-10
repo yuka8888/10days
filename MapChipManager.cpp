@@ -8,6 +8,8 @@ namespace {
 		{"0", MapChipType::kBlank},
 		{"1", MapChipType::kGround_},
 		{"2", MapChipType::kBlock},
+		{"3", MapChipType::kKey},
+		{"4", MapChipType::kGoal},
 	};
 }
 

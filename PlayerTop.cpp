@@ -16,6 +16,13 @@ void PlayerTop::Initialize()
 void PlayerTop::PlayerBottomPhaseUpdate()
 {
 	velocity_.x = 0.0f;
+	animationTimer++;
+
+	//状態によってタイマーのリセット値を変える
+	AnimationTimerChange();
+
+	//当たり判定下
+	MapCollisionBottom();
 
 	//ジャンプ中
 	if (isJump) {
@@ -29,6 +36,17 @@ void PlayerTop::PlayerBottomPhaseUpdate()
 		}
 	}
 
+	////directionを待機に切り替え
+	if (velocity_.x == 0) {
+		if (direction == Direction::kRight) {
+
+			direction = Direction::kRightStand;
+		}
+		else if (direction == Direction::kLeft) {
+			direction = Direction::kLeftStand;
+		}
+	}
+
 	//aabbの更新
 	aabb_.max = { translation_.x + kWidth_ / 2, translation_.y + kHeight_ / 2 };
 	aabb_.min = { translation_.x - kWidth_ / 2, translation_.y - kHeight_ / 2 };
@@ -37,8 +55,19 @@ void PlayerTop::PlayerBottomPhaseUpdate()
 
 void PlayerTop::PlayerTopPhaseUpdate()
 {
-	Move();
+	if (!isGoal) {
+		Move();
+	}
+	else {
+		velocity_ = {};
+	}
 
+	//鍵を持った状態じゃないとゴールにしない
+	if (!haveKey) {
+		isGoal = false;
+	}
+
+	//ScrollMove();
 }
 
 void PlayerTop::MoveResult()
@@ -50,16 +79,16 @@ void PlayerTop::MoveResult()
 
 }
 
-void PlayerTop::Draw(Camera camera)
+void PlayerTop::Draw()
 {
 	//スクリーン座標に変換
 	worldMatrix_ = MakeAffineMatrix(scale_, rotate_, translation_);
-	wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_, camera.worldMatrix, camera.vertex, camera.viewPortPosition, camera.viewPortSize);
+	wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_,camera_.worldMatrix, camera_.vertex, camera_.viewPortPosition, camera_.viewPortSize);
 
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
-	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
+	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeWireFrame);
 
 	switch (direction)
 	{
@@ -120,6 +149,7 @@ void PlayerTop::Draw(Camera camera)
 	}
 #ifdef _DEBUG
 	ImGui::DragFloat2("PlayerGirl.Translation", &translation_.x, 0.01f);
+	ImGui::DragFloat2("PlayerGirl.ScreenTranslation", &screenPosition_.x, 0.01f);
 #endif // _DEBUG
 
 }
@@ -192,6 +222,7 @@ void PlayerTop::Move()
 		//当たり判定
 		MapCollisionRight();
 	}
+
 	////directionを待機に切り替え
 	if (velocity_.x == 0) {
 		if (direction == Direction::kRight) {
@@ -202,6 +233,7 @@ void PlayerTop::Move()
 			direction = Direction::kLeftStand;
 		}
 	}
+
 	if (isGround_) {
 		velocity_.y = 0.0f;
 		translation_.y = kGround_;
@@ -242,6 +274,14 @@ void PlayerTop::MapCollisionTop()
 		isCollideCeiling_ = true;
 	}
 
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey = true;
+	}
+
+	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isGoal = true;
+	}
+
 	//右上
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{-1.0f, 0.0f});
 
@@ -249,6 +289,14 @@ void PlayerTop::MapCollisionTop()
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isCollideCeiling_ = true;
+	}
+
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey = true;
+	}
+
+	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isGoal = true;
 	}
 
 }
@@ -273,6 +321,14 @@ void PlayerTop::MapCollisionBottom()
 		isLanding_ = true;
 	}
 
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey = true;
+	}
+
+	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isGoal = true;
+	}
+
 	//右下
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f });
 
@@ -280,6 +336,14 @@ void PlayerTop::MapCollisionBottom()
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isLanding_ = true;
+	}
+
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey = true;
+	}
+
+	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isGoal = true;
 	}
 
 }
@@ -304,6 +368,15 @@ void PlayerTop::MapCollisionRight()
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
+
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey = true;
+		}
+
+		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isGoal = true;
+		}
+
 	}
 
 	//右真ん中
@@ -312,6 +385,10 @@ void PlayerTop::MapCollisionRight()
 	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 		velocity_.x = 0.0f;
+	}
+
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey = true;
 	}
 
 	//ブロックが下にあったら当たり判定とらない
@@ -323,6 +400,15 @@ void PlayerTop::MapCollisionRight()
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
+
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey = true;
+		}
+
+		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isGoal = true;
+		}
+
 	}
 
 }
@@ -347,6 +433,15 @@ void PlayerTop::MapCollisionLeft()
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
+
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey = true;
+		}
+
+		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isGoal = true;
+		}
+
 	}
 
 	//左真ん中
@@ -366,6 +461,15 @@ void PlayerTop::MapCollisionLeft()
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
+
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey = true;
+		}
+
+		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isGoal = true;
+		}
+
 	}
 
 }
@@ -405,6 +509,28 @@ void PlayerTop::AnimationTimerChange()
 	if (animationTimer >= animationTimerReset) {
 		animationTimer = 0;
 	}
+}
+
+void PlayerTop::ScrollMove()
+{
+	if (translation_.x >= kWindowWidth / 2.0f) {
+		camera_.viewPortPosition.x = translation_.x - kWindowWidth;
+	}
+}
+
+bool PlayerTop::HaveKey()
+{
+	return haveKey;
+}
+
+void PlayerTop::SetCamera(Camera camera)
+{
+	camera_ = camera;
+}
+
+Camera PlayerTop::GetCamera()
+{
+	return camera_;
 }
 
 Vector2 PlayerTop::CornerPosition(const Vector2& center, Corner corner) {

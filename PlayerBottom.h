@@ -82,6 +82,8 @@ private:
 	//ブロック押す
 	int pushBlock = Novice::LoadTexture("./Resources./player_boy./player_PushRight_boy.png");
 
+	//ゴールしたか
+	bool isGoal = false;
 
 	Vector2 initialPosition_ = { 0.0f, 0.0f };
 	Vector2 translation_ = { 0.0f, 56.0f };
