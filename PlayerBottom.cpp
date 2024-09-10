@@ -121,7 +121,7 @@ void PlayerBottom::Move()
 	}
 	////止まったらdirectionを待機に切り替え
 	if (velocity_.x == 0) {
-		if (direction == Direction::kRight) {
+		if (direction == Direction::kRight || direction == Direction::kPushBlock) {
 
 			direction = Direction::kRightStand;
 		}
@@ -129,6 +129,7 @@ void PlayerBottom::Move()
 			direction = Direction::kLeftStand;
 		}
 	}
+
 	////ブロックが押されていたらdirectionをpushに切り替え
 	//if (isPushBlock_) {
 	//	direction = Direction::kPushBlock;
@@ -136,6 +137,7 @@ void PlayerBottom::Move()
 	//if (isPushBlock_ == false) {
 	//	direction = Direction::kRightStand;
 	//}
+	// 
 	//進んだ先のaabbの更新
 	aabb_.max = { translation_.x + velocity_.x + kWidth_ / 2, translation_.y + velocity_.y + kHeight_ / 2 };
 	aabb_.min = { translation_.x + velocity_.x - kWidth_ / 2, translation_.y + velocity_.y - kHeight_ / 2 };
@@ -169,7 +171,13 @@ AABB PlayerBottom::GetAABB()
 void PlayerBottom::OnCollision()
 {
 	isPushBlock_ = true;
-	
+
+	//右が押されていたら
+	if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
+		//押してる
+		direction = Direction::kPushBlock;
+	}
+
 	//移動量を減らす
 	velocity_.x = velocity_.x * 0.30f;
 

@@ -72,6 +72,9 @@ private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
 
+	float kWindowHeight = 720.0f;
+	float kWindowWidth = 1280.0f;
+
 	//幅
 	float kWidth_ = 32.0f;
 	//高さ
