@@ -198,7 +198,7 @@ void PlayScene::DrawMap()
 					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
 
 					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
-
+					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					k++;
 
 					break;
@@ -206,6 +206,7 @@ void PlayScene::DrawMap()
 				case MapChipType::kKey:
 					if (!playerTop_->HaveKey()) {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+					
 					}
 					else {
 
@@ -215,9 +216,11 @@ void PlayScene::DrawMap()
 				case MapChipType::kGoal:
 					if (!playerTop_->HaveKey()) {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2),goalCloseTexture,1.0f,1.0f,0.0f,WHITE);
 					}
 					else {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), goalOpenTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					break;
 			}
