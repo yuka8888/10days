@@ -74,6 +74,11 @@ private:
 	//ブロック
 	Block block[10];
 
+	//背景画像
+	//上の背景
+	int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
+	//下の背景
+	int bg_underTexture = Novice::LoadTexture("./Resources./background./bg_under.png");
 	//マップチップの画像
 	//上のブロックテクスチャ
 	int blockTexture = Novice::LoadTexture("./Resources./mapChip./block.png");
