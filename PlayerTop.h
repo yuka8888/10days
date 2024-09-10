@@ -111,7 +111,7 @@ private:
 	bool isGoal = false;
 
 	//鍵を持っているか
-	bool haveKey = false;
+	bool haveKey_ = false;
 
 	//地面座標
 	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
@@ -166,6 +166,7 @@ private:
 
 	//AABB
 	AABB aabb_;
+
 	Vector2 CornerPosition(const Vector2& center, Corner corner);
 
 };

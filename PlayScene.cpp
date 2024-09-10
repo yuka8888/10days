@@ -58,7 +58,9 @@ void PlayScene::Initialize()
 		}
 	}
 
+	//マップチップの読み込み
 	playerTop_->SetMapChipField(mapChipField_);
+	playerBottom_->SetMapChipField(mapChipField_);
 
 }
 
@@ -105,6 +107,9 @@ void PlayScene::Update()
 
 	//当たり判定をとる
 	CheckCollision();
+
+	//鍵をとっているか共有
+	playerBottom_->HaveKey(playerTop_->HaveKey());
 
 	//プレイヤーを最終的に移動させる
 	playerTop_->MoveResult();

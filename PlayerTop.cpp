@@ -63,7 +63,7 @@ void PlayerTop::PlayerTopPhaseUpdate()
 	}
 
 	//鍵を持った状態じゃないとゴールにしない
-	if (!haveKey) {
+	if (!haveKey_) {
 		isGoal = false;
 	}
 
@@ -275,7 +275,7 @@ void PlayerTop::MapCollisionTop()
 	}
 
 	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey = true;
+		haveKey_ = true;
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -292,7 +292,7 @@ void PlayerTop::MapCollisionTop()
 	}
 
 	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey = true;
+		haveKey_ = true;
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -322,7 +322,7 @@ void PlayerTop::MapCollisionBottom()
 	}
 
 	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey = true;
+		haveKey_ = true;
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -339,7 +339,7 @@ void PlayerTop::MapCollisionBottom()
 	}
 
 	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey = true;
+		haveKey_ = true;
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -370,7 +370,7 @@ void PlayerTop::MapCollisionRight()
 		}
 
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey = true;
+			haveKey_ = true;
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -388,7 +388,7 @@ void PlayerTop::MapCollisionRight()
 	}
 
 	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey = true;
+		haveKey_ = true;
 	}
 
 	//ブロックが下にあったら当たり判定とらない
@@ -402,7 +402,7 @@ void PlayerTop::MapCollisionRight()
 		}
 
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey = true;
+			haveKey_ = true;
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -435,7 +435,7 @@ void PlayerTop::MapCollisionLeft()
 		}
 
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey = true;
+			haveKey_ = true;
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -463,7 +463,7 @@ void PlayerTop::MapCollisionLeft()
 		}
 
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey = true;
+			haveKey_ = true;
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -518,11 +518,6 @@ void PlayerTop::ScrollMove()
 	}
 }
 
-bool PlayerTop::HaveKey()
-{
-	return haveKey;
-}
-
 void PlayerTop::SetCamera(Camera camera)
 {
 	camera_ = camera;
@@ -531,6 +526,10 @@ void PlayerTop::SetCamera(Camera camera)
 Camera PlayerTop::GetCamera()
 {
 	return camera_;
+}
+
+bool PlayerTop::HaveKey() {
+	return haveKey_;
 }
 
 Vector2 PlayerTop::CornerPosition(const Vector2& center, Corner corner) {

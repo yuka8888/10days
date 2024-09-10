@@ -2,6 +2,9 @@
 #include "mt.h"
 #include "Novice.h"
 #include "imgui.h"
+#include "algorithm"
+
+class MapChipManager;
 
 class PlayerBottom
 {
@@ -34,6 +37,8 @@ public:
 	/// </summary>
 	void MoveResult();
 
+	void SetMapChipField(MapChipManager* mapChipManager);
+
 	void PushTwoBlocks(Block block);
 
 	AABB GetAABB();
@@ -52,6 +57,8 @@ public:
 	Vector2 GetSize();
 
 	void SetTranslation(Vector2 translation);
+
+	void HaveKey(bool haveKey);
 
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
@@ -82,8 +89,17 @@ private:
 	//ブロック押す
 	int pushBlock = Novice::LoadTexture("./Resources./player_boy./player_PushRight_boy.png");
 
+	//天井に当たっているか
+	bool isCollideCeiling_ = false;
+	
 	//ゴールしたか
 	bool isGoal = false;
+
+	//地面についているか
+	bool isGround_ = false;
+
+	//鍵を持っているか
+	bool haveKey_ = false;
 
 	Vector2 initialPosition_ = { 0.0f, 0.0f };
 	Vector2 translation_ = { 0.0f, 56.0f };
@@ -106,5 +122,20 @@ private:
 
 	int isPushBlock_ = false;
 
+	//マップチップ
+	MapChipManager* mapChipManager_ = nullptr;
+
+	//四つ角座標
+	Vector2 CornerPosition(const Vector2& center, Corner corner);
+
+
+	//当たり判定
+	void MapCollisionBottom();
+
+	void MapCollisionRight();
+
+	void MapCollisionLeft();
+
 };
+
 
