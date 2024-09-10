@@ -61,6 +61,63 @@ void PlayerTop::Draw(Camera camera)
 
 	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, RED, kFillModeSolid);
 
+	switch (direction)
+	{
+	case kRight:
+
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkRight,
+			WHITE);
+
+		break;
+	case kRightStand:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingRight,
+			WHITE);
+		break;
+	case kLeft:
+
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkLeft,
+			WHITE);
+
+		break;
+	case kLeftStand:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingLeft,
+			WHITE);
+		break;
+	case kRightJump:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpRight,
+			WHITE);
+		break;
+	case kLeftJump:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpLeft,
+			WHITE);
+		break;
+	default:
+		break;
+	}
 #ifdef _DEBUG
 	ImGui::DragFloat2("PlayerGirl.Translation", &translation_.x, 0.01f);
 #endif // _DEBUG
@@ -74,6 +131,10 @@ void PlayerTop::Move()
 	isLanding_ = false;
 	isCollideCeiling_ = false;
 	isContactWall_ = false;
+	animationTimer++;
+
+	//状態によってタイマーのリセット値を変える
+	AnimationTimerChange();
 
 	//当たり判定下
 	MapCollisionBottom();
@@ -91,12 +152,28 @@ void PlayerTop::Move()
 		velocity_ = velocity_ + kAcceleration_;
 		//天井との当たり判定
 		MapCollisionTop();
-
+		//directionをジャンプに切り替え
+		if (direction == Direction::kRight || direction == Direction::kRightStand) {
+			direction = Direction::kRightJump;
+		}
+		else if (direction == Direction::kLeft || direction == Direction::kLeftStand) {
+			direction = Direction::kLeftJump;
+		}
 		//地面についたら接地状態に切り替え
 		if (velocity_.y < 0 && translation_.y <= kGround_) {
 			isGround_ = true;
 			translation_.y = kGround_;
 			velocity_.y = 0;
+			
+		}
+	}
+	if (isLanding_ == true || isGround_ == true) {
+		//directionを待機に切り替え
+		if (direction == Direction::kRightJump) {
+			direction = Direction::kRight;
+		}
+		else if (direction == Direction::kLeftJump) {
+			direction = Direction::kLeft;
 		}
 	}
 
@@ -115,7 +192,16 @@ void PlayerTop::Move()
 		//当たり判定
 		MapCollisionRight();
 	}
+	////directionを待機に切り替え
+	if (velocity_.x == 0) {
+		if (direction == Direction::kRight) {
 
+			direction = Direction::kRightStand;
+		}
+		else if (direction == Direction::kLeft) {
+			direction = Direction::kLeftStand;
+		}
+	}
 	if (isGround_) {
 		velocity_.y = 0.0f;
 		translation_.y = kGround_;
@@ -287,6 +373,38 @@ void PlayerTop::MapCollisionLeft()
 void PlayerTop::SetMapChipField(MapChipManager* mapChipManager)
 {
 	mapChipManager_ = mapChipManager;
+}
+
+void PlayerTop::AnimationTimerChange()
+{
+	switch (direction)
+	{
+	case kRight:
+		animationTimerReset = 56;
+		break;
+	case kRightStand:
+		animationTimerReset = 60;
+		break;
+	case kLeft:
+		animationTimerReset = 56;
+		break;
+	case kLeftStand:
+		animationTimerReset = 60;
+		break;
+	case kRightJump:
+		animationTimerReset = 56;
+		break;
+	case kLeftJump:
+		animationTimerReset = 56;
+		break;
+
+	default:
+		break;
+	}
+
+	if (animationTimer >= animationTimerReset) {
+		animationTimer = 0;
+	}
 }
 
 Vector2 PlayerTop::CornerPosition(const Vector2& center, Corner corner) {

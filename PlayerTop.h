@@ -65,6 +65,9 @@ public:
 
 	void SetMapChipField(MapChipManager* mapChipManager);
 
+	//アニメーションタイマーを状態によって切り替える
+	void AnimationTimerChange();
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -73,6 +76,26 @@ private:
 	float kWidth_ = 32.0f;
 	//高さ
 	float kHeight_ = 64.0f;
+
+	//アニメーションタイマー
+	int animationTimer = 0;
+	//アニメーションタイマーを0に戻す
+	int animationTimerReset = 0;
+	//プレイヤーの画像
+	//歩き　右
+	int walkRight = Novice::LoadTexture("./Resources./player_girl./player_walkRight_girl.png");
+	//歩き　左
+	int walkLeft = Novice::LoadTexture("./Resources./player_girl./player_walkLeft_girl.png");
+
+	//待機　右
+	int standingRight = Novice::LoadTexture("./Resources./player_girl./player_StandingRight_girl.png");
+	//待機　左
+	int standingLeft = Novice::LoadTexture("./Resources./player_girl./player_StandingLeft_girl.png");
+	//ジャンプ　右
+	int jumpRight = Novice::LoadTexture("./Resources./player_girl./player_JumpRight_girl.png");
+	//ジャンプ　左
+	int jumpLeft = Novice::LoadTexture("./Resources./player_girl./player_JumpLeft_girl.png");
+
 
 	//地面座標
 	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
