@@ -59,6 +59,7 @@ struct Block {
 	Vector2 initialPosition;
 	Vector2 velocity;
 	bool isFall = false;
+	bool isFallEnd = false;
 };
 
 enum Direction {

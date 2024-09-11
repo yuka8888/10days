@@ -26,6 +26,7 @@ public:
 	/// </summary>
 	void DrawMap();
 
+	void Sound();
 private:
 	//ゲームのフェーズ
 	enum class Phase {
@@ -103,6 +104,35 @@ private:
 	int animationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 60;
+
+	//音
+	//BGM
+	///鍵取得SE読み込み
+	int gameSceneBGM = Novice::LoadAudio("./Resources./sound././BGM./gameSceneBGM.wav");
+	///プレイハンドルの宣言
+	int playgameScene = -1;
+	//SE
+
+	//操作キャラ変更SE
+	int characterChangeSE = Novice::LoadAudio("./Resources./sound././SE./characterChangeSE.wav");
+	///プレイハンドルの宣言
+	int playcharacterChange = -1;
+	///鍵取得SE読み込み
+	int getKeySE = Novice::LoadAudio("./Resources./sound././SE./getKeySE.wav");
+	///プレイハンドルの宣言
+	int playGetKey = -1;
+	//鍵の前取得状態
+	bool preHaveKey = 0;
+	///ブロック押してるSE読み込み
+	int pushBlockSE = Novice::LoadAudio("./Resources./sound././SE./pushBlockSE.wav");
+	///プレイハンドルの宣言
+	int playPushBlock = -1;
+	///ブロック押ちたSE読み込み
+	int blockFitSE = Novice::LoadAudio("./Resources./sound././SE./blockFitSE.wav");
+	///プレイハンドルの宣言
+	int playPlockFit = -1;
+	//ブロックの前取得状態
+	bool preHaveBlock = 0;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };

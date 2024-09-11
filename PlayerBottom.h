@@ -62,6 +62,7 @@ public:
 
 	void SetFallBlockIndex(IndexSet index);
 
+	bool GetIsPushBlock() { return isPushBlock_; };
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
 
