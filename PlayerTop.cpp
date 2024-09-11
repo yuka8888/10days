@@ -55,7 +55,7 @@ void PlayerTop::PlayerBottomPhaseUpdate()
 
 void PlayerTop::PlayerTopPhaseUpdate()
 {
-	if (!isGoal) {
+	if (!isGoal_) {
 		Move();
 	}
 	else {
@@ -64,7 +64,7 @@ void PlayerTop::PlayerTopPhaseUpdate()
 
 	//鍵を持った状態じゃないとゴールにしない
 	if (!haveKey_) {
-		isGoal = false;
+		isGoal_ = false;
 	}
 
 	//ScrollMove();
@@ -279,7 +279,7 @@ void PlayerTop::MapCollisionTop()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 	//右上
@@ -296,7 +296,7 @@ void PlayerTop::MapCollisionTop()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 }
@@ -326,7 +326,7 @@ void PlayerTop::MapCollisionBottom()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 	//右下
@@ -343,7 +343,7 @@ void PlayerTop::MapCollisionBottom()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 }
@@ -374,7 +374,7 @@ void PlayerTop::MapCollisionRight()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -406,7 +406,7 @@ void PlayerTop::MapCollisionRight()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -439,7 +439,7 @@ void PlayerTop::MapCollisionLeft()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -467,7 +467,7 @@ void PlayerTop::MapCollisionLeft()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -526,6 +526,11 @@ void PlayerTop::SetCamera(Camera camera)
 Camera PlayerTop::GetCamera()
 {
 	return camera_;
+}
+
+bool PlayerTop::IsGoal()
+{
+	return isGoal_;
 }
 
 bool PlayerTop::HaveKey() {

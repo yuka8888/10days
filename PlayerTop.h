@@ -76,6 +76,8 @@ public:
 
 	Camera GetCamera();
 
+	bool IsGoal();
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -108,7 +110,7 @@ private:
 	int jumpLeft = Novice::LoadTexture("./Resources./player_girl./player_JumpLeft_girl.png");
 
 	//ゴールしたか
-	bool isGoal = false;
+	bool isGoal_ = false;
 
 	//鍵を持っているか
 	bool haveKey_ = false;

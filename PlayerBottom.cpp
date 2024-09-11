@@ -19,7 +19,12 @@ void PlayerBottom::Initialize()
 
 void PlayerBottom::PlayerBottomPhaseUpdate()
 {
-	if (!isGoal) {
+	animationTimer++;
+
+	isBottomPhase = true;
+	isTopPhase = false;;
+
+	if (!isGoal_) {
 		Move();
 	}
 	else {
@@ -28,15 +33,28 @@ void PlayerBottom::PlayerBottomPhaseUpdate()
 
 	//鍵を持った状態じゃないとゴールにしない
 	if (!haveKey_) {
-		isGoal = false;
+		isGoal_ = false;
 	}
 
 }
 
 void PlayerBottom::PlayerTopPhaseUpdate()
 {
+	isBottomPhase = false;
+	isTopPhase = true;
+
 	velocity_ = { 0.0f, 0.0f };
 	isPushTwoBlocks_ = false;
+	animationTimer++;
+	AnimationTimerChange();
+
+	//directionを待機に切り替え
+	if (direction == Direction::kLeft) {
+		direction = Direction::kLeftStand;
+	}
+	else if (direction == Direction::kRight || direction == Direction::kPushBlock) {
+		direction = Direction::kRightStand;
+	}
 
 	//進んだ先のaabbの更新
 	aabb_.max = { translation_.x + velocity_.x + kWidth_ / 2, translation_.y + velocity_.y + kHeight_ / 2 };
@@ -121,7 +139,6 @@ void PlayerBottom::Move()
 	isPushTwoBlocks_ = false;
 	isPushBlock_ = false;
 
-	animationTimer++;
 	AnimationTimerChange();
 	velocity_ = { 0.0f, 0.0f };
 
@@ -198,7 +215,7 @@ void PlayerBottom::OnCollision()
 	isPushBlock_ = true;
 
 	//右が押されていたら
-	if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
+	if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW) && isBottomPhase) {
 		//押してる
 		direction = Direction::kPushBlock;
 	}
@@ -325,7 +342,7 @@ void PlayerBottom::MapCollisionBottom()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 	//右下
@@ -336,7 +353,7 @@ void PlayerBottom::MapCollisionBottom()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 }
@@ -362,7 +379,7 @@ void PlayerBottom::MapCollisionRight()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -384,7 +401,7 @@ void PlayerBottom::MapCollisionRight()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 		//右下
@@ -427,7 +444,7 @@ void PlayerBottom::MapCollisionLeft()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 	}
@@ -440,7 +457,7 @@ void PlayerBottom::MapCollisionLeft()
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		isGoal = true;
+		isGoal_ = true;
 	}
 
 	//ブロックが下にあったら当たり判定とらない
@@ -453,7 +470,7 @@ void PlayerBottom::MapCollisionLeft()
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			isGoal = true;
+			isGoal_ = true;
 		}
 
 		//左下

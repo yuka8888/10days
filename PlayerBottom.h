@@ -74,6 +74,11 @@ private:
 	//高さ
 	float kHeight_ = 64.0f;
 
+	//フェーズが上の子か
+	bool isTopPhase;
+	//フェーズが下の子か
+	bool isBottomPhase;
+
 	//アニメーションタイマー
 	int animationTimer = 0;
 	//アニメーションタイマーを0に戻す
@@ -95,7 +100,7 @@ private:
 	bool isCollideCeiling_ = false;
 	
 	//ゴールしたか
-	bool isGoal = false;
+	bool isGoal_ = false;
 
 	//地面についているか
 	bool isGround_ = true;
