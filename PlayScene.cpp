@@ -147,7 +147,8 @@ void PlayScene::Draw()
 	playerTop_->Draw();
 	playerBottom_->Draw(cameraManager_->GetCamera());
 
-
+	Novice::DrawSprite(0, 30, grassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 30, grassTexture, 1.0f, 1.0f, 0.0f, WHITE);
 	//マップの描画
 	DrawMap();
 

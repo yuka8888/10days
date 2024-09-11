@@ -79,6 +79,8 @@ private:
 	int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
 	//下の背景
 	int bg_underTexture = Novice::LoadTexture("./Resources./background./bg_under.png");
+	//手前の草
+	int grassTexture = Novice::LoadTexture("./Resources./background./grass.png");
 	//マップチップの画像
 	//上のブロックテクスチャ
 	int blockTexture = Novice::LoadTexture("./Resources./mapChip./block.png");
