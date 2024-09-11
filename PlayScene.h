@@ -74,6 +74,26 @@ private:
 	//ブロック
 	Block block[10];
 
+	//背景画像
+	//上の背景
+	int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
+	//下の背景
+	int bg_underTexture = Novice::LoadTexture("./Resources./background./bg_under.png");
+	//マップチップの画像
+	//上のブロックテクスチャ
+	int blockTexture = Novice::LoadTexture("./Resources./mapChip./block.png");
+	//下のブロックテクスチャ
+	int stoneTexture = Novice::LoadTexture("./Resources./mapChip./stone.png");
+	//鍵テクスチャ
+	int keyTexture = Novice::LoadTexture("./Resources./mapChip./key.png");
+	//扉(ゴール)テクスチャ
+	int goalCloseTexture = Novice::LoadTexture("./Resources./mapChip./door_close.png");
+	int goalOpenTexture = Novice::LoadTexture("./Resources./mapChip./door_open.png");
+	//アニメーションタイマー
+	int animationTimer = 0;
+	//アニメーションタイマーを0に戻す
+	int animationTimerReset = 60;
+
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };

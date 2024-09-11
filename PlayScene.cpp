@@ -74,6 +74,14 @@ void PlayScene::Update()
 
 	switch (phase) {
 		case Phase::kMovePlayerTop:
+
+			//アニメーションタイマーの更新
+			animationTimer++;
+			//アニメーションタイマーのリセット
+			if (animationTimer >= animationTimerReset) {
+				animationTimer = 0;
+			}
+
 			//プレイヤーの更新
 			playerTop_->PlayerTopPhaseUpdate();
 			playerBottom_->PlayerTopPhaseUpdate();
@@ -86,6 +94,15 @@ void PlayScene::Update()
 			break;
 
 		case Phase::kMovePlayerBottom:
+
+			//アニメーションタイマーの更新
+			animationTimer++;
+			//アニメーションタイマーのリセット
+			if (animationTimer >= animationTimerReset) {
+				animationTimer = 0;
+			}
+
+
 			//プレイヤーの更新
 			playerBottom_->PlayerBottomPhaseUpdate();
 			playerTop_->PlayerBottomPhaseUpdate();
@@ -98,6 +115,14 @@ void PlayScene::Update()
 			break;
 
 		case Phase::kMoveAll:
+
+			//アニメーションタイマーの更新
+			animationTimer++;
+			//アニメーションタイマーのリセット
+			if (animationTimer >= animationTimerReset) {
+				animationTimer = 0;
+			}
+
 			//プレイヤーの更新
 			playerTop_->PlayerTopPhaseUpdate();
 			playerBottom_->PlayerBottomPhaseUpdate();
@@ -121,6 +146,11 @@ void PlayScene::Update()
 
 void PlayScene::Draw()
 {
+	//背景の描画
+	Novice::DrawSprite(0, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(0, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
 
 	//プレイヤーの描画
 	playerTop_->Draw();
@@ -195,6 +225,8 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kGround_:
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
+					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), stoneTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					break;
 					break;
 
 				case MapChipType::kBlock:
@@ -203,7 +235,7 @@ void PlayScene::DrawMap()
 					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
 
 					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
-
+					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					k++;
 
 					break;
@@ -211,6 +243,12 @@ void PlayScene::DrawMap()
 				case MapChipType::kKey:
 					if (!playerTop_->HaveKey()) {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+						Novice::DrawQuad((int)(screenPosition_.x - 16 / 2), (int)(screenPosition_.y - 16 / 2),
+							int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y - 16 / 2.0f),
+							int(screenPosition_.x - 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
+							int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
+							(int)16 * (animationTimer / 20), 0, (int)16, (int)16, keyTexture,
+							WHITE);
 					}
 					else {
 
@@ -220,9 +258,11 @@ void PlayScene::DrawMap()
 				case MapChipType::kGoal:
 					if (!playerTop_->HaveKey()) {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2) - 8, goalCloseTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					else {
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2) - 8, goalOpenTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					break;
 			}
