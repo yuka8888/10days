@@ -168,7 +168,7 @@ void PlayScene::CheckCollision()
 	isBlockAndPlayerBottomCollision_ = false;
 	for (uint32_t i = 0; i < mapChipField_->GetBlockNum(); i++) {
 		//下のプレイヤーとブロックの衝突判定
-		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && playerBottom_->GetDirection() == Direction::kRight) {
+		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && (playerBottom_->GetDirection() == Direction::kRight || playerBottom_->GetDirection() == Direction::kRightStand)) {
 			isBlockAndPlayerBottomCollision_ = true;
 
 			//もし最初に触れるならブロックにくっつけるように移動
@@ -225,8 +225,6 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kGround_:
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
-					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), stoneTexture, 1.0f, 1.0f, 0.0f, WHITE);
-					break;
 					break;
 
 				case MapChipType::kBlock:
