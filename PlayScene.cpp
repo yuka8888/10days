@@ -34,16 +34,17 @@ void PlayScene::Initialize()
 	uint32_t numBlockHorizonal = mapChipField_->GetNumBlockHorizontal();
 
 	uint32_t k = 0;
+	uint32_t l = 0;
 
 
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
 
 			switch (mapChipField_->GetMapChipDate().data[i][j]) {
-				case MapChipType::kBlock:
+				case MapChipType::kBlockBottom:
 					//ブロックの初期位置を取得
 					block[k].initialPosition = { j * kBlockWidth_ + block[k].velocity.x, i * kBlockHeight_ + block[k].velocity.y };
-					
+
 					//ブロックのaabbを計算
 					block[k].aabb_.max = { j * kBlockWidth_ + block[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y + kBlockHeight_ / 2 };
 					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
@@ -53,10 +54,20 @@ void PlayScene::Initialize()
 					k++;
 
 					break;
+
+				case MapChipType::kFall:
+					//落とし穴のaabbを計算
+					fallAABB_[l].max = { j * kBlockWidth_ + kBlockWidth_ / 2, i * kBlockHeight_ + kBlockHeight_ / 2 };
+					fallAABB_[l].min = { j * kBlockWidth_ - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
+					
+					l++;
 			}
 
 		}
 	}
+
+	//マップ生成
+	DrawMap();
 
 	//マップチップの読み込み
 	playerTop_->SetMapChipField(mapChipField_);
@@ -168,12 +179,12 @@ void PlayScene::CheckCollision()
 	isBlockAndPlayerBottomCollision_ = false;
 	for (uint32_t i = 0; i < mapChipField_->GetBlockNum(); i++) {
 		//下のプレイヤーとブロックの衝突判定
-		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && (playerBottom_->GetDirection() == Direction::kRight || playerBottom_->GetDirection() == Direction::kRightStand)) {
+		if (isCollision(playerBottom_->GetAABB(), block[i].aabb_) && (playerBottom_->GetDirection() == Direction::kRight || playerBottom_->GetDirection() == Direction::kRightStand) && !block[i].isFall) {
 			isBlockAndPlayerBottomCollision_ = true;
 
 			//もし最初に触れるならブロックにくっつけるように移動
 			if (isPreBlockAndPlayerBottomCollision == false && isBlockAndPlayerBottomCollision_ == true) {
-				playerBottom_->SetTranslation({ block[i].aabb_.min.x - playerBottom_->GetSize().x / 2.0f, playerBottom_->GetTranslation().y});
+				playerBottom_->SetTranslation({ block[i].aabb_.min.x - playerBottom_->GetSize().x / 2.0f, playerBottom_->GetTranslation().y });
 			}
 
 			playerBottom_->OnCollision();
@@ -195,9 +206,29 @@ void PlayScene::CheckCollision()
 					playerBottom_->PushTwoBlocks(block[i]);
 				}
 			}
-
 		}
 
+		//ブロックと落とし穴の当たり判定
+		for (uint32_t j = 0; j < mapChipField_->GetFallNum(); j++) {
+			if (fallAABB_[j].max.x >= block[i].aabb_.max.x - 0.5f && fallAABB_[j].max.x <= block[i].aabb_.max.x + 0.5f && !block[i].isFall) {
+				block[i].isFall = true;
+ 				block[i].velocity.x = (fallAABB_[j].min.x - block[i].initialPosition.x + kBlockHeight_ / 2);
+				startBlockPosition = block[i].initialPosition + block[i].velocity;
+				endBlockPosition = { startBlockPosition.x, startBlockPosition.y - kBlockHeight_ };
+			}
+		}
+
+		//ブロックが落下するとき
+		if (block[i].isFall) {
+			blockFallTimer += 0.02f;
+
+			if (blockFallTimer >= 1.0f) {
+				blockFallTimer = 1.0f;
+				playerBottom_->SetFallBlockIndex(mapChipField_->GetMapChipIndexSetByPosition(endBlockPosition));
+			}
+			//線形補間でブロック落下
+			block[i].velocity.y = Lerp(startBlockPosition.y, endBlockPosition.y, easeInCubic(blockFallTimer));
+		}
 	}
 
 }
@@ -209,6 +240,7 @@ void PlayScene::DrawMap()
 	uint32_t numBlockHorizonal = mapChipField_->GetNumBlockHorizontal();
 
 	uint32_t k = 0;
+	uint32_t l = 0;
 
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
@@ -227,13 +259,20 @@ void PlayScene::DrawMap()
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
 					break;
 
-				case MapChipType::kBlock:
+				case MapChipType::kBlockTop:
+					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					k++;
+
+					break;
+
+				case MapChipType::kBlockBottom:
 					//ブロックのaabbを計算
 					block[k].aabb_.max = { j * kBlockWidth_ + block[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y + kBlockHeight_ / 2 };
 					block[k].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + block[k].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
-					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					Novice::DrawBox((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + block[k].velocity.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawSprite((int)(screenPosition_.x + block[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + block[k].velocity.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					k++;
 
 					break;
@@ -262,6 +301,14 @@ void PlayScene::DrawMap()
 						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
 						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2) - 8, goalOpenTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
+					break;
+
+				case MapChipType::kFall:
+					//ブロックのaabbを計算
+					block[l].aabb_.max = { j * kBlockWidth_ + block[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + kBlockHeight_ / 2 };
+					block[l].aabb_.min = { j * kBlockWidth_ + block[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
+
+					l++;
 					break;
 			}
 

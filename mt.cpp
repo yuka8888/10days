@@ -228,3 +228,19 @@ bool isCollision(const AABB& aabb1, const AABB& aabb2) {
 
 	return false;
 }
+
+//イージング
+float easeInCubic(float x) {
+	return x * x * x;
+}
+
+/// <summary>
+/// 線形補間
+/// </summary>
+/// <param name="a">始点</param>
+/// <param name="b">終点</param>
+/// <param name="t"></param>
+/// <returns></returns>
+float Lerp(const float& a, const float& b, float t) {
+	return t * a + (1.0f - t) * b;
+}

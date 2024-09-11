@@ -119,7 +119,7 @@ private:
 	//初期位置
 	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {50.0f, kGround_};
+	Vector2 translation_ = {100.0f, kGround_};
 
 	//1ループ前の座標
 	Vector2 preTranslation_ = { 0.0f, kGround_ + 10.0f };
@@ -168,6 +168,5 @@ private:
 	AABB aabb_;
 
 	Vector2 CornerPosition(const Vector2& center, Corner corner);
-
 };
 

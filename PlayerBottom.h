@@ -60,6 +60,8 @@ public:
 
 	void HaveKey(bool haveKey);
 
+	void SetFallBlockIndex(IndexSet index);
+
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
 
@@ -96,13 +98,13 @@ private:
 	bool isGoal = false;
 
 	//地面についているか
-	bool isGround_ = false;
+	bool isGround_ = true;
 
 	//鍵を持っているか
 	bool haveKey_ = false;
 
 	Vector2 initialPosition_ = { 0.0f, 0.0f };
-	Vector2 translation_ = { 0.0f, 56.0f };
+	Vector2 translation_ = { 100.0f, 56.0f };
 	Vector2 scale_ = { 1.0f, 1.0f };
 	float rotate_ = 0.0f;
 	Vector2 velocity_ = { 0.0f,0.0f };
@@ -121,6 +123,11 @@ private:
 	AABB aabb_;
 
 	int isPushBlock_ = false;
+
+	//穴にブロックがハマっている場所
+	IndexSet fallBlockIndex_[10];
+
+	uint32_t fallNo = 0;
 
 	//マップチップ
 	MapChipManager* mapChipManager_ = nullptr;

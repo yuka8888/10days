@@ -268,7 +268,7 @@ void PlayerTop::MapCollisionTop()
 	//左上
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop] + Vector2{ 1.0f, 0.0f });
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isCollideCeiling_ = true;
@@ -285,7 +285,7 @@ void PlayerTop::MapCollisionTop()
 	//右上
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{-1.0f, 0.0f});
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isCollideCeiling_ = true;
@@ -315,7 +315,7 @@ void PlayerTop::MapCollisionBottom()
 	//左下
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f });
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isLanding_ = true;
@@ -332,7 +332,7 @@ void PlayerTop::MapCollisionBottom()
 	//右下
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f });
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
 		velocity_.y = 0.0f;
 		isLanding_ = true;
@@ -364,7 +364,7 @@ void PlayerTop::MapCollisionRight()
 		//右上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
 
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
@@ -382,7 +382,7 @@ void PlayerTop::MapCollisionRight()
 	//右真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ + Vector2{kWidth_ / 2.0f, 0.0f});
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 		velocity_.x = 0.0f;
 	}
@@ -396,7 +396,7 @@ void PlayerTop::MapCollisionRight()
 		//右下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
@@ -429,7 +429,7 @@ void PlayerTop::MapCollisionLeft()
 		//左上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
 
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
@@ -447,7 +447,7 @@ void PlayerTop::MapCollisionLeft()
 	//左真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{kWidth_ / 2.0f, 0.0f});
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 		velocity_.x = 0.0f;
 	}
@@ -457,7 +457,7 @@ void PlayerTop::MapCollisionLeft()
 		//左下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}

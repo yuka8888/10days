@@ -8,11 +8,6 @@ struct MapChipData {
 	std::vector<std::vector<MapChipType>> data;
 };
 
-struct IndexSet {
-	uint32_t xIndex;
-	uint32_t yIndex;
-};
-
 struct Rect {
 	float left = 0.0f;
 	float right = 1.0f;
@@ -42,6 +37,8 @@ public:
 	MapChipData GetMapChipDate();
 
 	uint32_t GetBlockNum();
+	
+	uint32_t GetFallNum();
 
 	Vector2 GetBlockSize();
 
@@ -67,6 +64,9 @@ private:
 
 	//ブロックの個数
 	uint32_t kBlockNum = 0;
+
+	//ブロックの個数
+	uint32_t kFallNum = 0;
 
 	MapChipData mapChipData_;
 

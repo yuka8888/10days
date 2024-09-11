@@ -11,6 +11,10 @@ PlayerBottom::~PlayerBottom()
 
 void PlayerBottom::Initialize()
 {
+	for (uint32_t i = 0; i < 10; i++) {
+		fallBlockIndex_[i].xIndex = -1;
+		fallBlockIndex_[i].yIndex = -1;
+	}
 }
 
 void PlayerBottom::PlayerBottomPhaseUpdate()
@@ -33,6 +37,10 @@ void PlayerBottom::PlayerTopPhaseUpdate()
 {
 	velocity_ = { 0.0f, 0.0f };
 	isPushTwoBlocks_ = false;
+
+	//進んだ先のaabbの更新
+	aabb_.max = { translation_.x + velocity_.x + kWidth_ / 2, translation_.y + velocity_.y + kHeight_ / 2 };
+	aabb_.min = { translation_.x + velocity_.x - kWidth_ / 2, translation_.y + velocity_.y - kHeight_ / 2 };
 
 }
 
@@ -126,7 +134,7 @@ void PlayerBottom::Move()
 	else if (direction == Direction::kRight) {
 		direction = Direction::kRightStand;
 	}
-	
+
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
 		direction = Direction::kLeft;
@@ -138,7 +146,7 @@ void PlayerBottom::Move()
 		velocity_.x = 2.0f;
 		MapCollisionRight();
 	}
-	
+
 	//止まったらdirectionを待機に切り替え
 	if (velocity_.x == 0) {
 		if (direction == Direction::kRight || direction == Direction::kPushBlock) {
@@ -150,16 +158,7 @@ void PlayerBottom::Move()
 		}
 	}
 
-	////ブロックが押されていたらdirectionをpushに切り替え
-	//if (isPushBlock_) {
-	//	direction = Direction::kPushBlock;
-	//}
-	//if (isPushBlock_ == false) {
-	//	direction = Direction::kRightStand;
-	//}
-	// 
 	//進んだ先のaabbの更新
-	
 	aabb_.max = { translation_.x + velocity_.x + kWidth_ / 2, translation_.y + velocity_.y + kHeight_ / 2 };
 	aabb_.min = { translation_.x + velocity_.x - kWidth_ / 2, translation_.y + velocity_.y - kHeight_ / 2 };
 
@@ -246,6 +245,16 @@ void PlayerBottom::SetTranslation(Vector2 translation)
 void PlayerBottom::HaveKey(bool haveKey)
 {
 	haveKey_ = haveKey;
+}
+
+void PlayerBottom::SetFallBlockIndex(IndexSet index)
+{
+	if (fallBlockIndex_[fallNo].xIndex != index.xIndex && fallBlockIndex_[fallNo].yIndex != index.yIndex) {
+		fallBlockIndex_[fallNo].xIndex = index.xIndex;
+		fallBlockIndex_[fallNo].yIndex = index.yIndex;
+
+		fallNo++;
+	}
 }
 
 void PlayerBottom::AnimationTimerChange()
@@ -366,7 +375,7 @@ void PlayerBottom::MapCollisionRight()
 	}
 
 	//ブロックが下にあったら当たり判定とらない
-	if (!isGround_) {
+	if (isGround_) {
 		//右下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 
@@ -376,6 +385,21 @@ void PlayerBottom::MapCollisionRight()
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			isGoal = true;
+		}
+
+		//右下
+		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ 0, -1.0f });
+
+		bool isLandingBlock = false;
+		for (uint32_t i = 0; i < 10; i++) {
+			if (indexSet.xIndex == fallBlockIndex_[i].xIndex && indexSet.yIndex == fallBlockIndex_[i].yIndex) {
+				isLandingBlock = true;
+				break;
+			}
+		}
+		if (MapChipType::kFall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex) != isLandingBlock) {
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
 		}
 
 	}
@@ -398,11 +422,6 @@ void PlayerBottom::MapCollisionLeft()
 		//左上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
 
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
-
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			haveKey_ = true;
 		}
@@ -416,20 +435,18 @@ void PlayerBottom::MapCollisionLeft()
 	//左真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f });
 
-	if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		haveKey_ = true;
+	}
+
+	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isGoal = true;
 	}
 
 	//ブロックが下にあったら当たり判定とらない
-	if (!isGround_) {
+	if (isGround_) {
 		//左下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
-
-		if (MapChipType::kBlock == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
 
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			haveKey_ = true;
@@ -439,6 +456,19 @@ void PlayerBottom::MapCollisionLeft()
 			isGoal = true;
 		}
 
+		//左下
+		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 0, -1.0f });
+	
+		bool isLandingBlock = false;
+		for (uint32_t i = 0; i < 10; i++) {
+			if (indexSet.xIndex == fallBlockIndex_[i].xIndex && indexSet.yIndex == fallBlockIndex_[i].yIndex) {
+				isLandingBlock = true;
+				break;
+			}
+		}
+		if (MapChipType::kFall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex) != isLandingBlock) {
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
-
 }

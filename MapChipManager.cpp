@@ -7,9 +7,11 @@ namespace {
 	std::map<std::string, MapChipType> mapChipTable = {
 		{"0", MapChipType::kBlank},
 		{"1", MapChipType::kGround_},
-		{"2", MapChipType::kBlock},
-		{"3", MapChipType::kKey},
-		{"4", MapChipType::kGoal},
+		{"2", MapChipType::kBlockTop},
+		{"3", MapChipType::kBlockBottom},
+		{"4", MapChipType::kKey},
+		{"5", MapChipType::kGoal},
+		{"6", MapChipType::kFall},
 	};
 }
 
@@ -57,8 +59,14 @@ void MapChipManager::LoadMapChipCsv(const std::string& filePath) {
 				mapChipData_.data[(i - kNumBlockVirtical_ + 1) * -1][j] = mapChipTable[word];
 
 				//ブロックの個数を取得
-				if (mapChipTable[word] == MapChipType::kBlock) {
+				if (mapChipTable[word] == MapChipType::kBlockBottom) {
 					kBlockNum++;
+
+				}
+
+				//落とし穴の個数を取得
+				if (mapChipTable[word] == MapChipType::kFall) {
+					kFallNum++;
 
 				}
 			}
@@ -86,6 +94,11 @@ MapChipData MapChipManager::GetMapChipDate()
 uint32_t MapChipManager::GetBlockNum()
 {
 	return kBlockNum;
+}
+
+uint32_t MapChipManager::GetFallNum()
+{
+	return kFallNum;
 }
 
 Vector2 MapChipManager::GetBlockSize()

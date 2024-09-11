@@ -74,6 +74,16 @@ private:
 	//ブロック
 	Block block[10];
 
+	//落とし穴
+	AABB fallAABB_[10];
+
+	//ブロック落とす用のタイマー
+	float blockFallTimer = 0.0f;
+	//落下するときの初期位置
+	Vector2 startBlockPosition;
+	//落下するときの最終位置
+	Vector2 endBlockPosition;
+
 	//背景画像
 	//上の背景
 	int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");

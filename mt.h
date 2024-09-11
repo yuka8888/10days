@@ -7,9 +7,11 @@
 enum class MapChipType {
 	kBlank,//空白
 	kGround_,//地面
-	kBlock, //ブロック
+	kBlockTop, //ブロック
+	kBlockBottom, //ブロック
 	kKey, //鍵
 	kGoal, //ゴール
+	kFall, //穴
 };
 
 enum Corner {
@@ -56,6 +58,7 @@ struct Block {
 	AABB aabb_;
 	Vector2 initialPosition;
 	Vector2 velocity;
+	bool isFall = false;
 };
 
 enum Direction {
@@ -66,6 +69,12 @@ enum Direction {
 	kRightJump,
 	kLeftJump,
 	kPushBlock,
+};
+
+
+struct IndexSet {
+	int xIndex;
+	int yIndex;
 };
 
 Vector2 operator+(Vector2 num1, Vector2 num2);
@@ -93,3 +102,14 @@ Matrix3x3 MakewvpVpMatrix(Matrix3x3 worldMatrix, Matrix3x3 cameraWorldMatrix, Ve
 Matrix3x3 MakevpVpMatrix(Matrix3x3 worldMatrix, Vertex vertex, Vector2 viewPortPosition, Vector2 viewPortSize);
 
 bool isCollision(const AABB& aabb1, const AABB& aabb2);
+
+float easeInCubic(float x);
+
+/// <summary>
+/// 線形補間
+/// </summary>
+/// <param name="a">始点</param>
+/// <param name="b">終点</param>
+/// <param name="t"></param>
+/// <returns></returns>
+float Lerp(const float& a, const float& b, float t);
