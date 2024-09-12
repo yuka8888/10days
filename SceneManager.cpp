@@ -30,6 +30,12 @@ int SceneManager::Run()
 	//更新処理
 	sceneArr_[currentSceneNo_]->Update(); //シーンごとの更新処理
 
+	if (currentSceneNo_ == kPlay) {
+		if (sceneArr_[currentSceneNo_]->IsStageClear()) {
+			sceneArr_[currentSceneNo_]->Initialize();
+		}
+	}
+
 	//描画処理
 	sceneArr_[currentSceneNo_]->Draw();
 

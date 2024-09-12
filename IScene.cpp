@@ -1,4 +1,4 @@
-﻿#include "IScene.h"
+#include "IScene.h"
 //タイトルシーンで初期化
 int IScene::sceneNo = kTitle;
 
@@ -7,3 +7,8 @@ int IScene::sceneNo = kTitle;
 IScene::~IScene() {};
 
 int IScene::GetSceneNo() { return sceneNo; }
+
+bool IScene::IsStageClear()
+{
+	return isStageClear;
+}

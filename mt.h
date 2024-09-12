@@ -12,6 +12,7 @@ enum class MapChipType {
 	kKey, //鍵
 	kGoal, //ゴール
 	kFall, //穴
+	kMagicCircle //上下入れ替えの魔法陣
 };
 
 enum Corner {

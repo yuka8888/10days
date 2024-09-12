@@ -21,6 +21,7 @@ public:
 
 	void CheckCollision();
 
+
 	/// <summary>
 	/// マップの生成
 	/// </summary>
@@ -29,26 +30,25 @@ public:
 private:
 	//ゲームのフェーズ
 	enum class Phase {
-		kMovePlayerTop, //女の子が動く
-		kMovePlayerBottom, //男の子が動く
+		kMovePlayerGirlTop, //女の子が上で動く
+		kMovePlayerBoyTop, //男の子が上で動く
+		kMovePlayerGirlBottom, //女の子が下で動く
+		kMovePlayerBoyBottom, //男の子が下で動く
 		kMoveAll, //どっちも動く
 	};
 
 	//現在のステージ
-	uint32_t StageNo = 1;
-
-	//ステージをクリアしたか
-	bool isStageClear = false;
+	uint32_t stageNo_ = 0;
 
 	//現在のフェーズ
-	Phase phase = Phase::kMovePlayerTop;
+	Phase phase = Phase::kMovePlayerGirlTop;
 
 	float kWindowHeight = 720.0f;
 	float kWindowWidth = 1280.0f;
 
 	//プレイヤー
-	PlayerTop* playerTop_ = nullptr;
-	PlayerBottom* playerBottom_ = nullptr;
+	PlayerTop* playerGirl_ = nullptr;
+	PlayerBottom* playerBoy_ = nullptr;
 
 	//カメラの管理
 	CameraManager* cameraManager_ = nullptr;
@@ -68,11 +68,15 @@ private:
 	Matrix3x3 worldMatrix_;
 	Matrix3x3 wvpVpMatrix_;
 
+	//鍵が描画されたか
+	bool isKeyDraw_ = false;
+
 	//スクリーン座標
 	Vector2 screenPosition_;
 
 	//ブロック
-	Block block[10];
+	Block blockTop_[10];
+	Block blockBottom_[10];
 
 	//落とし穴
 	AABB fallAABB_[10];

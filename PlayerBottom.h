@@ -18,12 +18,12 @@ public:
 	/// <summary>
 	/// 下のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerBottomPhaseUpdate();
+	void PlayerMovePhaseUpdate();
 
 	/// <summary>
 	/// 上のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerTopPhaseUpdate();
+	void PlayerStopPhaseUpdate();
 
 	void Draw(Camera camera);
 
@@ -36,6 +36,11 @@ public:
 	/// 最終的に移動させる
 	/// </summary>
 	void MoveResult();
+
+	/// <summary>
+	/// 上下の場所入れ替え
+	/// </summary>
+	void SwapTopBottom();
 
 	void SetMapChipField(MapChipManager* mapChipManager);
 
@@ -59,6 +64,11 @@ public:
 	void SetTranslation(Vector2 translation);
 
 	void HaveKey(bool haveKey);
+	bool HaveKey();
+
+	bool IsGoal();
+
+	bool IsMagicCircleTouch();
 
 	void SetFallBlockIndex(IndexSet index);
 
@@ -108,8 +118,17 @@ private:
 	//鍵を持っているか
 	bool haveKey_ = false;
 
+	//魔法陣に触れているか
+	bool isMagicCircleTouch_ = false;
+
+	float kBottomGround_ = 56.0f;
+
+	float kTopGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
+
+	float nowGround_ = kBottomGround_;
+
 	Vector2 initialPosition_ = { 0.0f, 0.0f };
-	Vector2 translation_ = { 100.0f, 56.0f };
+	Vector2 translation_ = { 100.0f, kBottomGround_ };
 	Vector2 scale_ = { 1.0f, 1.0f };
 	float rotate_ = 0.0f;
 	Vector2 velocity_ = { 0.0f,0.0f };

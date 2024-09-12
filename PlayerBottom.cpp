@@ -17,9 +17,10 @@ void PlayerBottom::Initialize()
 	}
 }
 
-void PlayerBottom::PlayerBottomPhaseUpdate()
+void PlayerBottom::PlayerMovePhaseUpdate()
 {
 	animationTimer++;
+	AnimationTimerChange();
 
 	isBottomPhase = true;
 	isTopPhase = false;;
@@ -29,6 +30,15 @@ void PlayerBottom::PlayerBottomPhaseUpdate()
 	}
 	else {
 		velocity_ = {};
+
+		if (direction == Direction::kRight) {
+
+			direction = Direction::kRightStand;
+		}
+		else if (direction == Direction::kLeft) {
+			direction = Direction::kLeftStand;
+		}
+
 	}
 
 	//鍵を持った状態じゃないとゴールにしない
@@ -38,7 +48,7 @@ void PlayerBottom::PlayerBottomPhaseUpdate()
 
 }
 
-void PlayerBottom::PlayerTopPhaseUpdate()
+void PlayerBottom::PlayerStopPhaseUpdate()
 {
 	isBottomPhase = false;
 	isTopPhase = true;
@@ -138,6 +148,7 @@ void PlayerBottom::Move()
 {
 	isPushTwoBlocks_ = false;
 	isPushBlock_ = false;
+	isMagicCircleTouch_ = false;
 
 	AnimationTimerChange();
 	velocity_ = { 0.0f, 0.0f };
@@ -190,6 +201,20 @@ void PlayerBottom::MoveResult()
 	else {
 		translation_.y = translation_.y + velocity_.y;
 	}
+}
+
+void PlayerBottom::SwapTopBottom()
+{
+	//地面座標入れ替え
+	if (nowGround_ == kTopGround_) {
+		nowGround_ = kBottomGround_;
+	}
+	else {
+		nowGround_ = kTopGround_;
+	}
+
+	//座標入れ替え
+	translation_.y = nowGround_;
 }
 
 void PlayerBottom::SetMapChipField(MapChipManager* mapChipManager)
@@ -262,6 +287,21 @@ void PlayerBottom::SetTranslation(Vector2 translation)
 void PlayerBottom::HaveKey(bool haveKey)
 {
 	haveKey_ = haveKey;
+}
+
+bool PlayerBottom::HaveKey()
+{
+	return haveKey_;
+}
+
+bool PlayerBottom::IsGoal()
+{
+	return isGoal_;
+}
+
+bool PlayerBottom::IsMagicCircleTouch()
+{
+	return isMagicCircleTouch_;
 }
 
 void PlayerBottom::SetFallBlockIndex(IndexSet index)
@@ -345,6 +385,13 @@ void PlayerBottom::MapCollisionBottom()
 		isGoal_ = true;
 	}
 
+	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 0.0f, -1.0f });
+
+	if (MapChipType::kMagicCircle == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isMagicCircleTouch_ = true;
+	}
+
+
 	//右下
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f });
 
@@ -354,6 +401,12 @@ void PlayerBottom::MapCollisionBottom()
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		isGoal_ = true;
+	}
+
+	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ 0.0f, -1.0f });
+
+	if (MapChipType::kMagicCircle == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isMagicCircleTouch_ = true;
 	}
 
 }
@@ -391,6 +444,7 @@ void PlayerBottom::MapCollisionRight()
 		haveKey_ = true;
 	}
 
+		bool isLandingBlock = false;
 	//ブロックが下にあったら当たり判定とらない
 	if (isGround_) {
 		//右下
@@ -405,9 +459,8 @@ void PlayerBottom::MapCollisionRight()
 		}
 
 		//右下
-		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ 0, -1.0f });
+		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, -1.0f });
 
-		bool isLandingBlock = false;
 		for (uint32_t i = 0; i < 10; i++) {
 			if (indexSet.xIndex == fallBlockIndex_[i].xIndex && indexSet.yIndex == fallBlockIndex_[i].yIndex) {
 				isLandingBlock = true;
@@ -460,6 +513,8 @@ void PlayerBottom::MapCollisionLeft()
 		isGoal_ = true;
 	}
 
+	bool isLandingBlock = false;
+
 	//ブロックが下にあったら当たり判定とらない
 	if (isGround_) {
 		//左下
@@ -474,9 +529,9 @@ void PlayerBottom::MapCollisionLeft()
 		}
 
 		//左下
-		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 0, -1.0f });
-	
-		bool isLandingBlock = false;
+		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 1.0f, -1.0f });
+
+
 		for (uint32_t i = 0; i < 10; i++) {
 			if (indexSet.xIndex == fallBlockIndex_[i].xIndex && indexSet.yIndex == fallBlockIndex_[i].yIndex) {
 				isLandingBlock = true;
@@ -487,5 +542,6 @@ void PlayerBottom::MapCollisionLeft()
 			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
 			velocity_.x = 0.0f;
 		}
+
 	}
 }

@@ -19,12 +19,12 @@ public:
 	/// <summary>
 	/// 下のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerBottomPhaseUpdate();
+	void PlayerStopPhaseUpdate();
 
 	/// <summary>
 	/// 上のキャラクターが動くときの更新処理
 	/// </summary>
-	void PlayerTopPhaseUpdate();
+	void PlayerMovePhaseUpdate();
 	
 	/// <summary>
 	/// 最終的に移動させる
@@ -67,10 +67,19 @@ public:
 
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
+
+	/// <summary>
+	/// 上下の場所入れ替え
+	/// </summary>
+	void SwapTopBottom();
 	
 	void ScrollMove();
 
 	bool HaveKey();
+
+	void IsKeyDraw(bool isKeyDraw);
+
+	bool IsMagicCircleTouch();
 
 	void SetCamera(Camera camera);
 
@@ -115,16 +124,25 @@ private:
 	//鍵を持っているか
 	bool haveKey_ = false;
 
-	//地面座標
-	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
+	//魔法陣に触れているか
+	bool isMagicCircleTouch_ = false;
+
+	//鍵が描画されたか
+	bool isKeyDraw_ = false;
+
+	float kBottomGround_ = 56.0f;
+
+	float kTopGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
+
+	float nowGround_ = kTopGround_;
 
 	//初期位置
 	Vector2 initialPosition_ = {0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {100.0f, kGround_};
+	Vector2 translation_ = {100.0f, nowGround_ };
 
 	//1ループ前の座標
-	Vector2 preTranslation_ = { 0.0f, kGround_ + 10.0f };
+	Vector2 preTranslation_ = { 0.0f, kTopGround_ + 10.0f };
 	//拡縮
 	Vector2 scale_ = {1.0f, 1.0f};
 	//回転
@@ -133,6 +151,9 @@ private:
 	Vector2 velocity_ = { 0.0f,0.0f };
 	//加速量
 	Vector2 kAcceleration_ = { 0.0f, -0.5f };
+
+	//最高落下速度
+	float kMaxFallSpeed = -10.0f;
 
 	//地面についているか
 	bool isGround_ = true;

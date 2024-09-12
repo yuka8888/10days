@@ -36,7 +36,8 @@ public:
 
 	MapChipData GetMapChipDate();
 
-	uint32_t GetBlockNum();
+	uint32_t GetBlockTopNum();
+	uint32_t GetBlockBottomNum();
 	
 	uint32_t GetFallNum();
 
@@ -60,13 +61,14 @@ private:
 	//縦の要素数
 	static inline const uint32_t kNumBlockVirtical_ = 16;
 	//横の要素数
-	static inline const uint32_t kNumBlockHorizontal_ = 40;
+	static inline const uint32_t kNumBlockHorizontal_ = 28;
 
 	//ブロックの個数
-	uint32_t kBlockNum = 0;
+	uint32_t kBlockTopNum_ = 0;
+	uint32_t kBlockBottomNum_ = 0;
 
 	//ブロックの個数
-	uint32_t kFallNum = 0;
+	uint32_t kFallNum_ = 0;
 
 	MapChipData mapChipData_;
 

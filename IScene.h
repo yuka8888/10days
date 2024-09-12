@@ -10,6 +10,8 @@ protected:
 	//シーン番号を管理する変数
 	static int sceneNo;
 
+	bool isStageClear;
+
 public:
 	//継承先で実装される関数
 	virtual void Initialize() = 0;
@@ -19,5 +21,6 @@ public:
 	virtual ~IScene();
 
 	int GetSceneNo();
+	bool IsStageClear();
 };
 

@@ -12,6 +12,7 @@ namespace {
 		{"4", MapChipType::kKey},
 		{"5", MapChipType::kGoal},
 		{"6", MapChipType::kFall},
+		{"7", MapChipType::kMagicCircle},
 	};
 }
 
@@ -60,14 +61,19 @@ void MapChipManager::LoadMapChipCsv(const std::string& filePath) {
 
 				//ブロックの個数を取得
 				if (mapChipTable[word] == MapChipType::kBlockBottom) {
-					kBlockNum++;
+					kBlockBottomNum_++;
+
+				}
+
+				//ブロックの個数を取得
+				if (mapChipTable[word] == MapChipType::kBlockTop) {
+					kBlockTopNum_++;
 
 				}
 
 				//落とし穴の個数を取得
 				if (mapChipTable[word] == MapChipType::kFall) {
-					kFallNum++;
-
+					kFallNum_++;
 				}
 			}
 		}
@@ -91,14 +97,19 @@ MapChipData MapChipManager::GetMapChipDate()
 	return mapChipData_;
 }
 
-uint32_t MapChipManager::GetBlockNum()
+uint32_t MapChipManager::GetBlockTopNum()
 {
-	return kBlockNum;
+	return kBlockTopNum_;
+}
+
+uint32_t MapChipManager::GetBlockBottomNum()
+{
+	return kBlockBottomNum_;
 }
 
 uint32_t MapChipManager::GetFallNum()
 {
-	return kFallNum;
+	return kFallNum_;
 }
 
 Vector2 MapChipManager::GetBlockSize()
