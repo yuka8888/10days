@@ -119,6 +119,13 @@ void PlayScene::Update()
 
 	playerGirl_->SetCamera(cameraManager_->GetCamera());
 
+	//背景
+	backAnimationTimer++;
+	if (backAnimationTimer >= backAnimationTimerReset)
+	{
+		backAnimationTimer = 0;
+	}
+
 	//ブロックを共有
 	playerGirl_->SetBlockTop(blockTop_);
 	playerGirl_->SetBlockBottom(blockBottom_);
@@ -156,7 +163,7 @@ void PlayScene::Update()
 			}
 			for (int i = 0; i < 8; ++i)
 			{
-				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetBackTreeScroll();
+				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetFrontTreeScroll();
 			}
 
 			break;
@@ -193,7 +200,7 @@ void PlayScene::Update()
 			}
 			for (int i = 0; i < 8; ++i)
 			{
-				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetBackTreeScroll();
+				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetFrontTreeScroll();
 			}
 
 			break;

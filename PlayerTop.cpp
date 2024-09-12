@@ -244,7 +244,7 @@ void PlayerTop::Move()
 		else if (direction == Direction::kLeftJump) {
 			direction = Direction::kLeft;
 		}
-		
+
 	}
 
 	//移動処理
@@ -252,7 +252,7 @@ void PlayerTop::Move()
 		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
 		//スクロール
-		frontTreeScroll_ -= 20;
+		frontTreeScroll_ -= 2;
 		backTreeScroll_ -= 1;
 		//当たり判定
 		MapCollisionLeft();
@@ -261,7 +261,7 @@ void PlayerTop::Move()
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
 		//スクロール
-		frontTreeScroll_ += 20;
+		frontTreeScroll_ += 2;
 		backTreeScroll_ += 1;
 		//当たり判定
 		MapCollisionRight();
@@ -517,9 +517,9 @@ void PlayerTop::MapCollisionBottom()
 	}
 
 	if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
-			velocity_.y = 0.0f;
-			isLanding_ = true;
+		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+		velocity_.y = 0.0f;
+		isLanding_ = true;
 	}
 
 	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -652,8 +652,8 @@ void PlayerTop::MapCollisionRight()
 		}
 
 		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-				velocity_.x = 0.0f;
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
 		}
 
 		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -779,8 +779,8 @@ void PlayerTop::MapCollisionLeft()
 		}
 
 		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-				velocity_.x = 0.0f;
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
 		}
 
 		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
