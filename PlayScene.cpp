@@ -139,6 +139,8 @@ void PlayScene::Update()
 			if (animationTimer >= animationTimerReset) {
 				animationTimer = 0;
 			}
+			//各種サウンド
+			Sound();
 
 			//プレイヤーの更新
 			playerGirl_->PlayerMovePhaseUpdate();
@@ -181,6 +183,8 @@ void PlayScene::Update()
 			if (animationTimer >= animationTimerReset) {
 				animationTimer = 0;
 			}
+			//各種サウンド
+			Sound();
 
 			//プレイヤーの更新
 			playerGirl_->PlayerStopPhaseUpdate();
@@ -225,12 +229,14 @@ void PlayScene::Update()
 				animationTimer = 0;
 			}
 
-			//アニメーションタイマーの更新
-			animationTimer++;
-			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
-			}
+			////アニメーションタイマーの更新
+			//animationTimer++;
+			////アニメーションタイマーのリセット
+			//if (animationTimer >= animationTimerReset) {
+			//	animationTimer = 0;
+			//}
+			//各種サウンド
+			Sound();
 
 			//プレイヤーの更新
 			playerGirl_->PlayerMovePhaseUpdate();
@@ -264,12 +270,16 @@ void PlayScene::Update()
 				animationTimer = 0;
 			}
 
-			//アニメーションタイマーの更新
-			animationTimer++;
-			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
-			}
+			////アニメーションタイマーの更新
+			//animationTimer++;
+			////アニメーションタイマーのリセット
+			//if (animationTimer >= animationTimerReset) {
+			//	animationTimer = 0;
+			//}
+
+			//各種サウンド
+			Sound();
+
 
 			//プレイヤーの更新
 			playerBoy_->PlayerMovePhaseUpdate();
@@ -434,6 +444,52 @@ void PlayScene::CheckCollision()
 			//線形補間でブロック落下
 			blockBottom_[i].velocity.y = Lerp(startBlockPosition.y, endBlockPosition.y, easeInCubic(blockFallTimer));
 		}
+	}
+
+}
+
+void PlayScene::Sound()
+{
+	//ゲームシーンのBGM
+	if (!Novice::IsPlayingAudio(playgameScene)) {
+		///BGMを再生
+		playgameScene = Novice::PlayAudio(gameSceneBGM, false, 1.0f);
+	}
+
+	if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
+		if (!Novice::IsPlayingAudio(playcharacterChange)) {
+			///操作キャラ変更SEを再生
+			playcharacterChange = Novice::PlayAudio(characterChangeSE, false, 0.3f);
+		}
+	}
+
+	//鍵のSE
+	if (playerGirl_->HaveKey()) {
+		if (preHaveKey == 0)
+			if (!Novice::IsPlayingAudio(playGetKey)) {
+				///SEを再生
+				playGetKey = Novice::PlayAudio(getKeySE, false, 1.0f);
+				preHaveKey = 1;
+			}
+	}
+	//ブロックのSE
+	//押してるとき
+	if (playerBoy_->GetDirection() == Direction::kPushBlock) {
+		if (!Novice::IsPlayingAudio(playPushBlock)) {
+			///SEを再生
+			playPushBlock = Novice::PlayAudio(pushBlockSE, false, 0.5f);
+		}
+	}
+	//落ちた時
+	for (uint32_t i = 0; i < mapChipField_->GetBlockBottomNum(); i++) {
+		if (blockBottom_[i].isFall == true && preHaveBlock == 0) {
+			if (!Novice::IsPlayingAudio(playPlockFit)) {
+				///SEを再生
+				playPlockFit = Novice::PlayAudio(blockFitSE, false, 0.5f);
+				preHaveBlock = 1;
+			}
+		}
+
 	}
 
 }
