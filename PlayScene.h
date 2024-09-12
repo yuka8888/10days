@@ -129,7 +129,7 @@ private:
 	int backAnimationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 60;
-	int backAnimationTimerReset = 180;
+	int backAnimationTimerReset = 28;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
