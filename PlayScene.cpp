@@ -197,8 +197,8 @@ void PlayScene::Draw()
 	Novice::DrawSprite(720, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
 
 	//下
-	Novice::DrawSprite(0, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawQuad(0,355,640,355,0,720,640,720,kWidth_*(backAnimationTimer/60),0, kWidth_,kHeight_, bg_underTexture,WHITE);
+	Novice::DrawQuad(640, 355, 1280, 355, 640, 720, 1280, 720, kWidth_ * (backAnimationTimer / 60), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
 
 	//プレイヤーの描画
 	playerTop_->Draw();

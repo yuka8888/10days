@@ -94,6 +94,10 @@ private:
 	int frontTreeScroll_ = 0;
 	int backTreeScroll_ = 0;
 
+	//背景の幅
+	int kWidth_ = 720;
+	int kHeight_ = 360;
+
 	//背景画像
 	//上の背景
 	//int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
@@ -125,7 +129,7 @@ private:
 	int backAnimationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 60;
-	int backAnimationTimerReset = 60;
+	int backAnimationTimerReset = 180;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
