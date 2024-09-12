@@ -59,7 +59,7 @@ void PlayScene::Initialize()
 					//落とし穴のaabbを計算
 					fallAABB_[l].max = { j * kBlockWidth_ + kBlockWidth_ / 2, i * kBlockHeight_ + kBlockHeight_ / 2 };
 					fallAABB_[l].min = { j * kBlockWidth_ - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
-					
+
 					l++;
 			}
 
@@ -83,6 +83,13 @@ void PlayScene::Update()
 
 	playerTop_->SetCamera(cameraManager_->GetCamera());
 
+	//背景
+	backAnimationTimer++;
+	if (backAnimationTimer >= backAnimationTimerReset)
+	{
+		backAnimationTimer = 0;
+	}
+
 	switch (phase) {
 		case Phase::kMovePlayerTop:
 
@@ -100,6 +107,16 @@ void PlayScene::Update()
 			//フェーズを変える
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBottom;
+			}
+
+			//スクロール
+			for (int i = 0; i < 8; ++i)
+			{
+				backLocalPos[i] = backTreePos[i] + playerTop_->GetBackTreeScroll();
+			}
+			for (int i = 0; i < 8; ++i)
+			{
+				frontLocalPos[i] = frontTreePos[i] + playerTop_->GetBackTreeScroll();
 			}
 
 			break;
@@ -158,8 +175,28 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	//背景の描画
-	Novice::DrawSprite(0, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//上
+	//奥の草
+	Novice::DrawSprite(0, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//後ろの木
+	for (int i = 0; i < 8; ++i)
+	{
+		Novice::DrawSprite(backLocalPos[i], 0, backTreeTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	}
+	//真ん中の草
+	Novice::DrawSprite(0, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//前の木
+	for (int i = 0; i < 8; ++i)
+	{
+		Novice::DrawSprite(frontLocalPos[i], 0, frontTreeTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	}
+	//前の草
+	Novice::DrawSprite(0, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+
+	//下
 	Novice::DrawSprite(0, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
 	Novice::DrawSprite(720, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
 
@@ -212,7 +249,7 @@ void PlayScene::CheckCollision()
 		for (uint32_t j = 0; j < mapChipField_->GetFallNum(); j++) {
 			if (fallAABB_[j].max.x >= block[i].aabb_.max.x - 0.5f && fallAABB_[j].max.x <= block[i].aabb_.max.x + 0.5f && !block[i].isFall) {
 				block[i].isFall = true;
- 				block[i].velocity.x = (fallAABB_[j].min.x - block[i].initialPosition.x + kBlockHeight_ / 2);
+				block[i].velocity.x = (fallAABB_[j].min.x - block[i].initialPosition.x + kBlockHeight_ / 2);
 				startBlockPosition = block[i].initialPosition + block[i].velocity;
 				endBlockPosition = { startBlockPosition.x, startBlockPosition.y - kBlockHeight_ };
 			}

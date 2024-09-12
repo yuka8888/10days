@@ -25,7 +25,7 @@ public:
 	/// 上のキャラクターが動くときの更新処理
 	/// </summary>
 	void PlayerTopPhaseUpdate();
-	
+
 	/// <summary>
 	/// 最終的に移動させる
 	/// </summary>
@@ -67,7 +67,7 @@ public:
 
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
-	
+
 	void ScrollMove();
 
 	bool HaveKey();
@@ -77,6 +77,10 @@ public:
 	Camera GetCamera();
 
 	bool IsGoal();
+
+	int GetFrontTreeScroll();
+
+	int GetBackTreeScroll();
 
 private:
 	//向いている方向
@@ -119,20 +123,26 @@ private:
 	float kGround_ = 48.0f * 8.0f + 24.0f + kHeight_ / 2.0f;
 
 	//初期位置
-	Vector2 initialPosition_ = {0.0f,0.0f };
+	Vector2 initialPosition_ = { 0.0f,0.0f };
 	//座標
-	Vector2 translation_ = {100.0f, kGround_};
+	Vector2 translation_ = { 100.0f, kGround_ };
 
 	//1ループ前の座標
 	Vector2 preTranslation_ = { 0.0f, kGround_ + 10.0f };
 	//拡縮
-	Vector2 scale_ = {1.0f, 1.0f};
+	Vector2 scale_ = { 1.0f, 1.0f };
 	//回転
 	float rotate_ = 0.0f;
 	//移動量
 	Vector2 velocity_ = { 0.0f,0.0f };
 	//加速量
 	Vector2 kAcceleration_ = { 0.0f, -0.5f };
+
+	//スクロール
+	int frontTreeScroll_ = 0;
+	int oldFrontTreeScroll_ = 0;
+	int backTreeScroll_ = 0;
+	int oldBackTreeScroll_ = 0;
 
 	//地面についているか
 	bool isGround_ = true;
@@ -145,19 +155,19 @@ private:
 
 	//天井に当たっているか
 	bool isCollideCeiling_ = false;
-	
+
 	MapChipType collisionBlockType_ = MapChipType::kBlank;
 
 	//したがぶロックについているか
 	bool isBottomHit_ = false;
 
 	//壁に当たったか
-	bool isContactWall_ = false; 
+	bool isContactWall_ = false;
 
 	//座標関係
 	Matrix3x3 worldMatrix_;
 	Matrix3x3 wvpVpMatrix_;
-	
+
 	//カメラ関係
 	Camera camera_;
 	//スクリーン座標

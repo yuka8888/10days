@@ -83,7 +83,7 @@ void PlayerTop::Draw()
 {
 	//スクリーン座標に変換
 	worldMatrix_ = MakeAffineMatrix(scale_, rotate_, translation_);
-	wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_,camera_.worldMatrix, camera_.vertex, camera_.viewPortPosition, camera_.viewPortSize);
+	wvpVpMatrix_ = MakewvpVpMatrix(worldMatrix_, camera_.worldMatrix, camera_.vertex, camera_.viewPortPosition, camera_.viewPortSize);
 
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
@@ -92,60 +92,60 @@ void PlayerTop::Draw()
 
 	switch (direction)
 	{
-	case kRight:
+		case kRight:
 
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkRight,
-			WHITE);
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkRight,
+				WHITE);
 
-		break;
-	case kRightStand:
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingRight,
-			WHITE);
-		break;
-	case kLeft:
+			break;
+		case kRightStand:
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingRight,
+				WHITE);
+			break;
+		case kLeft:
 
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkLeft,
-			WHITE);
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkLeft,
+				WHITE);
 
-		break;
-	case kLeftStand:
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingLeft,
-			WHITE);
-		break;
-	case kRightJump:
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpRight,
-			WHITE);
-		break;
-	case kLeftJump:
-		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpLeft,
-			WHITE);
-		break;
-	default:
-		break;
+			break;
+		case kLeftStand:
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingLeft,
+				WHITE);
+			break;
+		case kRightJump:
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpRight,
+				WHITE);
+			break;
+		case kLeftJump:
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpLeft,
+				WHITE);
+			break;
+		default:
+			break;
 	}
 #ifdef _DEBUG
 	ImGui::DragFloat2("PlayerGirl.Translation", &translation_.x, 0.01f);
@@ -163,6 +163,10 @@ void PlayerTop::Move()
 	isContactWall_ = false;
 	animationTimer++;
 
+
+	oldFrontTreeScroll_ = frontTreeScroll_;
+	oldBackTreeScroll_ = backTreeScroll_;
+
 	//状態によってタイマーのリセット値を変える
 	AnimationTimerChange();
 
@@ -171,7 +175,7 @@ void PlayerTop::Move()
 
 	//ジャンプ中
 	//地面についていて上押されたらジャンプ開始
-	if ((isGround_ || isLanding_)&& (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
+	if ((isGround_ || isLanding_) && (Novice::CheckHitKey(DIK_W) || Novice::CheckHitKey(DIK_UPARROW))) {
 		isGround_ = false;
 		isJump = true;
 
@@ -194,7 +198,7 @@ void PlayerTop::Move()
 			isGround_ = true;
 			translation_.y = kGround_;
 			velocity_.y = 0;
-			
+
 		}
 	}
 	if (isLanding_ == true || isGround_ == true) {
@@ -211,14 +215,18 @@ void PlayerTop::Move()
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
 		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
-
 		//当たり判定
 		MapCollisionLeft();
+		//スクロール
+		frontTreeScroll_ -= 20;
+		backTreeScroll_ -= 1;
 	}
-	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {		
+	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
-
+		//スクロール
+		frontTreeScroll_ += 20;
+		backTreeScroll_ += 1;
 		//当たり判定
 		MapCollisionRight();
 	}
@@ -228,10 +236,13 @@ void PlayerTop::Move()
 		if (direction == Direction::kRight) {
 
 			direction = Direction::kRightStand;
+
 		}
 		else if (direction == Direction::kLeft) {
 			direction = Direction::kLeftStand;
 		}
+		frontTreeScroll_ = oldFrontTreeScroll_;
+		backTreeScroll_ = oldBackTreeScroll_;
 	}
 
 	if (isGround_) {
@@ -258,13 +269,13 @@ void PlayerTop::MapCollisionTop()
 {
 	// 移動後の4つの角の座標
 	std::array<Vector2, Corner::kNumCorner> positionNew;
-	
+
 	// 真上の当たり判定を行う
 	//移動後の座標
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(translation_ + velocity_, static_cast<Corner>(i));
 	}
-	
+
 	//左上
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop] + Vector2{ 1.0f, 0.0f });
 
@@ -283,7 +294,7 @@ void PlayerTop::MapCollisionTop()
 	}
 
 	//右上
-	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{-1.0f, 0.0f});
+	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{ -1.0f, 0.0f });
 
 	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
@@ -352,13 +363,13 @@ void PlayerTop::MapCollisionRight()
 {
 	// 移動後の4つの角の座標
 	std::array<Vector2, Corner::kNumCorner> positionNew;
-	
+
 	// 右の当たり判定を行う
 	//移動後の座標
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(translation_ + velocity_, static_cast<Corner>(i));
 	}
-	
+
 	//天井に当たっていたら上は当たり判定とらない
 	if (!isCollideCeiling_) {
 		//右上
@@ -380,7 +391,7 @@ void PlayerTop::MapCollisionRight()
 	}
 
 	//右真ん中
-	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ + Vector2{kWidth_ / 2.0f, 0.0f});
+	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ + Vector2{ kWidth_ / 2.0f, 0.0f });
 
 	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
@@ -417,13 +428,13 @@ void PlayerTop::MapCollisionLeft()
 {
 	// 移動後の4つの角の座標
 	std::array<Vector2, Corner::kNumCorner> positionNew;
-	
+
 	// 左の当たり判定を行う
 	//移動後の座標
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(translation_ + velocity_, static_cast<Corner>(i));
 	}
-	
+
 	//天井に当たっていたら上は当たり判定とらない
 	if (!isCollideCeiling_) {
 		//左上
@@ -445,7 +456,7 @@ void PlayerTop::MapCollisionLeft()
 	}
 
 	//左真ん中
-	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{kWidth_ / 2.0f, 0.0f});
+	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f });
 
 	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
@@ -483,27 +494,27 @@ void PlayerTop::AnimationTimerChange()
 {
 	switch (direction)
 	{
-	case kRight:
-		animationTimerReset = 56;
-		break;
-	case kRightStand:
-		animationTimerReset = 60;
-		break;
-	case kLeft:
-		animationTimerReset = 56;
-		break;
-	case kLeftStand:
-		animationTimerReset = 60;
-		break;
-	case kRightJump:
-		animationTimerReset = 56;
-		break;
-	case kLeftJump:
-		animationTimerReset = 56;
-		break;
+		case kRight:
+			animationTimerReset = 56;
+			break;
+		case kRightStand:
+			animationTimerReset = 60;
+			break;
+		case kLeft:
+			animationTimerReset = 56;
+			break;
+		case kLeftStand:
+			animationTimerReset = 60;
+			break;
+		case kRightJump:
+			animationTimerReset = 56;
+			break;
+		case kLeftJump:
+			animationTimerReset = 56;
+			break;
 
-	default:
-		break;
+		default:
+			break;
 	}
 
 	if (animationTimer >= animationTimerReset) {
@@ -531,6 +542,16 @@ Camera PlayerTop::GetCamera()
 bool PlayerTop::IsGoal()
 {
 	return isGoal_;
+}
+
+int PlayerTop::GetFrontTreeScroll()
+{
+	return frontTreeScroll_;
+}
+
+int PlayerTop::GetBackTreeScroll()
+{
+	return backTreeScroll_;
 }
 
 bool PlayerTop::HaveKey() {
