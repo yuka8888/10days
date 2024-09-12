@@ -109,6 +109,7 @@ public:
 
 	void SetBackTreeScroll(float backTreeScroll);
 
+	void SetIsChanged(bool isChanged);
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -120,11 +121,16 @@ private:
 	float kWidth_ = 32.0f;
 	//高さ
 	float kHeight_ = 64.0f;
-
+	float kChangeHeight = kHeight_ + 32;
 	//アニメーションタイマー
 	int animationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 0;
+	//操作キャラ変更アニメーションタイマー
+	int changeAnimationTimer = 0;
+	//操作キャラ変更アニメーションタイマーのリセット
+	int changeAnimationTimerReset = 120;
+
 	//プレイヤーの画像
 	//歩き　右
 	int walkRight = Novice::LoadTexture("./Resources./player_girl./player_walkRight_girl.png");
@@ -139,7 +145,18 @@ private:
 	int jumpRight = Novice::LoadTexture("./Resources./player_girl./player_JumpRight_girl.png");
 	//ジャンプ　左
 	int jumpLeft = Novice::LoadTexture("./Resources./player_girl./player_JumpLeft_girl.png");
+	
+	//操作キャラ変更後
+	//歩き　右
+	int walkChangeRight = Novice::LoadTexture("./Resources./player_girl./player_walkChangeRight_girl.png");
+	//歩き　左
+	int walkChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_walkChangeRight_girl.png");
+	//待機　右
+	int standingChangeRight = Novice::LoadTexture("./Resources./player_girl./player_StandingChangeRight_girl.png");
+	//待機　左
+	int standingChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_StandingChangeLeft_girl.png");
 
+	bool isChanged_ = false;
 	//ゴールしたか
 	bool isGoal_ = false;
 
