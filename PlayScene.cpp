@@ -432,19 +432,21 @@ void PlayScene::CheckCollision()
 		for (uint32_t j = 0; j < mapChipField_->GetWallNum(); j++) {
 			//ブロックと壁の当たり判定
 			if (isCollision(wallAABB_[j], blockTop_[i].aabb_)) {
-				if (!playerBoy_->IsPressSwitch() && playerBoy_->GetDirection() == Direction::kPushBlock ) {
-					blockTop_[i].velocity.x = wallAABB_->min.x - blockTop_[i].initialPosition.x - mapChipField_->GetBlockSize().x / 2.0f;
-					
-					//ブロックのaabbの計算しなおし
-					blockTop_[i].aabb_.max = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + kBlockHeight_ / 2 };
-					blockTop_[i].aabb_.min = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - kBlockHeight_ / 2 };
-					
-					playerBoy_->SetTranslation({ blockTop_[i].aabb_.min.x - playerBoy_->GetSize().x / 2.0f, playerBoy_->GetTranslation().y });
-				}
-				else {
-					playerGirl_->IsWallTopDraw(false);
-					playerBoy_->IsWallTopDraw(false);
-					isWallTopDraw_ = false;
+				if (!playerGirl_->IsPressSwitch()) {
+					if (isCollision(wallAABB_[j], { blockTop_[i].aabb_.min + Vector2{-1.0f, 0.0f},  blockTop_[i].aabb_.max + Vector2{-1.0f, 0.0f} })) {
+						playerGirl_->IsWallTopDraw(false);
+						playerBoy_->IsWallTopDraw(false);
+						isWallTopDraw_ = false;
+					}
+					else if (playerBoy_->GetDirection() == Direction::kPushBlock) {
+						blockTop_[i].velocity.x = wallAABB_->min.x - blockTop_[i].initialPosition.x - mapChipField_->GetBlockSize().x / 2.0f;
+
+						//ブロックのaabbの計算しなおし
+						blockTop_[i].aabb_.max = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + kBlockHeight_ / 2 };
+						blockTop_[i].aabb_.min = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - kBlockHeight_ / 2 };
+
+						playerBoy_->SetTranslation({ blockTop_[i].aabb_.min.x - playerBoy_->GetSize().x / 2.0f, playerBoy_->GetTranslation().y });
+					}
 				}
 			}
 
