@@ -252,8 +252,8 @@ void PlayerTop::Move()
 		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
 		//スクロール
-		frontTreeScroll_ -= 2;
-		backTreeScroll_ -= 1;
+		frontTreeScroll_ -= 0.2f;
+		backTreeScroll_ -= 0.05f;
 		//当たり判定
 		MapCollisionLeft();
 	}
@@ -261,8 +261,8 @@ void PlayerTop::Move()
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
 		//スクロール
-		frontTreeScroll_ += 2;
-		backTreeScroll_ += 1;
+		frontTreeScroll_ += 0.2f;
+		backTreeScroll_ += 0.05f;
 		//当たり判定
 		MapCollisionRight();
 	}
@@ -893,14 +893,24 @@ bool PlayerTop::IsGoal()
 	return isGoal_;
 }
 
-int PlayerTop::GetFrontTreeScroll()
+float PlayerTop::GetFrontTreeScroll()
 {
 	return frontTreeScroll_;
 }
 
-int PlayerTop::GetBackTreeScroll()
+float PlayerTop::GetBackTreeScroll()
 {
 	return backTreeScroll_;
+}
+
+void PlayerTop::SetFrontTreeScroll(float frontTreeScroll)
+{
+	frontTreeScroll_ = frontTreeScroll;
+}
+
+void PlayerTop::SetBackTreeScroll(float backTreeScroll)
+{
+	backTreeScroll_ = backTreeScroll;
 }
 
 bool PlayerTop::HaveKey() {

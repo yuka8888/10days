@@ -150,6 +150,9 @@ void PlayerBottom::Move()
 	isPushBlock_ = false;
 	isMagicCircleTouch_ = false;
 
+	oldFrontTreeScroll_ = frontTreeScroll_;
+	oldBackTreeScroll_ = backTreeScroll_;
+
 	AnimationTimerChange();
 	velocity_ = { 0.0f, 0.0f };
 
@@ -167,11 +170,19 @@ void PlayerBottom::Move()
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
 		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
+		//スクロール
+		frontTreeScroll_ += 0.2f;
+		backTreeScroll_ += 0.05f;
+
 		MapCollisionLeft();
 	}
 	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
+		//スクロール
+		frontTreeScroll_ -= 0.2f;
+		backTreeScroll_ -= 0.05f;
+
 		MapCollisionRight();
 	}
 
@@ -184,6 +195,8 @@ void PlayerBottom::Move()
 		else if (direction == Direction::kLeft) {
 			direction = Direction::kLeftStand;
 		}
+		frontTreeScroll_ = oldFrontTreeScroll_;
+		backTreeScroll_ = oldBackTreeScroll_;
 	}
 
 	//進んだ先のaabbの更新
@@ -346,6 +359,26 @@ void PlayerBottom::AnimationTimerChange()
 	if (animationTimer >= animationTimerReset) {
 		animationTimer = 0;
 	}
+}
+
+float PlayerBottom::GetFrontTreeScroll()
+{
+	return frontTreeScroll_;
+}
+
+float PlayerBottom::GetBackTreeScroll()
+{
+	return backTreeScroll_;
+}
+
+void PlayerBottom::SetFrontTreeScroll(float frontTreeScroll)
+{
+	frontTreeScroll_ = frontTreeScroll;
+}
+
+void PlayerBottom::SetBackTreeScroll(float backTreeScroll)
+{
+	backTreeScroll_ = backTreeScroll;
 }
 
 Vector2 PlayerBottom::CornerPosition(const Vector2& center, Corner corner)

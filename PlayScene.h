@@ -89,14 +89,14 @@ private:
 	Vector2 endBlockPosition;
 
 	//背景
-	int backTreePos[8] = { -2160 ,-1440,-720, 0,720,1440,2160 };
-	int frontTreePos[8] = { -2160 ,-1440,-720,0,720,1440,2160 };
+	float backTreePos[8] = { -2160 ,-1440,-720, 0,720,1440,2160 };
+	float frontTreePos[8] = { -2160 ,-1440,-720,0,720,1440,2160 };
 	int backLocalPos[8] = {};
 	int frontLocalPos[8] = {};
 
 	//スクロール
-	int frontTreeScroll_ = 0;
-	int backTreeScroll_ = 0;
+	float frontTreeScroll_ = 0;
+	float backTreeScroll_ = 0;
 
 	//背景の幅
 	int kWidth_ = 720;

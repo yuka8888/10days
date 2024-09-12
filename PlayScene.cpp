@@ -144,6 +144,16 @@ void PlayScene::Update()
 			playerGirl_->PlayerMovePhaseUpdate();
 			playerBoy_->PlayerStopPhaseUpdate();
 
+			//スクロール
+			for (int i = 0; i < 8; ++i)
+			{
+				backLocalPos[i] = int(backTreePos[i] + playerGirl_->GetBackTreeScroll());
+			}
+			for (int i = 0; i < 8; ++i)
+			{
+				frontLocalPos[i] = int(frontTreePos[i] + playerGirl_->GetFrontTreeScroll());
+			}
+
 			//フェーズを変える
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
@@ -151,20 +161,15 @@ void PlayScene::Update()
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
+
+				//スクロールの値の共有
+				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
+				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBoyBottom;
 			}
 
-			//スクロール
-			for (int i = 0; i < 8; ++i)
-			{
-				backLocalPos[i] = backTreePos[i] + playerGirl_->GetBackTreeScroll();
-			}
-			for (int i = 0; i < 8; ++i)
-			{
-				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetFrontTreeScroll();
-			}
 
 			break;
 
@@ -181,6 +186,16 @@ void PlayScene::Update()
 			playerGirl_->PlayerStopPhaseUpdate();
 			playerBoy_->PlayerMovePhaseUpdate();
 
+			//スクロール
+			for (int i = 0; i < 8; ++i)
+			{
+				backLocalPos[i] = int(backTreePos[i] + playerBoy_->GetBackTreeScroll());
+			}
+			for (int i = 0; i < 8; ++i)
+			{
+				frontLocalPos[i] = int(frontTreePos[i] + playerBoy_->GetFrontTreeScroll());
+			}
+
 			//フェーズを変える
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
@@ -188,19 +203,14 @@ void PlayScene::Update()
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
+
+				//スクロールの値の共有
+				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
+				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
+
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerGirlTop;
-			}
-
-			//スクロール
-			for (int i = 0; i < 8; ++i)
-			{
-				backLocalPos[i] = backTreePos[i] + playerGirl_->GetBackTreeScroll();
-			}
-			for (int i = 0; i < 8; ++i)
-			{
-				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetFrontTreeScroll();
 			}
 
 			break;
@@ -233,6 +243,11 @@ void PlayScene::Update()
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
+
+				//スクロールの値の共有
+				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
+				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
+
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBoyTop;
@@ -267,6 +282,11 @@ void PlayScene::Update()
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
+
+				//スクロールの値の共有
+				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
+				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
+
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerGirlTop;

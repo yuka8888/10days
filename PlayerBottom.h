@@ -75,6 +75,14 @@ public:
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
 
+	float GetFrontTreeScroll();
+
+	float GetBackTreeScroll();
+
+	void SetFrontTreeScroll(float frontTreeScroll);
+
+	void SetBackTreeScroll(float backTreeScroll);
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -132,6 +140,12 @@ private:
 	Vector2 scale_ = { 1.0f, 1.0f };
 	float rotate_ = 0.0f;
 	Vector2 velocity_ = { 0.0f,0.0f };
+
+	//スクロール
+	float frontTreeScroll_ = 0.0f;
+	float oldFrontTreeScroll_ = 0.0f;
+	float backTreeScroll_ = 0.0f;
+	float oldBackTreeScroll_ = 0.0f;
 
 	//座標関係
 	Matrix3x3 worldMatrix_;

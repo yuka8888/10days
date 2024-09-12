@@ -101,9 +101,13 @@ public:
 
 	bool IsGoal();
 
-	int GetFrontTreeScroll();
+	float GetFrontTreeScroll();
 
-	int GetBackTreeScroll();
+	float GetBackTreeScroll();
+	
+	void SetFrontTreeScroll(float frontTreeScroll);
+
+	void SetBackTreeScroll(float backTreeScroll);
 
 private:
 	//向いている方向
@@ -189,10 +193,10 @@ private:
 	bool isPressSwitch_ = false;
 
 	//スクロール
-	int frontTreeScroll_ = 0;
-	int oldFrontTreeScroll_ = 0;
-	int backTreeScroll_ = 0;
-	int oldBackTreeScroll_ = 0;
+	float frontTreeScroll_ = 0.0f;
+	float oldFrontTreeScroll_ = 0.0f;
+	float backTreeScroll_ = 0.0f;
+	float oldBackTreeScroll_ = 0.0f;
 
 	Block blockTop_[10];
 	Block blockBottom_[10];
