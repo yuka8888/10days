@@ -71,6 +71,9 @@
     <ClCompile Include="MapChipManager.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="TitleText.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -155,5 +158,6 @@
     <ClInclude Include="mt.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="MapChipManager.h" />
+    <ClInclude Include="TitleText.h" />
   </ItemGroup>
 </Project>

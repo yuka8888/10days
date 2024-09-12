@@ -321,7 +321,7 @@ void PlayScene::Draw()
 	//上
 	//奥の草
 	Novice::DrawSprite(0, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(kWidth_, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
 	//後ろの木
 	for (int i = 0; i < 8; ++i)
 	{
@@ -329,7 +329,7 @@ void PlayScene::Draw()
 	}
 	//真ん中の草
 	Novice::DrawSprite(0, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(kWidth_, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
 	//前の木
 	for (int i = 0; i < 8; ++i)
 	{
@@ -337,11 +337,11 @@ void PlayScene::Draw()
 	}
 	//前の草
 	Novice::DrawSprite(0, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(kWidth_, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
 
 	//下
-	Novice::DrawQuad(0, 355, 640, 355, 0, 720, 640, 720, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
-	Novice::DrawQuad(640, 355, 1280, 355, 640, 720, 1280, 720, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
+	Novice::DrawQuad(0, int(kBackPos_.y), int(kBackPos_.x), int(kBackPos_.y), 0, kWidth_, int(kBackPos_.x), kWidth_, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
+	Novice::DrawQuad(int(kBackPos_.x), int(kBackPos_.y), kMostPos_, int(kBackPos_.y), int(kBackPos_.x), kWidth_, kMostPos_, kWidth_, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
 
 
 	//プレイヤーの描画

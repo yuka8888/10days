@@ -101,6 +101,8 @@ private:
 	//背景の幅
 	int kWidth_ = 720;
 	int kHeight_ = 360;
+	int kMostPos_ = 1280;
+	Vector2 kBackPos_ = { 640.0f , 355.0f };
 
 	//背景画像
 	//上の背景
@@ -140,6 +142,6 @@ private:
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	
+
 };
 
