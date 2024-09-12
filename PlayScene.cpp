@@ -239,6 +239,8 @@ void PlayScene::Update()
 	//当たり判定をとる
 	CheckCollision();
 
+	//ボタンを押しているか共有
+
 	//鍵をとっているか共有
 	playerBoy_->HaveKey(playerGirl_->HaveKey());
 
@@ -441,16 +443,17 @@ void PlayScene::DrawMap()
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
 					break;
 
-				case MapChipType::kSwitch:
+				case MapChipType::kWall:
+					//ブロックのaabbを計算
 
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
 					break;
 
-				case MapChipType::kWall:
-					//ブロックのaabbを計算
+				case MapChipType::kSwitch:
 
-					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
+					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
 					break;
+
 			}
 
 		}

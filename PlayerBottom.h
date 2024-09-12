@@ -143,6 +143,9 @@ private:
 	//ブロックを二個押す
 	bool isPushTwoBlocks_ = false;
 
+	//スイッチが押されたか
+	bool isPressSwitch_ = false;
+
 	//AABB
 	AABB aabb_;
 

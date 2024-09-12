@@ -343,7 +343,7 @@ void PlayerTop::MapCollisionTop()
 
 	//右上
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{ -1.0f, 0.0f });
-	
+
 	for (uint32_t i = 0; i < blockTopNum_; i++) {
 		if (isCollision(blockTop_[i].aabb_, positionNew[kRightTop] + Vector2{ -1.0f, 0.0f })) {
 			translation_.y = blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
@@ -381,6 +381,16 @@ void PlayerTop::MapCollisionTop()
 		isGoal_ = true;
 	}
 
+	if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+		velocity_.y = 0.0f;
+		isCollideCeiling_ = true;
+	}
+
+	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isPressSwitch_ = true;
+	}
+
 }
 
 void PlayerTop::MapCollisionBottom()
@@ -393,7 +403,7 @@ void PlayerTop::MapCollisionBottom()
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(translation_ + velocity_, static_cast<Corner>(i));
 	}
-	
+
 	//左下
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f });
 
@@ -411,6 +421,16 @@ void PlayerTop::MapCollisionBottom()
 			velocity_.y = 0.0f;
 			isLanding_ = true;
 		}
+	}
+
+	if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+		velocity_.y = 0.0f;
+		isCollideCeiling_ = true;
+	}
+
+	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isPressSwitch_ = true;
 	}
 
 	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -450,7 +470,7 @@ void PlayerTop::MapCollisionBottom()
 			isLanding_ = true;
 		}
 	}
-	 //
+	//
 	for (uint32_t i = 0; i < blockBottomNum_; i++) {
 		if (isCollision(blockBottom_[i].aabb_, positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f })) {
 			translation_.y = blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
@@ -486,6 +506,16 @@ void PlayerTop::MapCollisionBottom()
 		isMagicCircleTouch_ = true;
 	}
 
+	if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isLanding_ = true;
+	}
+
+	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		isPressSwitch_ = true;
+	}
+
 }
 
 void PlayerTop::MapCollisionRight()
@@ -503,7 +533,7 @@ void PlayerTop::MapCollisionRight()
 	if (!isCollideCeiling_) {
 		//右上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
-		
+
 		for (uint32_t i = 0; i < blockTopNum_; i++) {
 			if (isCollision(blockTop_[i].aabb_, positionNew[kRightTop])) {
 				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
@@ -536,6 +566,8 @@ void PlayerTop::MapCollisionRight()
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			isGoal_ = true;
 		}
+
+
 
 	}
 
@@ -575,7 +607,7 @@ void PlayerTop::MapCollisionRight()
 	if (!isLanding_) {
 		//右下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
-		
+
 		for (uint32_t i = 0; i < blockTopNum_; i++) {
 			if (isCollision(blockTop_[i].aabb_, positionNew[kRightBottom])) {
 				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
@@ -609,6 +641,16 @@ void PlayerTop::MapCollisionRight()
 			isGoal_ = true;
 		}
 
+		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+		}
+
+		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isPressSwitch_ = true;
+		}
+
+
 	}
 
 }
@@ -628,7 +670,7 @@ void PlayerTop::MapCollisionLeft()
 	if (!isCollideCeiling_) {
 		//左上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
-		
+
 		for (uint32_t i = 0; i < blockTopNum_; i++) {
 			if (isCollision(blockTop_[i].aabb_, positionNew[kLeftTop])) {
 				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
@@ -724,6 +766,15 @@ void PlayerTop::MapCollisionLeft()
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			isGoal_ = true;
+		}
+
+		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+		}
+
+		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			isPressSwitch_ = true;
 		}
 
 	}
@@ -834,6 +885,21 @@ bool PlayerTop::IsGoal()
 
 bool PlayerTop::HaveKey() {
 	return haveKey_;
+}
+
+void PlayerTop::HaveKey(bool haveKey)
+{
+	haveKey_ = haveKey;
+}
+
+bool PlayerTop::IsPressSwitch()
+{
+	return isPressSwitch_;
+}
+
+void PlayerTop::IsPressSwitch(bool isPressSwitch)
+{
+	isPressSwitch_ = isPressSwitch;
 }
 
 void PlayerTop::IsKeyDraw(bool isKeyDraw)

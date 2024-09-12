@@ -85,6 +85,12 @@ public:
 
 	bool HaveKey();
 
+	void HaveKey(bool haveKey);
+
+	bool IsPressSwitch();
+
+	void IsPressSwitch(bool isPressSwitch_);
+
 	void IsKeyDraw(bool isKeyDraw);
 
 	bool IsMagicCircleTouch();
@@ -174,6 +180,9 @@ private:
 
 	//天井に当たっているか
 	bool isCollideCeiling_ = false;
+
+	//スイッチが押されたか
+	bool isPressSwitch_ = false;
 
 	Block blockTop_[10];
 	Block blockBottom_[10];
