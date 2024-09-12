@@ -88,11 +88,37 @@ private:
 	//落下するときの最終位置
 	Vector2 endBlockPosition;
 
+	//背景
+	int backTreePos[8] = { -2160 ,-1440,-720, 0,720,1440,2160 };
+	int frontTreePos[8] = { -2160 ,-1440,-720,0,720,1440,2160 };
+	int backLocalPos[8] = {};
+	int frontLocalPos[8] = {};
+
+	//スクロール
+	int frontTreeScroll_ = 0;
+	int backTreeScroll_ = 0;
+
+	//背景の幅
+	int kWidth_ = 720;
+	int kHeight_ = 360;
+
 	//背景画像
 	//上の背景
-	int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
+	//int bg_groundTexture = Novice::LoadTexture("./Resources./background./bg_ground.png");
+	//前の木
+	int frontTreeTexture = Novice::LoadTexture("./Resources./background./frontTree.png");
+	//奥の木
+	int backTreeTexture = Novice::LoadTexture("./Resources./background./farTree.png");
+	//前の草
+	int frontGrassTexture = Novice::LoadTexture("./Resources./background./frontGrass.png");
+	//真ん中の草
+	int centerGrassTexture = Novice::LoadTexture("./Resources./background./centerGrass.png");
+	//奥の草
+	int farGrassTexture = Novice::LoadTexture("./Resources./background./farGrass.png");
+
 	//下の背景
-	int bg_underTexture = Novice::LoadTexture("./Resources./background./bg_under.png");
+	int bg_underTexture = Novice::LoadTexture("./Resources./background./underBack.png");
+
 	//マップチップの画像
 	//上のブロックテクスチャ
 	int blockTexture = Novice::LoadTexture("./Resources./mapChip./block.png");
@@ -105,8 +131,10 @@ private:
 	int goalOpenTexture = Novice::LoadTexture("./Resources./mapChip./door_open.png");
 	//アニメーションタイマー
 	int animationTimer = 0;
+	int backAnimationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 60;
+	int backAnimationTimerReset = 28;
 
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };

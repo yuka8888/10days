@@ -60,7 +60,7 @@ void PlayScene::Initialize()
 
 			switch (mapChipField_->GetMapChipDate().data[i][j]) {
 				case MapChipType::kBlockBottom:
-					
+
 					//ブロックの初期位置を取得
 					blockBottom_[k].initialPosition = { j * kBlockWidth_, i * kBlockHeight_ };
 
@@ -88,7 +88,7 @@ void PlayScene::Initialize()
 					//落とし穴のaabbを計算
 					fallAABB_[l].max = { j * kBlockWidth_ + kBlockWidth_ / 2, i * kBlockHeight_ + kBlockHeight_ / 2 };
 					fallAABB_[l].min = { j * kBlockWidth_ - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
-					
+
 					l++;
 			}
 
@@ -149,6 +149,16 @@ void PlayScene::Update()
 				phase = Phase::kMovePlayerBoyBottom;
 			}
 
+			//スクロール
+			for (int i = 0; i < 8; ++i)
+			{
+				backLocalPos[i] = backTreePos[i] + playerGirl_->GetBackTreeScroll();
+			}
+			for (int i = 0; i < 8; ++i)
+			{
+				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetBackTreeScroll();
+			}
+
 			break;
 
 		case Phase::kMovePlayerBoyTop:
@@ -176,6 +186,16 @@ void PlayScene::Update()
 				phase = Phase::kMovePlayerGirlTop;
 			}
 
+			//スクロール
+			for (int i = 0; i < 8; ++i)
+			{
+				backLocalPos[i] = backTreePos[i] + playerGirl_->GetBackTreeScroll();
+			}
+			for (int i = 0; i < 8; ++i)
+			{
+				frontLocalPos[i] = frontTreePos[i] + playerGirl_->GetBackTreeScroll();
+			}
+
 			break;
 
 		case Phase::kMovePlayerGirlBottom:
@@ -188,6 +208,12 @@ void PlayScene::Update()
 				animationTimer = 0;
 			}
 
+			//アニメーションタイマーの更新
+			animationTimer++;
+			//アニメーションタイマーのリセット
+			if (animationTimer >= animationTimerReset) {
+				animationTimer = 0;
+			}
 
 			//プレイヤーの更新
 			playerGirl_->PlayerMovePhaseUpdate();
@@ -216,6 +242,12 @@ void PlayScene::Update()
 				animationTimer = 0;
 			}
 
+			//アニメーションタイマーの更新
+			animationTimer++;
+			//アニメーションタイマーのリセット
+			if (animationTimer >= animationTimerReset) {
+				animationTimer = 0;
+			}
 
 			//プレイヤーの更新
 			playerBoy_->PlayerMovePhaseUpdate();
@@ -259,10 +291,31 @@ void PlayScene::Update()
 void PlayScene::Draw()
 {
 	//背景の描画
-	Novice::DrawSprite(0, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 0, bg_groundTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(0, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(720, 355, bg_underTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//上
+	//奥の草
+	Novice::DrawSprite(0, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, farGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//後ろの木
+	for (int i = 0; i < 8; ++i)
+	{
+		Novice::DrawSprite(backLocalPos[i], 0, backTreeTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	}
+	//真ん中の草
+	Novice::DrawSprite(0, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, centerGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	//前の木
+	for (int i = 0; i < 8; ++i)
+	{
+		Novice::DrawSprite(frontLocalPos[i], 0, frontTreeTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	}
+	//前の草
+	Novice::DrawSprite(0, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(720, 0, frontGrassTexture, 1.0f, 1.0f, 0.0f, WHITE);
+
+	//下
+	Novice::DrawQuad(0, 355, 640, 355, 0, 720, 640, 720, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
+	Novice::DrawQuad(640, 355, 1280, 355, 640, 720, 1280, 720, kWidth_ * (backAnimationTimer / 7), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
+
 
 	//プレイヤーの描画
 	playerGirl_->Draw();
@@ -335,7 +388,7 @@ void PlayScene::CheckCollision()
 		for (uint32_t j = 0; j < mapChipField_->GetFallNum(); j++) {
 			if (fallAABB_[j].max.x >= blockBottom_[i].aabb_.max.x - 0.5f && fallAABB_[j].max.x <= blockBottom_[i].aabb_.max.x + 0.5f && !blockBottom_[i].isFall) {
 				blockBottom_[i].isFall = true;
- 				blockBottom_[i].velocity.x = (fallAABB_[j].min.x - blockBottom_[i].initialPosition.x + kBlockHeight_ / 2);
+				blockBottom_[i].velocity.x = (fallAABB_[j].min.x - blockBottom_[i].initialPosition.x + kBlockHeight_ / 2);
 				startBlockPosition = blockBottom_[i].initialPosition + blockBottom_[i].velocity;
 				endBlockPosition = { startBlockPosition.x, startBlockPosition.y - kBlockHeight_ };
 			}

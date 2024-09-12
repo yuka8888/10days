@@ -101,6 +101,10 @@ public:
 
 	bool IsGoal();
 
+	int GetFrontTreeScroll();
+
+	int GetBackTreeScroll();
+
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -183,6 +187,12 @@ private:
 
 	//スイッチが押されたか
 	bool isPressSwitch_ = false;
+
+	//スクロール
+	int frontTreeScroll_ = 0;
+	int oldFrontTreeScroll_ = 0;
+	int backTreeScroll_ = 0;
+	int oldBackTreeScroll_ = 0;
 
 	Block blockTop_[10];
 	Block blockBottom_[10];

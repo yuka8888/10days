@@ -196,6 +196,9 @@ void PlayerTop::Move()
 	isContactWall_ = false;
 	isMagicCircleTouch_ = false;
 
+	oldFrontTreeScroll_ = frontTreeScroll_;
+	oldBackTreeScroll_ = backTreeScroll_;
+
 	//当たり判定下
 	MapCollisionBottom();
 
@@ -241,20 +244,25 @@ void PlayerTop::Move()
 		else if (direction == Direction::kLeftJump) {
 			direction = Direction::kLeft;
 		}
+		
 	}
 
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
 		direction = Direction::kLeft;
 		velocity_.x = -2.0f;
-
+		//スクロール
+		frontTreeScroll_ -= 20;
+		backTreeScroll_ -= 1;
 		//当たり判定
 		MapCollisionLeft();
 	}
 	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
 		direction = Direction::kRight;
 		velocity_.x = 2.0f;
-
+		//スクロール
+		frontTreeScroll_ += 20;
+		backTreeScroll_ += 1;
 		//当たり判定
 		MapCollisionRight();
 	}
@@ -268,6 +276,8 @@ void PlayerTop::Move()
 		else if (direction == Direction::kLeft) {
 			direction = Direction::kLeftStand;
 		}
+		frontTreeScroll_ = oldFrontTreeScroll_;
+		backTreeScroll_ = oldBackTreeScroll_;
 	}
 
 	if (isGround_) {
@@ -881,6 +891,16 @@ Camera PlayerTop::GetCamera()
 bool PlayerTop::IsGoal()
 {
 	return isGoal_;
+}
+
+int PlayerTop::GetFrontTreeScroll()
+{
+	return frontTreeScroll_;
+}
+
+int PlayerTop::GetBackTreeScroll()
+{
+	return backTreeScroll_;
 }
 
 bool PlayerTop::HaveKey() {
