@@ -98,6 +98,13 @@ void PlayScene::Initialize()
 	//マップ生成
 	DrawMap();
 
+	playerGirl_->SetTopBlockNum(mapChipField_->GetBlockTopNum());
+	playerGirl_->SetBottomBlockNum(mapChipField_->GetBlockBottomNum());
+
+	//ブロックを共有
+	playerGirl_->SetBlockTop(blockTop_);
+	playerGirl_->SetBlockBottom(blockBottom_);
+
 	//マップチップの読み込み
 	playerGirl_->SetMapChipField(mapChipField_);
 	playerBoy_->SetMapChipField(mapChipField_);
@@ -111,6 +118,10 @@ void PlayScene::Update()
 	Novice::GetHitKeyStateAll(keys);
 
 	playerGirl_->SetCamera(cameraManager_->GetCamera());
+
+	//ブロックを共有
+	playerGirl_->SetBlockTop(blockTop_);
+	playerGirl_->SetBlockBottom(blockBottom_);
 
 	switch (phase) {
 		case Phase::kMovePlayerGirlTop:
@@ -424,10 +435,21 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kFall:
 					break;
+
 				case MapChipType::kMagicCircle:
-					//ブロックのaabbを計算
 
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+					break;
+
+				case MapChipType::kSwitch:
+
+					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					break;
+
+				case MapChipType::kWall:
+					//ブロックのaabbを計算
+
+					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
 					break;
 			}
 

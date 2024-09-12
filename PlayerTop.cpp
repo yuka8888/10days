@@ -304,16 +304,32 @@ void PlayerTop::MapCollisionTop()
 	//左上
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop] + Vector2{ 1.0f, 0.0f });
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isCollideCeiling_ = true;
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, positionNew[kLeftTop] + Vector2{ 1.0f, 0.0f })) {
+			translation_.y = blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isCollideCeiling_ = true;
+		}
 	}
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isCollideCeiling_ = true;
+
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, positionNew[kLeftTop] + Vector2{ 1.0f, 0.0f })) {
+			translation_.y = blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isCollideCeiling_ = true;
+		}
 	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isCollideCeiling_ = true;
+	//}
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isCollideCeiling_ = true;
+	//}
 
 	if (isKeyDraw_ == true) {
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -327,17 +343,33 @@ void PlayerTop::MapCollisionTop()
 
 	//右上
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop] + Vector2{ -1.0f, 0.0f });
+	
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, positionNew[kRightTop] + Vector2{ -1.0f, 0.0f })) {
+			translation_.y = blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isCollideCeiling_ = true;
+		}
+	}
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isCollideCeiling_ = true;
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, positionNew[kRightTop] + Vector2{ -1.0f, 0.0f })) {
+			translation_.y = blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isCollideCeiling_ = true;
+		}
 	}
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isCollideCeiling_ = true;
-	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isCollideCeiling_ = true;
+	//}
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y - mapChipManager_->GetBlockSize().y / 2.0f - kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isCollideCeiling_ = true;
+	//}
 
 	if (isKeyDraw_ == true) {
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -361,20 +393,36 @@ void PlayerTop::MapCollisionBottom()
 	for (uint32_t i = 0; i < positionNew.size(); ++i) {
 		positionNew[i] = CornerPosition(translation_ + velocity_, static_cast<Corner>(i));
 	}
-
+	
 	//左下
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f });
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isLanding_ = true;
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f })) {
+			translation_.y = blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isLanding_ = true;
+		}
 	}
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isLanding_ = true;
+
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f })) {
+			translation_.y = blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isLanding_ = true;
+		}
 	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isLanding_ = true;
+	//}
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isLanding_ = true;
+	//}
 
 	if (isKeyDraw_ == true) {
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -395,16 +443,32 @@ void PlayerTop::MapCollisionBottom()
 	//右下
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f });
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isLanding_ = true;
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f })) {
+			translation_.y = blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isLanding_ = true;
+		}
 	}
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
-		velocity_.y = 0.0f;
-		isLanding_ = true;
+	 //
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f })) {
+			translation_.y = blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+			velocity_.y = 0.0f;
+			isLanding_ = true;
+		}
 	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isLanding_ = true;
+	//}
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.y = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).y + mapChipManager_->GetBlockSize().y / 2.0f + kHeight_ / 2.0f;
+	//	velocity_.y = 0.0f;
+	//	isLanding_ = true;
+	//}
 
 	if (isKeyDraw_ == true) {
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -439,15 +503,29 @@ void PlayerTop::MapCollisionRight()
 	if (!isCollideCeiling_) {
 		//右上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
+		
+		for (uint32_t i = 0; i < blockTopNum_; i++) {
+			if (isCollision(blockTop_[i].aabb_, positionNew[kRightTop])) {
+				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
 
-		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		for (uint32_t i = 0; i < blockBottomNum_; i++) {
+			if (isCollision(blockBottom_[i].aabb_, positionNew[kRightTop])) {
+				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
-		if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
+
+		//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
+		//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
 
 		if (isKeyDraw_ == true) {
 			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -464,14 +542,28 @@ void PlayerTop::MapCollisionRight()
 	//右真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ + Vector2{ kWidth_ / 2.0f, 0.0f });
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, translation_ + velocity_ + Vector2{ kWidth_ / 2.0f, 0.0f })) {
+			translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, translation_ + velocity_ + Vector2{ kWidth_ / 2.0f, 0.0f })) {
+			translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+	//	velocity_.x = 0.0f;
+	//}
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+	//	velocity_.x = 0.0f;
+	//}
 
 	if (isKeyDraw_ == true) {
 		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -483,15 +575,29 @@ void PlayerTop::MapCollisionRight()
 	if (!isLanding_) {
 		//右下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
+		
+		for (uint32_t i = 0; i < blockTopNum_; i++) {
+			if (isCollision(blockTop_[i].aabb_, positionNew[kRightBottom])) {
+				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
 
-		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		for (uint32_t i = 0; i < blockBottomNum_; i++) {
+			if (isCollision(blockBottom_[i].aabb_, positionNew[kRightBottom])) {
+				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
-		if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
+
+		//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
+		//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
 
 		if (isKeyDraw_ == true) {
 			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -522,15 +628,29 @@ void PlayerTop::MapCollisionLeft()
 	if (!isCollideCeiling_) {
 		//左上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
+		
+		for (uint32_t i = 0; i < blockTopNum_; i++) {
+			if (isCollision(blockTop_[i].aabb_, positionNew[kLeftTop])) {
+				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
 
-		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		for (uint32_t i = 0; i < blockBottomNum_; i++) {
+			if (isCollision(blockBottom_[i].aabb_, positionNew[kLeftTop])) {
+				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
-		if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
+
+		//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
+		//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
 
 		if (isKeyDraw_ == true) {
 			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -547,29 +667,55 @@ void PlayerTop::MapCollisionLeft()
 	//左真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f });
 
-	if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		if (isCollision(blockTop_[i].aabb_, translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f })) {
+			translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
 
-	if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		if (isCollision(blockBottom_[i].aabb_, translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f })) {
+			translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
+
+	//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+	//	velocity_.x = 0.0f;
+	//}
+
+	//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+	//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+	//	velocity_.x = 0.0f;
+	//}
 
 	//ブロックが下にあったら当たり判定とらない
 	if (!isLanding_) {
 		//左下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
+		for (uint32_t i = 0; i < blockTopNum_; i++) {
+			if (isCollision(blockTop_[i].aabb_, positionNew[kLeftBottom])) {
+				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
 
-		if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		for (uint32_t i = 0; i < blockBottomNum_; i++) {
+			if (isCollision(blockBottom_[i].aabb_, positionNew[kLeftBottom])) {
+				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
-		if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
-		}
+		//if (MapChipType::kBlockTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
+		//if (MapChipType::kBlockBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+		//	translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+		//	velocity_.x = 0.0f;
+		//}
 		if (isKeyDraw_ == true) {
 			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 				haveKey_ = true;
@@ -640,6 +786,35 @@ void PlayerTop::ScrollMove()
 	if (translation_.x >= kWindowWidth / 2.0f) {
 		camera_.viewPortPosition.x = translation_.x - kWindowWidth;
 	}
+}
+
+void PlayerTop::SetBlockTop(Block* block)
+{
+	for (uint32_t i = 0; i < blockTopNum_; i++) {
+		blockTop_[i].initialPosition = block[i].initialPosition;
+		blockTop_[i].velocity = block[i].velocity;
+		blockTop_[i].aabb_ = block[i].aabb_;
+	}
+}
+
+void PlayerTop::SetBlockBottom(Block* block)
+{
+	for (uint32_t i = 0; i < blockBottomNum_; i++) {
+		blockBottom_[i].initialPosition = block[i].initialPosition;
+		blockBottom_[i].velocity = block[i].velocity;
+		blockBottom_[i].aabb_ = block[i].aabb_;
+	}
+
+}
+
+void PlayerTop::SetTopBlockNum(uint32_t blockNum)
+{
+	blockTopNum_ = blockNum;
+}
+
+void PlayerTop::SetBottomBlockNum(uint32_t blockNum)
+{
+	blockBottomNum_ = blockNum;
 }
 
 void PlayerTop::SetCamera(Camera camera)

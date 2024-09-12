@@ -12,7 +12,9 @@ enum class MapChipType {
 	kKey, //鍵
 	kGoal, //ゴール
 	kFall, //穴
-	kMagicCircle //上下入れ替えの魔法陣
+	kMagicCircle, //上下入れ替えの魔法陣
+	kWall, //壁
+	kSwitch, //スイッチ
 };
 
 enum Corner {
@@ -103,6 +105,8 @@ Matrix3x3 MakewvpVpMatrix(Matrix3x3 worldMatrix, Matrix3x3 cameraWorldMatrix, Ve
 Matrix3x3 MakevpVpMatrix(Matrix3x3 worldMatrix, Vertex vertex, Vector2 viewPortPosition, Vector2 viewPortSize);
 
 bool isCollision(const AABB& aabb1, const AABB& aabb2);
+
+bool isCollision(const AABB& aabb, const Vector2& position);
 
 float easeInCubic(float x);
 

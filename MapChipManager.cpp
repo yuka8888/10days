@@ -13,6 +13,8 @@ namespace {
 		{"5", MapChipType::kGoal},
 		{"6", MapChipType::kFall},
 		{"7", MapChipType::kMagicCircle},
+		{"8", MapChipType::kWall},
+		{"9", MapChipType::kSwitch},
 	};
 }
 

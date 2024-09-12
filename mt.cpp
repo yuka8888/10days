@@ -229,6 +229,15 @@ bool isCollision(const AABB& aabb1, const AABB& aabb2) {
 	return false;
 }
 
+bool isCollision(const AABB& aabb, const Vector2& position)
+{
+	if (position.x <= aabb.max.x && position.x >= aabb.min.x && position.y <= aabb.max.y && position.y >= aabb.min.y){
+		return true ;
+	}
+
+	return false;
+}
+
 //イージング
 float easeInCubic(float x) {
 	return x * x * x;

@@ -75,6 +75,14 @@ public:
 	
 	void ScrollMove();
 
+	void SetBlockTop(Block* block);
+
+	void SetBlockBottom(Block* block);
+
+	void SetTopBlockNum(uint32_t blockNum);
+
+	void SetBottomBlockNum(uint32_t blockNum);
+
 	bool HaveKey();
 
 	void IsKeyDraw(bool isKeyDraw);
@@ -166,6 +174,12 @@ private:
 
 	//天井に当たっているか
 	bool isCollideCeiling_ = false;
+
+	Block blockTop_[10];
+	Block blockBottom_[10];
+
+	uint32_t blockTopNum_;
+	uint32_t blockBottomNum_;
 	
 	MapChipType collisionBlockType_ = MapChipType::kBlank;
 
