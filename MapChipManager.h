@@ -43,6 +43,8 @@ public:
 
 	Vector2 GetBlockSize();
 
+	uint32_t GetWallNum();
+
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 
 	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
@@ -69,6 +71,9 @@ private:
 
 	//ブロックの個数
 	uint32_t kFallNum_ = 0;
+
+	//壁の個数
+	uint32_t kWallNum_ = 0;
 
 	MapChipData mapChipData_;
 

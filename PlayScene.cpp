@@ -54,6 +54,7 @@ void PlayScene::Initialize()
 	uint32_t k = 0;
 	uint32_t l = 0;
 	uint32_t m = 0;
+	uint32_t n = 0;
 
 	for (uint32_t i = 0; i < numBlockVirtical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizonal; j++) {
@@ -90,6 +91,18 @@ void PlayScene::Initialize()
 					fallAABB_[l].min = { j * kBlockWidth_ - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
 
 					l++;
+
+					break;
+
+				case MapChipType::kWallTop:
+					//かべのaabbを計算
+					wallAABB_[n].max = { j * kBlockWidth_ + kBlockWidth_ / 2, i * kBlockHeight_ + kBlockHeight_ / 2 };
+					wallAABB_[n].min = { j * kBlockWidth_ - kBlockWidth_ / 2, i * kBlockHeight_ - kBlockHeight_ / 2 };
+
+					n++;
+
+					break;
+
 			}
 
 		}
@@ -130,6 +143,10 @@ void PlayScene::Update()
 	playerGirl_->SetBlockTop(blockTop_);
 	playerGirl_->SetBlockBottom(blockBottom_);
 
+	playerGirl_->IsPressSwitch(false);
+	playerBoy_->IsPressSwitch(false);
+
+
 	switch (phase) {
 		case Phase::kMovePlayerGirlTop:
 
@@ -143,8 +160,14 @@ void PlayScene::Update()
 			Sound();
 
 			//プレイヤーの更新
-			playerGirl_->PlayerMovePhaseUpdate();
 			playerBoy_->PlayerStopPhaseUpdate();
+			//ボタンをとっているか共有
+			if (playerGirl_->IsPressSwitch() || playerBoy_->IsPressSwitch()) {
+				playerGirl_->IsPressSwitch(true);
+				playerBoy_->IsPressSwitch(true);
+			}
+
+			playerGirl_->PlayerMovePhaseUpdate();
 
 			//スクロール
 			for (int i = 0; i < 8; ++i)
@@ -165,8 +188,8 @@ void PlayScene::Update()
 				playerBoy_->SwapTopBottom();
 
 				//スクロールの値の共有
-				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
-				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
+				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
+				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBoyBottom;
@@ -188,6 +211,12 @@ void PlayScene::Update()
 
 			//プレイヤーの更新
 			playerGirl_->PlayerStopPhaseUpdate();
+			//ボタンをとっているか共有
+			if (playerGirl_->IsPressSwitch() || playerBoy_->IsPressSwitch()) {
+				playerGirl_->IsPressSwitch(true);
+				playerBoy_->IsPressSwitch(true);
+			}
+
 			playerBoy_->PlayerMovePhaseUpdate();
 
 			//スクロール
@@ -209,12 +238,12 @@ void PlayScene::Update()
 				playerBoy_->SwapTopBottom();
 
 				//スクロールの値の共有
-				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
-				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
+				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
+				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
 
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
-				phase = Phase::kMovePlayerGirlTop;
+				phase = Phase::kMovePlayerGirlBottom;
 			}
 
 			break;
@@ -239,8 +268,15 @@ void PlayScene::Update()
 			Sound();
 
 			//プレイヤーの更新
-			playerGirl_->PlayerMovePhaseUpdate();
 			playerBoy_->PlayerStopPhaseUpdate();
+
+			//ボタンをとっているか共有
+			if (playerGirl_->IsPressSwitch() || playerBoy_->IsPressSwitch()) {
+				playerGirl_->IsPressSwitch(true);
+				playerBoy_->IsPressSwitch(true);
+			}
+
+			playerGirl_->PlayerMovePhaseUpdate();
 
 			//フェーズを変える
 			//魔法陣に触れていたら上下の移動
@@ -282,8 +318,13 @@ void PlayScene::Update()
 
 
 			//プレイヤーの更新
-			playerBoy_->PlayerMovePhaseUpdate();
 			playerGirl_->PlayerStopPhaseUpdate();
+			//ボタンをとっているか共有
+			if (playerGirl_->IsPressSwitch() || playerBoy_->IsPressSwitch()) {
+				playerGirl_->IsPressSwitch(true);
+				playerBoy_->IsPressSwitch(true);
+			}
+			playerBoy_->PlayerMovePhaseUpdate();
 
 			//フェーズを変える
 			//魔法陣に触れていたら上下の移動
@@ -308,13 +349,10 @@ void PlayScene::Update()
 	//当たり判定をとる
 	CheckCollision();
 
-	//ボタンを押しているか共有
-
-	//鍵をとっているか共有
-	playerBoy_->HaveKey(playerGirl_->HaveKey());
-
-	if (playerGirl_->IsGoal() && playerBoy_->IsGoal()) {
-		isStageClear = true;
+	//鍵を持っているか共有
+	if (playerGirl_->HaveKey() || playerBoy_->HaveKey()) {
+		playerGirl_->HaveKey(true);
+		playerBoy_->HaveKey(true);
 	}
 
 	//プレイヤーを最終的に移動させる
@@ -368,6 +406,11 @@ void PlayScene::CheckCollision()
 {
 	isPreBlockAndPlayerBottomCollision = isBlockAndPlayerBottomCollision_;
 	isBlockAndPlayerBottomCollision_ = false;
+
+	playerGirl_->IsWallTopDraw(true);
+	playerBoy_->IsWallTopDraw(true);
+	isWallTopDraw_ = true;
+
 	for (uint32_t i = 0; i < mapChipField_->GetBlockTopNum(); i++) {
 		//下のプレイヤーとブロックの衝突判定
 		if (isCollision(playerBoy_->GetAABB(), blockTop_[i].aabb_) && (playerBoy_->GetDirection() == Direction::kRight || playerBoy_->GetDirection() == Direction::kRightStand) && !blockTop_[i].isFall) {
@@ -383,11 +426,30 @@ void PlayScene::CheckCollision()
 			//ブロックを移動させる
 			blockTop_[i].velocity.x = (playerBoy_->GetTranslation().x - blockTop_[i].initialPosition.x + kBlockWidth_ / 2 + playerBoy_->GetSize().x / 2);
 
-			//ブロックのaabbの計算しなおし
-			blockTop_[i].aabb_.max = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + kBlockHeight_ / 2 };
-			blockTop_[i].aabb_.min = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - kBlockHeight_ / 2 };
 
 		}
+
+		for (uint32_t j = 0; j < mapChipField_->GetWallNum(); j++) {
+			//ブロックと壁の当たり判定
+			if (isCollision(wallAABB_[j], blockTop_[i].aabb_)) {
+				if (!playerBoy_->IsPressSwitch() && playerBoy_->GetDirection() == Direction::kPushBlock ) {
+					blockTop_[i].velocity.x = wallAABB_->min.x - blockTop_[i].initialPosition.x - mapChipField_->GetBlockSize().x / 2.0f;
+					
+					//ブロックのaabbの計算しなおし
+					blockTop_[i].aabb_.max = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y + kBlockHeight_ / 2 };
+					blockTop_[i].aabb_.min = { blockTop_[i].initialPosition.x + blockTop_[i].velocity.x - kBlockWidth_ / 2, blockTop_[i].initialPosition.y + blockTop_[i].velocity.y - kBlockHeight_ / 2 };
+					
+					playerBoy_->SetTranslation({ blockTop_[i].aabb_.min.x - playerBoy_->GetSize().x / 2.0f, playerBoy_->GetTranslation().y });
+				}
+				else {
+					playerGirl_->IsWallTopDraw(false);
+					playerBoy_->IsWallTopDraw(false);
+					isWallTopDraw_ = false;
+				}
+			}
+
+		}
+
 	}
 
 	for (uint32_t i = 0; i < mapChipField_->GetBlockBottomNum(); i++) {
@@ -442,7 +504,7 @@ void PlayScene::CheckCollision()
 				playerGirl_->IsKeyDraw(isKeyDraw_);
 			}
 			//線形補間でブロック落下
-			blockBottom_[i].velocity.y = Lerp(startBlockPosition.y, endBlockPosition.y, easeInCubic(blockFallTimer));
+			blockBottom_[i].velocity.y = -1.0f * Lerp(startBlockPosition.y, endBlockPosition.y, easeInCubic(blockFallTimer));
 		}
 	}
 
@@ -536,8 +598,8 @@ void PlayScene::DrawMap()
 					blockBottom_[l].aabb_.max = { j * kBlockWidth_ + blockBottom_[l].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + blockBottom_[l].velocity.y + kBlockHeight_ / 2 };
 					blockBottom_[l].aabb_.min = { j * kBlockWidth_ + blockBottom_[l].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + blockBottom_[l].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + blockBottom_[l].velocity.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
-					Novice::DrawSprite((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + blockBottom_[l].velocity.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					Novice::DrawBox((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - blockBottom_[l].velocity.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					Novice::DrawSprite((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - blockBottom_[l].velocity.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					l++;
 
 					break;
@@ -579,10 +641,16 @@ void PlayScene::DrawMap()
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
 					break;
 
-				case MapChipType::kWall:
-					//ブロックのaabbを計算
+				case MapChipType::kWallTop:
+					if (!playerGirl_->IsPressSwitch() && !playerBoy_->IsPressSwitch() && isWallTopDraw_) {
+						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					}
+					break;
 
-					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+				case MapChipType::kWallBottom:
+					if (!playerGirl_->IsPressSwitch() && !playerBoy_->IsPressSwitch()) {
+						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					}
 					break;
 
 				case MapChipType::kSwitch:

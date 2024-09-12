@@ -13,7 +13,8 @@ enum class MapChipType {
 	kGoal, //ゴール
 	kFall, //穴
 	kMagicCircle, //上下入れ替えの魔法陣
-	kWall, //壁
+	kWallTop, //壁
+	kWallBottom, //壁
 	kSwitch, //スイッチ
 };
 

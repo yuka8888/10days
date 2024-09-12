@@ -82,6 +82,12 @@ private:
 	//落とし穴
 	AABB fallAABB_[10];
 
+	//壁
+	AABB wallAABB_[10];
+
+	//下の壁が描画されてるか
+	bool isWallTopDraw_ = true;
+
 	//ブロック落とす用のタイマー
 	float blockFallTimer = 0.0f;
 	//落下するときの初期位置

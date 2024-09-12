@@ -64,13 +64,22 @@ public:
 	void SetTranslation(Vector2 translation);
 
 	void HaveKey(bool haveKey);
+
 	bool HaveKey();
 
+	bool IsPressSwitch();
+
+	void IsPressSwitch(bool isPressSwitch);
+
 	bool IsGoal();
+
+	void IsKeyDraw(bool isKeyDraw);
 
 	bool IsMagicCircleTouch();
 
 	void SetFallBlockIndex(IndexSet index);
+
+	void IsWallTopDraw(bool isWallTopDraw);
 
 	//アニメーションタイマーを状態によって切り替える
 	void AnimationTimerChange();
@@ -125,6 +134,12 @@ private:
 
 	//鍵を持っているか
 	bool haveKey_ = false;
+
+	//下の壁が描画されてるか
+	bool isWallTopDraw_ = false;
+
+	//鍵が描画されたか
+	bool isKeyDraw_ = false;
 
 	//魔法陣に触れているか
 	bool isMagicCircleTouch_ = false;

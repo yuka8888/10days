@@ -89,11 +89,13 @@ public:
 
 	bool IsPressSwitch();
 
-	void IsPressSwitch(bool isPressSwitch_);
+	void IsPressSwitch(bool isPressSwitch);
 
 	void IsKeyDraw(bool isKeyDraw);
 
 	bool IsMagicCircleTouch();
+
+	void IsWallTopDraw(bool isWallTopDraw);
 
 	void SetCamera(Camera camera);
 
@@ -151,6 +153,9 @@ private:
 
 	//鍵が描画されたか
 	bool isKeyDraw_ = false;
+
+	//上の壁が描画されてるか
+	bool isWallTopDraw_ = false;
 
 	float kBottomGround_ = 56.0f;
 

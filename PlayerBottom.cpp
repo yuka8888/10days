@@ -23,7 +23,7 @@ void PlayerBottom::PlayerMovePhaseUpdate()
 	AnimationTimerChange();
 
 	isBottomPhase = true;
-	isTopPhase = false;;
+	isTopPhase = false;
 
 	if (!isGoal_) {
 		Move();
@@ -57,6 +57,9 @@ void PlayerBottom::PlayerStopPhaseUpdate()
 	isPushTwoBlocks_ = false;
 	animationTimer++;
 	AnimationTimerChange();
+
+	//当たり判定下
+	MapCollisionBottom();
 
 	//directionを待機に切り替え
 	if (direction == Direction::kLeft) {
@@ -149,6 +152,7 @@ void PlayerBottom::Move()
 	isPushTwoBlocks_ = false;
 	isPushBlock_ = false;
 	isMagicCircleTouch_ = false;
+
 
 	oldFrontTreeScroll_ = frontTreeScroll_;
 	oldBackTreeScroll_ = backTreeScroll_;
@@ -307,9 +311,24 @@ bool PlayerBottom::HaveKey()
 	return haveKey_;
 }
 
+bool PlayerBottom::IsPressSwitch()
+{
+	return isPressSwitch_;
+}
+
+void PlayerBottom::IsPressSwitch(bool isPressSwitch)
+{
+	isPressSwitch_ = isPressSwitch;
+}
+
 bool PlayerBottom::IsGoal()
 {
 	return isGoal_;
+}
+
+void PlayerBottom::IsKeyDraw(bool isKeyDraw)
+{
+	isKeyDraw_ = isKeyDraw;
 }
 
 bool PlayerBottom::IsMagicCircleTouch()
@@ -325,6 +344,11 @@ void PlayerBottom::SetFallBlockIndex(IndexSet index)
 
 		fallNo++;
 	}
+}
+
+void PlayerBottom::IsWallTopDraw(bool isWallTopDraw)
+{
+	isWallTopDraw_ = isWallTopDraw;
 }
 
 void PlayerBottom::AnimationTimerChange()
@@ -410,16 +434,18 @@ void PlayerBottom::MapCollisionBottom()
 	//左下
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 1.0f, 0.0f });
 
-	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey_ = true;
-	}
-
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		isGoal_ = true;
 	}
 
 	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		isPressSwitch_ = true;
+	}
+
+	if (isKeyDraw_ == true) {
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey_ = true;
+		}
 	}
 
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom] + Vector2{ 0.0f, -1.0f });
@@ -432,10 +458,6 @@ void PlayerBottom::MapCollisionBottom()
 	//右下
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ -1.0f, 0.0f });
 
-	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey_ = true;
-	}
-
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 		isGoal_ = true;
 	}
@@ -444,6 +466,11 @@ void PlayerBottom::MapCollisionBottom()
 		isPressSwitch_ = true;
 	}
 
+	if (isKeyDraw_ == true) {
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey_ = true;
+		}
+	}
 
 	indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom] + Vector2{ 0.0f, -1.0f });
 
@@ -469,8 +496,10 @@ void PlayerBottom::MapCollisionRight()
 		//右上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightTop]);
 
-		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey_ = true;
+		if (isKeyDraw_ == true) {
+			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				haveKey_ = true;
+			}
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -482,13 +511,24 @@ void PlayerBottom::MapCollisionRight()
 	//右真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ + Vector2{ kWidth_ / 2.0f, 0.0f });
 
-	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey_ = true;
+	if (isKeyDraw_ == true) {
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey_ = true;
+		}
 	}
 
-	if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-		velocity_.x = 0.0f;
+	if (!isPressSwitch_) {
+		if (MapChipType::kWallBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
+	}
+
+	if (!isPressSwitch_ && isWallTopDraw_) {
+		if (MapChipType::kWallTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+			velocity_.x = 0.0f;
+		}
 	}
 
 	if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -501,17 +541,27 @@ void PlayerBottom::MapCollisionRight()
 		//右下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kRightBottom]);
 
-		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey_ = true;
+		if (isKeyDraw_ == true) {
+			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				haveKey_ = true;
+			}
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			isGoal_ = true;
 		}
 
-		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		if (!isPressSwitch_) {
+			if (MapChipType::kWallBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
+		if (!isPressSwitch_ && isWallTopDraw_) {
+			if (MapChipType::kWallTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x - mapChipManager_->GetBlockSize().x / 2.0f - kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
 
 		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -553,8 +603,10 @@ void PlayerBottom::MapCollisionLeft()
 		//左上
 		IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftTop]);
 
-		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey_ = true;
+		if (isKeyDraw_ == true) {
+			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				haveKey_ = true;
+			}
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -566,8 +618,10 @@ void PlayerBottom::MapCollisionLeft()
 	//左真ん中
 	IndexSet indexSet = mapChipManager_->GetMapChipIndexSetByPosition(translation_ + velocity_ - Vector2{ kWidth_ / 2.0f, 0.0f });
 
-	if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-		haveKey_ = true;
+	if (isKeyDraw_ == true) {
+		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+			haveKey_ = true;
+		}
 	}
 
 	if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
@@ -581,17 +635,28 @@ void PlayerBottom::MapCollisionLeft()
 		//左下
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 
-		if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			haveKey_ = true;
+		if (isKeyDraw_ == true) {
+			if (MapChipType::kKey == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				haveKey_ = true;
+			}
 		}
 
 		if (MapChipType::kGoal == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
 			isGoal_ = true;
 		}
 
-		if (MapChipType::kWall == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
-			translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
-			velocity_.x = 0.0f;
+		if (!isPressSwitch_) {
+			if (MapChipType::kWallBottom == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
+		}
+
+		if (!isPressSwitch_ && isWallTopDraw_) {
+			if (MapChipType::kWallTop == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {
+				translation_.x = mapChipManager_->GetMapChipPositionByIndex(indexSet.xIndex, indexSet.yIndex).x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				velocity_.x = 0.0f;
+			}
 		}
 
 		if (MapChipType::kSwitch == mapChipManager_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex)) {

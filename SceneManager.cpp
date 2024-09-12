@@ -9,6 +9,7 @@ SceneManager::SceneManager()
 
 	//初期シーンの設定
 	currentSceneNo_ = kTitle;
+	sceneArr_[currentSceneNo_]->Initialize();
 }
 
 

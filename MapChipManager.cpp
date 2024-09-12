@@ -13,8 +13,9 @@ namespace {
 		{"5", MapChipType::kGoal},
 		{"6", MapChipType::kFall},
 		{"7", MapChipType::kMagicCircle},
-		{"8", MapChipType::kWall},
-		{"9", MapChipType::kSwitch},
+		{"8", MapChipType::kWallTop},
+		{"9", MapChipType::kWallBottom},
+		{"10", MapChipType::kSwitch},
 	};
 }
 
@@ -77,6 +78,11 @@ void MapChipManager::LoadMapChipCsv(const std::string& filePath) {
 				if (mapChipTable[word] == MapChipType::kFall) {
 					kFallNum_++;
 				}
+
+				//壁の個数を取得
+				if (mapChipTable[word] == MapChipType::kWallBottom) {
+					kWallNum_++;
+				}
 			}
 		}
 	}
@@ -117,6 +123,11 @@ uint32_t MapChipManager::GetFallNum()
 Vector2 MapChipManager::GetBlockSize()
 {
 	return {kBlockWidth_, kBlockHeight_};
+}
+
+uint32_t MapChipManager::GetWallNum()
+{
+	return kWallNum_;
 }
 
 MapChipType MapChipManager::GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex) {
