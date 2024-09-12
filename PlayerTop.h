@@ -150,7 +150,7 @@ private:
 	//歩き　右
 	int walkChangeRight = Novice::LoadTexture("./Resources./player_girl./player_walkChangeRight_girl.png");
 	//歩き　左
-	int walkChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_walkChangeRight_girl.png");
+	int walkChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_walkChangeLeft_girl.png");
 	//待機　右
 	int standingChangeRight = Novice::LoadTexture("./Resources./player_girl./player_StandingChangeRight_girl.png");
 	//待機　左

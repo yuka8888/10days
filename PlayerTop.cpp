@@ -18,6 +18,17 @@ void PlayerTop::PlayerStopPhaseUpdate()
 	velocity_.x = 0.0f;
 	animationTimer++;
 
+	if (isChanged_ == true) {
+		changeAnimationTimer++;
+	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
+	if (changeAnimationTimer >= changeAnimationTimerReset) {
+		changeAnimationTimer = 0;
+		isChanged_ = false;
+	}
+
 	//状態によってタイマーのリセット値を変える
 	AnimationTimerChange();
 
@@ -64,10 +75,14 @@ void PlayerTop::PlayerMovePhaseUpdate()
 	if (isChanged_ == true) {
 		changeAnimationTimer++;
 	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
 	if (changeAnimationTimer>= changeAnimationTimerReset) {
 		changeAnimationTimer = 0;
 		isChanged_ = false;
 	}
+	
 	//状態によってタイマーのリセット値を変える
 	AnimationTimerChange();
 
@@ -251,7 +266,7 @@ void PlayerTop::Move()
 
 	oldFrontTreeScroll_ = frontTreeScroll_;
 	oldBackTreeScroll_ = backTreeScroll_;
-
+	
 	//当たり判定下
 	MapCollisionBottom();
 

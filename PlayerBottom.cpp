@@ -24,11 +24,13 @@ void PlayerBottom::PlayerMovePhaseUpdate()
 	if (isChanged_ == true) {
 		changeAnimationTimer++;
 	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
 	if (changeAnimationTimer >= changeAnimationTimerReset) {
 		changeAnimationTimer = 0;
 		isChanged_ = false;
 	}
-
 	isBottomPhase = true;
 	isTopPhase = false;;
 
@@ -65,7 +67,16 @@ void PlayerBottom::PlayerStopPhaseUpdate()
 	animationTimer++;
 	AnimationTimerChange();
 
-	
+	if (isChanged_ == true) {
+		changeAnimationTimer++;
+	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
+	if (changeAnimationTimer >= changeAnimationTimerReset) {
+		changeAnimationTimer = 0;
+		isChanged_ = false;
+	}
 	//directionを待機に切り替え
 	if (direction == Direction::kLeft) {
 		direction = Direction::kLeftStand;
@@ -120,7 +131,7 @@ void PlayerBottom::Draw(Camera camera)
 					int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
 					int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
 					int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
-					(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kChangeHeight, standingChangeRight,
+					(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kChangeHeight, standingChangeRight,
 					WHITE);
 			}
 			else {
@@ -157,7 +168,7 @@ void PlayerBottom::Draw(Camera camera)
 					int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
 					int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
 					int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
-					(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kChangeHeight, standingChangeLeft,
+					(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kChangeHeight, standingChangeLeft,
 					WHITE);
 			}
 			else {

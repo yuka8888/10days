@@ -126,7 +126,7 @@ private:
 	//歩き　右
 	int walkChangeRight = Novice::LoadTexture("./Resources./player_boy./player_walkChangeRight_boy.png");
 	//歩き　左
-	int walkChangeLeft = Novice::LoadTexture("./Resources./player_boy./player_walkChangeRight_boy.png");
+	int walkChangeLeft = Novice::LoadTexture("./Resources./player_boy./player_walkChangeLeft_boy.png");
 	//待機　右
 	int standingChangeRight = Novice::LoadTexture("./Resources./player_boy./player_StandingChangeRight_boy.png");
 	//待機　左
