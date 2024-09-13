@@ -38,7 +38,11 @@ void TitleScene::Update()
 	{
 		frontLocalPos[i] = int(frontTreePos[i] + frontTreeScroll_);
 	}
-	if (Novice::CheckHitKey(DIK_SPACE)) {
+	if (Novice::CheckHitKey(DIK_SPACE) && !(fade_->GetStatus() == Fade::Status::FadeOut)) {
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
+	}
+
+	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {
 		sceneNo = kPlay;
 	}
 
