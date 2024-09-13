@@ -305,6 +305,10 @@ void PlayScene::Update()
 				phase = Phase::kMovePlayerBoyTop;
 				playerBoy_->SetIsChanged(true);
 				playerGirl_->SetIsChanged(false);
+
+				//スクロールの値の共有
+				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
+				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
 			}
 
 			break;
@@ -355,7 +359,10 @@ void PlayScene::Update()
 				phase = Phase::kMovePlayerGirlTop;
 				playerGirl_->SetIsChanged(true);
 				playerBoy_->SetIsChanged(false);
-				
+				//スクロールの値の共有
+				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
+				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
+
 			}
 
 			break;
@@ -425,6 +432,11 @@ void PlayScene::Draw()
 
 	//マップの描画
 	DrawMap();
+
+	//文字の描画
+	if (stageNo_ == 1) {
+		drawChar();
+	}
 
 }
 
@@ -693,4 +705,17 @@ void PlayScene::DrawMap()
 	}
 
 
+}
+
+void PlayScene::drawChar()
+{
+	if (Novice::CheckHitKey(DIK_A)) {
+		Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 32, 0, 32, 32, aTexture, WHITE);
+	}
+	else {
+		Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 0, 0, 32, 32, aTexture, WHITE);
+	}
+	Novice::DrawSprite(150, 100, wTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(200, 150, dTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	Novice::DrawSprite(200, 300, spaceTexture, 1.0f, 1.0f, 0.0f, WHITE);
 }

@@ -38,7 +38,6 @@ void PlayerBottom::PlayerMovePhaseUpdate()
 		Move();
 	}
 	else {
-		velocity_ = {};
 
 		if (direction == Direction::kRight) {
 

@@ -143,6 +143,12 @@ private:
 	int animationTimerReset = 60;
 	int backAnimationTimerReset = 28;
 
+	//文字のリソース
+	int aTexture = Novice::LoadTexture("./Resources./char./A.png");
+	int dTexture = Novice::LoadTexture("./Resources./char./D.png");
+	int wTexture = Novice::LoadTexture("./Resources./char./W.png");
+	int spaceTexture = Novice::LoadTexture("./Resources./char./space.png");
+
 	//音
 	//BGM
 	///鍵取得SE読み込み
@@ -175,6 +181,8 @@ private:
 	// キー入力結果を受け取る箱
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
+
+	void drawChar();
 
 	
 };

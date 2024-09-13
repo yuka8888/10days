@@ -89,7 +89,6 @@ void PlayerTop::PlayerMovePhaseUpdate()
 		Move();
 	}
 	else {
-		velocity_.x = 0.0f;
 
 		if (direction == Direction::kRight) {
 
