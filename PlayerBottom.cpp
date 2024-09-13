@@ -183,12 +183,23 @@ void PlayerBottom::Draw(Camera camera)
 		}
 		break;
 	case kPushBlock:
-		Novice::DrawQuad(int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y - kHeight_ / 2.0f),
-			int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y + kHeight_ / 2.0f),
-			int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y + kHeight_ / 2.0f),
-			(int)pushWidth * (animationTimer / 7), 0, (int)pushWidth, (int)kHeight_, pushBlock,
-			WHITE);
+		if (changeAnimationTimer > 0) {
+			Novice::DrawQuad(int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y - kPushChangeHeight / 2.0f)-kMinusHeight,
+				int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y - kPushChangeHeight / 2.0f) - kMinusHeight,
+				int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y + kPushChangeHeight / 2.0f) - kMinusHeight,
+				int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y + kPushChangeHeight / 2.0f) - kMinusHeight,
+				(int)pushWidth * (animationTimer / 7), 0, (int)pushWidth, (int)kPushChangeHeight, pushBlockChange,
+				WHITE);
+		}
+		else {
+			Novice::DrawQuad(int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y - kHeight_ / 2.0f),
+				int(screenPosition_.x - pushWidth / 2.0f) - 7, int(screenPosition_.y + kHeight_ / 2.0f),
+				int(screenPosition_.x + pushWidth / 2.0f) - 7, int(screenPosition_.y + kHeight_ / 2.0f),
+				(int)pushWidth * (animationTimer / 7), 0, (int)pushWidth, (int)kHeight_, pushBlock,
+				WHITE);
+		}
+		
 		break;
 
 	case kRightJump:

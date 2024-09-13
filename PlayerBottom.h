@@ -97,10 +97,13 @@ private:
 	Direction direction = Direction::kRightStand;
 	//幅
 	float kWidth_ = 32.0f;
-	float pushWidth = kWidth_ + 16;
+	float pushWidth = 48.0f;
 	//高さ
 	float kHeight_ = 64.0f;
 	float kChangeHeight = kHeight_ + 32;
+	float kPushChangeHeight = 80.0f;
+
+	int kMinusHeight = 8;
 	//フェーズが上の子か
 	bool isTopPhase;
 	//フェーズが下の子か
@@ -136,6 +139,8 @@ private:
 	int standingChangeRight = Novice::LoadTexture("./Resources./player_boy./player_StandingChangeRight_boy.png");
 	//待機　左
 	int standingChangeLeft = Novice::LoadTexture("./Resources./player_boy./player_StandingChangeLeft_boy.png");
+	//ブロック押す
+	int pushBlockChange = Novice::LoadTexture("./Resources./player_boy./player_PushChangeRight_boy.png");
 
 	bool isChanged_ = false;
 	//天井に当たっているか

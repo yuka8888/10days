@@ -123,7 +123,8 @@ private:
 	float kWidth_ = 32.0f;
 	//高さ
 	float kHeight_ = 64.0f;
-	float kChangeHeight = kHeight_ + 32;
+	float kChangeHeight = 80.0f;
+	int kMinusHeight = 8;
 	//アニメーションタイマー
 	int animationTimer = 0;
 	//アニメーションタイマーを0に戻す
@@ -156,7 +157,10 @@ private:
 	int standingChangeRight = Novice::LoadTexture("./Resources./player_girl./player_StandingChangeRight_girl.png");
 	//待機　左
 	int standingChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_StandingChangeLeft_girl.png");
-
+	//ジャンプ　右
+	int jumpChangeRight = Novice::LoadTexture("./Resources./player_girl./player_JumpChangeRight_girl.png");
+	//ジャンプ　左
+	int jumpChangeLeft = Novice::LoadTexture("./Resources./player_girl./player_JumpChangeLeft_girl.png");
 	bool isChanged_ = false;
 	//ゴールしたか
 	bool isGoal_ = false;
