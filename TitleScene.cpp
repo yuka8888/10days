@@ -45,7 +45,6 @@ void TitleScene::Update()
 	if ((fade_->GetStatus() == Fade::Status::FadeOut) && (fade_->IsFinished() == true)) {
 		sceneNo = kPlay;
 	}
-
 }
 
 void TitleScene::Draw()

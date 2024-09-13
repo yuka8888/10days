@@ -27,7 +27,6 @@ private:
 	TitleText* titleText = nullptr;
 	Fade* fade_ = nullptr;
 
-
 	//前の木
 	int frontTreeTexture = Novice::LoadTexture("./Resources./background./frontTree.png");
 	//奥の木
