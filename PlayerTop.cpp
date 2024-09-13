@@ -855,14 +855,14 @@ void PlayerTop::MapCollisionLeft()
 		indexSet = mapChipManager_->GetMapChipIndexSetByPosition(positionNew[kLeftBottom]);
 		for (uint32_t i = 0; i < blockTopNum_; i++) {
 			if (isCollision(blockTop_[i].aabb_, positionNew[kLeftBottom])) {
-				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				translation_.x = blockTop_[i].initialPosition.x + blockTop_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f + 1.0f;
 				velocity_.x = 0.0f;
 			}
 		}
 
 		for (uint32_t i = 0; i < blockBottomNum_; i++) {
 			if (isCollision(blockBottom_[i].aabb_, positionNew[kLeftBottom])) {
-				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f;
+				translation_.x = blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + mapChipManager_->GetBlockSize().x / 2.0f + kWidth_ / 2.0f + 1.0f;
 				velocity_.x = 0.0f;
 			}
 		}

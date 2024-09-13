@@ -26,8 +26,12 @@ void PlayScene::Initialize()
 	// マップチップ
 	mapChipField_ = new MapChipManager;
 
+	isKeyDraw_ = false;
+	isStageClear = false;
+
 	//ステージ読み込み
 	stageNo_++;
+
 	switch (stageNo_)
 	{
 		case 0:
@@ -38,13 +42,13 @@ void PlayScene::Initialize()
 			break;
 		case 2:
 			mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+			isKeyDraw_ = true;
 			break;
 		default:
 			break;
 	}
 
-	isKeyDraw_ = false;
-	isStageClear = false;
+
 
 	//ブロックの情報を入れる
 	// 要素数
@@ -362,6 +366,14 @@ void PlayScene::Update()
 	if (playerGirl_->HaveKey() || playerBoy_->HaveKey()) {
 		playerGirl_->HaveKey(true);
 		playerBoy_->HaveKey(true);
+	}
+
+	//playerが二人ともゴールしたか
+	if (playerGirl_->IsGoal() && playerBoy_->IsGoal()) {
+		isStageClear = true;
+		if (stageNo_ == 3) {
+			sceneNo = kClear;
+		}
 	}
 
 	//プレイヤーを最終的に移動させる
