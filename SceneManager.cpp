@@ -3,9 +3,9 @@
 SceneManager::SceneManager()
 {
 	//各シーンの配列
-	sceneArr_[kTitle] = std::make_unique<TitleScene>();
-	sceneArr_[kPlay] = std::make_unique<PlayScene>();
-	sceneArr_[kClear] = std::make_unique<ClearScene>();
+	sceneArr_[kTitle] = new TitleScene;
+	sceneArr_[kPlay] = new PlayScene;
+	sceneArr_[kClear] = new ClearScene;
 
 	//初期シーンの設定
 	currentSceneNo_ = kTitle;
@@ -25,6 +25,16 @@ int SceneManager::Run()
 
 	//シーン変更チェック
 	if (prevSceneNo_ != currentSceneNo_) {
+		delete sceneArr_[currentSceneNo_];
+		if (currentSceneNo_ == kTitle) {
+			sceneArr_[currentSceneNo_] = new TitleScene;
+		}
+		else if (currentSceneNo_ == kPlay) {
+			sceneArr_[currentSceneNo_] = new PlayScene;
+		}
+		else if (currentSceneNo_ == kClear) {
+			sceneArr_[currentSceneNo_] = new ClearScene;
+		}
 		sceneArr_[currentSceneNo_]->Initialize();
 	}
 

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <memory>
 #include "Iscene.h"
 #include "titleScene.h"
@@ -9,7 +9,7 @@ class SceneManager
 {
 private:
 	//シーンを保持するメンバ変数
-	std::unique_ptr<IScene> sceneArr_[3];
+	IScene* sceneArr_[3];
 
 	//度のシーンを呼び出すかを管理する変数
 	int currentSceneNo_; // 現在のシーン

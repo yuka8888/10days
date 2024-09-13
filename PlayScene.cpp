@@ -42,6 +42,8 @@ void PlayScene::Initialize()
 			break;
 		case 2:
 			mapChipField_->LoadMapChipCsv("Resources/map2.csv");
+			playerBoy_->IsKeyDraw(true);
+			playerGirl_->IsKeyDraw(true);
 			isKeyDraw_ = true;
 			break;
 		default:
@@ -370,9 +372,12 @@ void PlayScene::Update()
 
 	//playerが二人ともゴールしたか
 	if (playerGirl_->IsGoal() && playerBoy_->IsGoal()) {
-		isStageClear = true;
-		if (stageNo_ == 3) {
+		if (stageNo_ == 2) {
 			sceneNo = kClear;
+			stageNo_ = 0;
+		}
+		else {
+			isStageClear = true;
 		}
 	}
 
@@ -525,6 +530,7 @@ void PlayScene::CheckCollision()
 				playerBoy_->SetFallBlockIndex(mapChipField_->GetMapChipIndexSetByPosition(endBlockPosition));
 				isKeyDraw_ = true;
 				playerGirl_->IsKeyDraw(isKeyDraw_);
+				playerBoy_->IsKeyDraw(isKeyDraw_);
 			}
 			//線形補間でブロック落下
 			blockBottom_[i].velocity.y = -1.0f * Lerp(startBlockPosition.y, endBlockPosition.y, easeInCubic(blockFallTimer));
