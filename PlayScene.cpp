@@ -323,12 +323,6 @@ void PlayScene::Update()
 				isChange_ = false;
 			}
 
-			////アニメーションタイマーの更新
-			//animationTimer++;
-			////アニメーションタイマーのリセット
-			//if (animationTimer >= animationTimerReset) {
-			//	animationTimer = 0;
-			//}
 			//各種サウンド
 			Sound();
 
@@ -383,13 +377,7 @@ void PlayScene::Update()
 				isChange_ = false;
 			}
 
-			////アニメーションタイマーの更新
-			//animationTimer++;
-			////アニメーションタイマーのリセット
-			//if (animationTimer >= animationTimerReset) {
-			//	animationTimer = 0;
-			//}
-
+		
 			//各種サウンド
 			Sound();
 
@@ -502,7 +490,10 @@ void PlayScene::Draw()
 
 	//文字の描画
 	if (stageNo_ == 1) {
-		drawChar();
+		draw1stageChar();
+	}
+	if (stageNo_ == 2) {
+		draw2stageChar();
 	}
 
 	fade_->Draw();
@@ -579,16 +570,7 @@ void PlayScene::CheckCollision()
 			blockBottom_[i].aabb_.max = { blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x + kBlockWidth_ / 2, blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y + kBlockHeight_ / 2 };
 			blockBottom_[i].aabb_.min = { blockBottom_[i].initialPosition.x + blockBottom_[i].velocity.x - kBlockWidth_ / 2, blockBottom_[i].initialPosition.y + blockBottom_[i].velocity.y - kBlockHeight_ / 2 };
 
-			////ブロック同士の衝突判定
-			//for (uint32_t j = 0; j < mapChipField_->GetBlockNum(); j++) {
-			//	if (i == j) {
-			//	}
-			//	else if (isCollision(block[i].aabb_, block[j].aabb_)) {
-			//		block[i].velocity.x = block[j].initialPosition.x + block[j].velocity.x - kBlockWidth_ - block[i].initialPosition.x;
-			//		//プレイヤーの位置をブロックと合わせる
-			//		playerBoy_->PushTwoBlocks(block[i]);
-			//	}
-			//}
+			
 		}
 
 		//ブロックと落とし穴の当たり判定
@@ -703,7 +685,7 @@ void PlayScene::DrawMap()
 					blockTop_[k].aabb_.max = { j * kBlockWidth_ + blockTop_[k].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + blockTop_[k].velocity.y + kBlockHeight_ / 2 };
 					blockTop_[k].aabb_.min = { j * kBlockWidth_ + blockTop_[k].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + blockTop_[k].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + blockTop_[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + blockTop_[k].velocity.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+				
 					Novice::DrawSprite((int)(screenPosition_.x + blockTop_[k].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y + blockTop_[k].velocity.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					k++;
 
@@ -714,7 +696,7 @@ void PlayScene::DrawMap()
 					blockBottom_[l].aabb_.max = { j * kBlockWidth_ + blockBottom_[l].velocity.x + kBlockWidth_ / 2, i * kBlockHeight_ + blockBottom_[l].velocity.y + kBlockHeight_ / 2 };
 					blockBottom_[l].aabb_.min = { j * kBlockWidth_ + blockBottom_[l].velocity.x - kBlockWidth_ / 2, i * kBlockHeight_ + blockBottom_[l].velocity.y - kBlockHeight_ / 2 };
 
-					Novice::DrawBox((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - blockBottom_[l].velocity.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+					
 					Novice::DrawSprite((int)(screenPosition_.x + blockBottom_[l].velocity.x - kBlockWidth_ / 2), (int)(screenPosition_.y - blockBottom_[l].velocity.y - kBlockHeight_ / 2), blockTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					l++;
 
@@ -723,8 +705,8 @@ void PlayScene::DrawMap()
 				case MapChipType::kKey:
 					if (isKeyDraw_) {
 						if (!playerGirl_->HaveKey()) {
-							Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
-							Novice::DrawQuad((int)(screenPosition_.x - 16 / 2), (int)(screenPosition_.y - 16 / 2),
+							
+							Novice::DrawQuad(((int)screenPosition_.x - 16 / 2), ((int)screenPosition_.y - 16 / 2),
 								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y - 16 / 2.0f),
 								int(screenPosition_.x - 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
 								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
@@ -740,11 +722,11 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kGoal:
 					if (!playerGirl_->HaveKey()) {
-						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+						
 						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2) - 8, goalCloseTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					else {
-						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+						
 						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2) - 8, goalOpenTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					break;
@@ -754,7 +736,7 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kMagicCircle:
 
-					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+				
 					if (screenPosition_.y > kWindowHeight / 2) {
 						Novice::DrawQuad((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
 							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
@@ -775,19 +757,36 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kWallTop:
 					if (!playerGirl_->IsPressSwitch() && !playerBoy_->IsPressSwitch() && isWallTopDraw_) {
-						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+						
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), wallTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					break;
 
 				case MapChipType::kWallBottom:
 					if (!playerGirl_->IsPressSwitch() && !playerBoy_->IsPressSwitch()) {
-						Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLACK, kFillModeSolid);
+						
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), wallTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}
 					break;
 
 				case MapChipType::kSwitch:
 
-					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, BLUE, kFillModeSolid);
+					if (playerGirl_->IsPressSwitch() || playerBoy_->IsPressSwitch()) {
+						Novice::DrawQuad((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)kBlockWidth_, 0, (int)kBlockWidth_, (int)kBlockWidth_, swichTexture,
+							WHITE);
+					}
+					else {
+						Novice::DrawQuad((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							0, 0, (int)kBlockWidth_, (int)kBlockWidth_, swichTexture,
+							WHITE);
+					}
 					break;
 
 			}
@@ -798,15 +797,86 @@ void PlayScene::DrawMap()
 
 }
 
-void PlayScene::drawChar()
+void PlayScene::draw1stageChar()
 {
-	if (Novice::CheckHitKey(DIK_A)) {
-		Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 32, 0, 32, 32, aTexture, WHITE);
+	//上の操作方法
+	if (phase == Phase::kMovePlayerGirlTop) {
+		if (Novice::CheckHitKey(DIK_A)) {
+			Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 32, 0, 32, 32, aTexture, WHITE);
+		}
+		else {
+			Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 0, 0, 32, 32, aTexture, WHITE);
+		}
+
+		if (Novice::CheckHitKey(DIK_W)) {
+
+			Novice::DrawQuad(150, 100, 182, 100, 150, 132, 182, 132, 32, 0, 32, 32, wTexture, WHITE);
+		}
+		else {
+			Novice::DrawQuad(150, 100, 182, 100, 150, 132, 182, 132, 0, 0, 32, 32, wTexture, WHITE);
+
+		}
+		if (Novice::CheckHitKey(DIK_D)) {
+			Novice::DrawQuad(200, 150, 232, 150, 200, 182, 232, 182, 32, 0, 32, 32, dTexture, WHITE);
+		}
+		else {
+			Novice::DrawQuad(200, 150, 232, 150, 200, 182, 232, 182, 0, 0, 32, 32, dTexture, WHITE);
+		}
+
+		if (Novice::CheckHitKey(DIK_SPACE)) {
+			Novice::DrawQuad(200, 300, 280, 300, 200, 380, 280, 380, 80, 0, 80, 80, spaceTexture, WHITE);
+		}
+		else {
+
+			Novice::DrawQuad(200, 300, 280, 300, 200, 380, 280, 380, 0, 0, 80, 80, spaceTexture, WHITE);
+		}
+
+	}
+	//下の操作方法
+
+	if (phase == Phase::kMovePlayerBoyBottom) {
+		if (Novice::CheckHitKey(DIK_A)) {
+			Novice::DrawQuad(100, 550, 132, 550, 100, 582, 132, 582, 32, 0, 32, 32, aTexture, WHITE);
+		}
+		else {
+			Novice::DrawQuad(100, 550, 132, 550, 100, 582, 132, 582, 0, 0, 32, 32, aTexture, WHITE);
+		}
+		if (Novice::CheckHitKey(DIK_D)) {
+			Novice::DrawQuad(200, 550, 232, 550, 200, 582, 232, 582, 32, 0, 32, 32, dTexture, WHITE);
+		}
+		else {
+			Novice::DrawQuad(200, 550, 232, 550, 200, 582, 232, 582, 0, 0, 32, 32, dTexture, WHITE);
+		}
+
+		if (Novice::CheckHitKey(DIK_SPACE)) {
+			Novice::DrawQuad(200, 700, 280, 700, 200, 780, 280, 780, 80, 0, 80, 80, spaceTexture, WHITE);
+		}
+		else {
+
+			Novice::DrawQuad(200, 700, 280, 700, 200, 780, 280, 780, 0, 0, 80, 80, spaceTexture, WHITE);
+		}
+
+	}
+}
+
+void PlayScene::draw2stageChar()
+{
+
+	if (Novice::CheckHitKey(DIK_SPACE)) {
+		Novice::DrawQuad(220, 300, 300, 300, 220, 380, 300, 380, 80, 0, 80, 80, spaceTexture, WHITE);
+	}
+
+	else {
+
+		Novice::DrawQuad(220, 300, 300, 300, 220, 380, 300, 380, 0, 0, 80, 80, spaceTexture, WHITE);
+	}
+
+
+	if (Novice::CheckHitKey(DIK_SPACE)) {
+		Novice::DrawQuad(220, 700, 300, 700, 220, 780, 300, 780, 80, 0, 80, 80, spaceTexture, WHITE);
 	}
 	else {
-		Novice::DrawQuad(100, 150, 132, 150, 100, 182, 132, 182, 0, 0, 32, 32, aTexture, WHITE);
+
+		Novice::DrawQuad(220, 700, 300, 700, 220, 780, 300, 780, 0, 0, 80, 80, spaceTexture, WHITE);
 	}
-	Novice::DrawSprite(150, 100, wTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(200, 150, dTexture, 1.0f, 1.0f, 0.0f, WHITE);
-	Novice::DrawSprite(200, 300, spaceTexture, 1.0f, 1.0f, 0.0f, WHITE);
 }

@@ -140,8 +140,10 @@ private:
 	//扉(ゴール)テクスチャ
 	int goalCloseTexture = Novice::LoadTexture("./Resources./mapChip./door_close.png");
 	int goalOpenTexture = Novice::LoadTexture("./Resources./mapChip./door_open.png");
-
-
+	//壁テクスチャ
+	int wallTexture= Novice::LoadTexture("./Resources./mapChip./wall.png");
+	//スイッチテクスチャ
+	int swichTexture= Novice::LoadTexture("./Resources./mapChip./switch.png"); 
 	//上の地面テクスチャ
 	int topGroundTexture = Novice::LoadTexture("./Resources./mapChip./topBlock.png");
 	//下の地面テクスチャ
@@ -201,8 +203,8 @@ private:
 	char keys[256] = { 0 };
 	char preKeys[256] = { 0 };
 
-	void drawChar();
-
+	void draw1stageChar();
+	void draw2stageChar();
 	
 };
 

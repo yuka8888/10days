@@ -100,7 +100,7 @@ void PlayerBottom::Draw(Camera camera)
 
 	screenPosition_ = Transform(initialPosition_, wvpVpMatrix_);
 
-	Novice::DrawBox(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f), (int)kWidth_, (int)kHeight_, 0.0f, BLUE, kFillModeWireFrame);
+	
 	switch (direction)
 	{
 	case kRight:
