@@ -3,16 +3,23 @@
 TitleScene::TitleScene()
 {
 	delete titleText;
+	delete fade_;
 }
 
 void TitleScene::Initialize()
 {
 	titleText = new TitleText;
 	titleText->Initialize();
+
+	fade_ = new Fade();
+	fade_->Initialize();
 }
 
 void TitleScene::Update()
 {
+	fade_->Update();
+	titleText->Update();
+
 	//背景
 	underAnimationTimer_++;
 	if (underAnimationTimer_ >= underAnimationTimerReset_)
@@ -33,6 +40,7 @@ void TitleScene::Update()
 	if (Novice::CheckHitKey(DIK_SPACE)) {
 		sceneNo = kPlay;
 	}
+
 }
 
 void TitleScene::Draw()
@@ -64,4 +72,5 @@ void TitleScene::Draw()
 	Novice::DrawQuad(int(kBackPos_.x), int(kBackPos_.y), kMostPos_, int(kBackPos_.y), int(kBackPos_.x), kWidth_, kMostPos_, kWidth_, kWidth_ * (underAnimationTimer_ / 18), 0, kWidth_, kHeight_, bg_underTexture, WHITE);
 
 	titleText->Draw();
+	fade_->Draw();
 }

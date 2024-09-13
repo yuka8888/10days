@@ -1,6 +1,8 @@
 #pragma once
 #include "IScene.h"
 #include"TitleText.h"
+#include "Fade.h"
+#include <Input.h>
 
 class TitleScene :public IScene
 {
@@ -22,6 +24,8 @@ public:
 private:
 
 	TitleText* titleText = nullptr;
+	Fade* fade_ = nullptr;
+
 
 	//前の木
 	int frontTreeTexture = Novice::LoadTexture("./Resources./background./frontTree.png");
@@ -57,6 +61,9 @@ private:
 	int underAnimationTimer_ = 0;
 	//アニメーションタイマーを0に戻す
 	int underAnimationTimerReset_ = 72;
+
+	//終了フラグ
+	bool finished_ = false;
 };
 
 

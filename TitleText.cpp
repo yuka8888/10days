@@ -2,12 +2,14 @@
 
 void TitleText::Initialize()
 {
-	titleTextPos_ = { 200.0f,250.0f };
+	titleTextPos_ = { 200.0f,240.0f };
 	pressSpaceTextPos_ = { 370.0f,500.0f };
 }
 
 void TitleText::Update()
 {
+	moveTimer_ += 2.0f / 30.0f;
+	titleTextPos_.y += std::sinf(moveTimer_);
 }
 
 void TitleText::Draw()

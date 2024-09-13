@@ -1,6 +1,8 @@
 #pragma once
 #include"Novice.h"
 #include"Vector2.h"
+#include <cmath>
+#include <iostream>
 #include"mt.h"
 
 class TitleText
