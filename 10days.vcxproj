@@ -117,6 +117,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="IScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipManager.cpp" />
@@ -127,6 +128,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TitleText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />
@@ -158,6 +160,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="IScene.h" />
     <ClInclude Include="MapChipManager.h" />
     <ClInclude Include="mt.h" />
@@ -167,6 +170,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="test.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TitleText.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
