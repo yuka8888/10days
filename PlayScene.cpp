@@ -706,11 +706,11 @@ void PlayScene::DrawMap()
 					if (isKeyDraw_) {
 						if (!playerGirl_->HaveKey()) {
 							
-							Novice::DrawQuad(((int)screenPosition_.x - 16 / 2), ((int)screenPosition_.y - 16 / 2),
-								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y - 16 / 2.0f),
-								int(screenPosition_.x - 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
-								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
-								(int)16 * (keyAnimationTimer / 20), 0, (int)16, (int)16, keyTexture,
+							Novice::DrawQuad(((int)screenPosition_.x - 32 / 2), ((int)screenPosition_.y - 32 / 2),
+								int(screenPosition_.x + 32 / 2.0f), int(screenPosition_.y - 32 / 2.0f),
+								int(screenPosition_.x - 32 / 2.0f), int(screenPosition_.y + 32 / 2.0f),
+								int(screenPosition_.x + 32 / 2.0f), int(screenPosition_.y + 32 / 2.0f),
+								(int)32 * (keyAnimationTimer / 20), 0, (int)32, (int)32, keyTexture,
 								WHITE);
 						}
 						else {
