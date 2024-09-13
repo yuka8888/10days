@@ -136,13 +136,25 @@ private:
 	//扉(ゴール)テクスチャ
 	int goalCloseTexture = Novice::LoadTexture("./Resources./mapChip./door_close.png");
 	int goalOpenTexture = Novice::LoadTexture("./Resources./mapChip./door_open.png");
+
+	//上の地面テクスチャ
+	int topGroundTexture = Novice::LoadTexture("./Resources./mapChip./topBlock.png");
+	//下の地面テクスチャ
+	int underGroundTexture = Novice::LoadTexture("./Resources./mapChip./underBlock.png");
+	//上の魔法陣テクスチャ
+	int topMagicCircleTexture= Novice::LoadTexture("./Resources./mapChip./topMagicCircle.png");
+	//下の魔法陣テクスチャ
+	int underMagicCircleTexture = Novice::LoadTexture("./Resources./mapChip./underMagicCircle.png");
+
 	//アニメーションタイマー
-	int animationTimer = 0;
+	int keyAnimationTimer = 0;
+	int magicCircleAnimationTimer = 0;
 	int backAnimationTimer = 0;
 	//アニメーションタイマーを0に戻す
-	int animationTimerReset = 60;
+	int keyAnimationTimerReset = 60;
+	int magicCircleAnimationTimerReset = 30;
 	int backAnimationTimerReset = 28;
-
+	bool isChange_ = false;
 	//音
 	//BGM
 	///鍵取得SE読み込み
