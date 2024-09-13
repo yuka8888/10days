@@ -18,7 +18,16 @@ void PlayerTop::PlayerStopPhaseUpdate()
 	isPressSwitch_ = false;
 	velocity_.x = 0.0f;
 	animationTimer++;
-
+	if (isChanged_ == true) {
+		changeAnimationTimer++;
+	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
+	if (changeAnimationTimer >= changeAnimationTimerReset) {
+		changeAnimationTimer = 0;
+		isChanged_ = false;
+	}
 	//状態によってタイマーのリセット値を変える
 	AnimationTimerChange();
 
@@ -64,6 +73,17 @@ void PlayerTop::PlayerMovePhaseUpdate()
 	animationTimer++;
 	//状態によってタイマーのリセット値を変える
 	AnimationTimerChange();
+	if (isChanged_ == true) {
+		changeAnimationTimer++;
+	}
+	else if (isChanged_ == false) {
+		changeAnimationTimer = 0;
+	}
+	if (changeAnimationTimer >= changeAnimationTimerReset) {
+		changeAnimationTimer = 0;
+		isChanged_ = false;
+	}
+
 
 	if (!isGoal_) {
 		Move();
@@ -126,8 +146,17 @@ void PlayerTop::Draw()
 
 	switch (direction)
 	{
-		case kRight:
+	case kRight:
 
+		if (changeAnimationTimer > 0) {
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kChangeHeight, walkChangeRight,
+				WHITE);
+		}
+		else {
 			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
@@ -135,51 +164,88 @@ void PlayerTop::Draw()
 				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkRight,
 				WHITE);
 
-			break;
-		case kRightStand:
+		}
+
+		break;
+	case kRightStand:
+		if (changeAnimationTimer > 0) {
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kChangeHeight, standingChangeRight,
+				WHITE);
+		}
+		else {
 			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingRight,
 				WHITE);
-			break;
-		case kLeft:
+		}
 
+		break;
+	case kLeft:
+
+		if (changeAnimationTimer > 0) {
+
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kChangeHeight, walkChangeLeft,
+				WHITE);
+		}
+		else {
 			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, walkLeft,
 				WHITE);
+		}
 
-			break;
-		case kLeftStand:
+
+		break;
+	case kLeftStand:
+		if (changeAnimationTimer > 0) {
+
+			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kChangeHeight / 2.0f),
+				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kChangeHeight / 2.0f),
+				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kChangeHeight, standingChangeLeft,
+				WHITE);
+		}
+		else {
 			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
 				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
 				(int)kWidth_ * (animationTimer / 30), 0, (int)kWidth_, (int)kHeight_, standingLeft,
 				WHITE);
-			break;
-		case kRightJump:
-			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpRight,
-				WHITE);
-			break;
-		case kLeftJump:
-			Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
-				int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-				int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
-				(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpLeft,
-				WHITE);
-			break;
-		default:
-			break;
+		}
+
+		break;
+	case kRightJump:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpRight,
+			WHITE);
+		break;
+	case kLeftJump:
+		Novice::DrawQuad(int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y - kHeight_ / 2.0f),
+			int(screenPosition_.x - kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			int(screenPosition_.x + kWidth_ / 2.0f), int(screenPosition_.y + kHeight_ / 2.0f),
+			(int)kWidth_ * (animationTimer / 7), 0, (int)kWidth_, (int)kHeight_, jumpLeft,
+			WHITE);
+		break;
+	default:
+		break;
 	}
 #ifdef _DEBUG
 	ImGui::DragFloat2("PlayerGirl.Translation", &translation_.x, 0.01f);
@@ -960,6 +1026,11 @@ void PlayerTop::SetFrontTreeScroll(float frontTreeScroll)
 void PlayerTop::SetBackTreeScroll(float backTreeScroll)
 {
 	backTreeScroll_ = backTreeScroll;
+}
+
+void PlayerTop::SetIsChanged(bool isChanged)
+{
+	isChanged_ = isChanged;
 }
 
 bool PlayerTop::HaveKey() {

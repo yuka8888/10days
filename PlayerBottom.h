@@ -91,7 +91,7 @@ public:
 	void SetFrontTreeScroll(float frontTreeScroll);
 
 	void SetBackTreeScroll(float backTreeScroll);
-
+	void SetIsChanged(bool isChanged);
 private:
 	//向いている方向
 	Direction direction = Direction::kRightStand;
@@ -100,7 +100,7 @@ private:
 	float pushWidth = kWidth_ + 16;
 	//高さ
 	float kHeight_ = 64.0f;
-
+	float kChangeHeight = kHeight_ + 32;
 	//フェーズが上の子か
 	bool isTopPhase;
 	//フェーズが下の子か
@@ -110,6 +110,10 @@ private:
 	int animationTimer = 0;
 	//アニメーションタイマーを0に戻す
 	int animationTimerReset = 0;
+	//操作キャラ変更アニメーションタイマー
+	int changeAnimationTimer = 0;
+	//操作キャラ変更アニメーションタイマーのリセット
+	int changeAnimationTimerReset = 120;
 	//プレイヤーの画像
 	//歩き　右
 	int walkRight = Novice::LoadTexture("./Resources./player_boy./player_walkRight_boy.png");
@@ -123,6 +127,17 @@ private:
 	//ブロック押す
 	int pushBlock = Novice::LoadTexture("./Resources./player_boy./player_PushRight_boy.png");
 
+	//操作キャラ変更後
+	//歩き　右
+	int walkChangeRight = Novice::LoadTexture("./Resources./player_boy./player_walkChangeRight_boy.png");
+	//歩き　左
+	int walkChangeLeft = Novice::LoadTexture("./Resources./player_boy./player_walkChangeLeft_boy.png");
+	//待機　右
+	int standingChangeRight = Novice::LoadTexture("./Resources./player_boy./player_StandingChangeRight_boy.png");
+	//待機　左
+	int standingChangeLeft = Novice::LoadTexture("./Resources./player_boy./player_StandingChangeLeft_boy.png");
+
+	bool isChanged_ = false;
 	//天井に当たっているか
 	bool isCollideCeiling_ = false;
 	

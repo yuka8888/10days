@@ -193,6 +193,8 @@ void PlayScene::Update()
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBoyBottom;
+				playerBoy_->SetIsChanged(true);
+				playerGirl_->SetIsChanged(false);
 			}
 
 
@@ -244,6 +246,8 @@ void PlayScene::Update()
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerGirlBottom;
+				playerGirl_->SetIsChanged(true);
+				playerBoy_->SetIsChanged(false);
 			}
 
 			break;
@@ -293,6 +297,8 @@ void PlayScene::Update()
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerBoyTop;
+				playerBoy_->SetIsChanged(true);
+				playerGirl_->SetIsChanged(false);
 			}
 
 			break;
@@ -341,6 +347,9 @@ void PlayScene::Update()
 			}
 			else if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) {
 				phase = Phase::kMovePlayerGirlTop;
+				playerGirl_->SetIsChanged(true);
+				playerBoy_->SetIsChanged(false);
+				
 			}
 
 			break;
