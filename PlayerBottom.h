@@ -1,7 +1,6 @@
 #pragma once
 #include "mt.h"
 #include "Novice.h"
-#include "imgui.h"
 #include "algorithm"
 
 class MapChipManager;
