@@ -157,10 +157,18 @@ void PlayScene::Update()
 		case Phase::kMovePlayerGirlTop:
 
 			//アニメーションタイマーの更新
-			animationTimer++;
+			keyAnimationTimer++;
 			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
+			if (keyAnimationTimer >= keyAnimationTimerReset) {
+				keyAnimationTimer = 0;
+			}
+			if (isChange_ == true) {
+				//魔法陣のアニメーションタイマー
+				magicCircleAnimationTimer++;
+			}
+			if (magicCircleAnimationTimer >= magicCircleAnimationTimerReset) {
+				magicCircleAnimationTimer = 0;
+				isChange_ = false;
 			}
 			//各種サウンド
 			Sound();
@@ -189,6 +197,7 @@ void PlayScene::Update()
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
 				phase = Phase::kMovePlayerGirlBottom;
+				isChange_ = true;
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
@@ -209,10 +218,18 @@ void PlayScene::Update()
 		case Phase::kMovePlayerBoyTop:
 
 			//アニメーションタイマーの更新
-			animationTimer++;
+			keyAnimationTimer++;
 			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
+			if (keyAnimationTimer >= keyAnimationTimerReset) {
+				keyAnimationTimer = 0;
+			}
+			if (isChange_ == true) {
+				//魔法陣のアニメーションタイマー
+				magicCircleAnimationTimer++;
+			}
+			if (magicCircleAnimationTimer >= magicCircleAnimationTimerReset) {
+				magicCircleAnimationTimer = 0;
+				isChange_ = false;
 			}
 			//各種サウンド
 			Sound();
@@ -241,6 +258,7 @@ void PlayScene::Update()
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
 				phase = Phase::kMovePlayerBoyBottom;
+				isChange_ = true;
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
@@ -262,10 +280,18 @@ void PlayScene::Update()
 
 
 			//アニメーションタイマーの更新
-			animationTimer++;
+			keyAnimationTimer++;
 			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
+			if (keyAnimationTimer >= keyAnimationTimerReset) {
+				keyAnimationTimer = 0;
+			}
+			if (isChange_ == true) {
+				//魔法陣のアニメーションタイマー
+				magicCircleAnimationTimer++;
+			}
+			if (magicCircleAnimationTimer >= magicCircleAnimationTimerReset) {
+				magicCircleAnimationTimer = 0;
+				isChange_ = false;
 			}
 
 			////アニメーションタイマーの更新
@@ -292,6 +318,7 @@ void PlayScene::Update()
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
 				phase = Phase::kMovePlayerGirlTop;
+				isChange_ = true;
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
@@ -316,10 +343,18 @@ void PlayScene::Update()
 		case Phase::kMovePlayerBoyBottom:
 
 			//アニメーションタイマーの更新
-			animationTimer++;
+			keyAnimationTimer++;
 			//アニメーションタイマーのリセット
-			if (animationTimer >= animationTimerReset) {
-				animationTimer = 0;
+			if (keyAnimationTimer >= keyAnimationTimerReset) {
+				keyAnimationTimer = 0;
+			}
+			if (isChange_ == true) {
+				//魔法陣のアニメーションタイマー
+				magicCircleAnimationTimer++;
+			}
+			if (magicCircleAnimationTimer >= magicCircleAnimationTimerReset) {
+				magicCircleAnimationTimer = 0;
+				isChange_ = false;
 			}
 
 			////アニメーションタイマーの更新
@@ -346,6 +381,7 @@ void PlayScene::Update()
 			//魔法陣に触れていたら上下の移動
 			if (keys[DIK_SPACE] && !preKeys[DIK_SPACE] && playerGirl_->IsMagicCircleTouch() && playerBoy_->IsMagicCircleTouch()) {
 				phase = Phase::kMovePlayerBoyTop;
+				isChange_ = true;
 				//座標入れ替え
 				playerGirl_->SwapTopBottom();
 				playerBoy_->SwapTopBottom();
@@ -621,6 +657,13 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kGround_:
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
+					
+					if (screenPosition_.y > kWindowHeight / 2) {
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), underGroundTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					}
+					else {
+						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), topGroundTexture, 1.0f, 1.0f, 0.0f, WHITE);
+					}
 					break;
 
 				case MapChipType::kBlockTop:
@@ -653,7 +696,7 @@ void PlayScene::DrawMap()
 								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y - 16 / 2.0f),
 								int(screenPosition_.x - 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
 								int(screenPosition_.x + 16 / 2.0f), int(screenPosition_.y + 16 / 2.0f),
-								(int)16 * (animationTimer / 20), 0, (int)16, (int)16, keyTexture,
+								(int)16 * (keyAnimationTimer / 20), 0, (int)16, (int)16, keyTexture,
 								WHITE);
 						}
 						else {
@@ -680,6 +723,22 @@ void PlayScene::DrawMap()
 				case MapChipType::kMagicCircle:
 
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, RED, kFillModeSolid);
+					if (screenPosition_.y > kWindowHeight / 2) {
+						Novice::DrawQuad((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)kBlockWidth_ * (magicCircleAnimationTimer / 10), 0, (int)kBlockWidth_, (int)kBlockWidth_, underMagicCircleTexture,
+							WHITE);
+					}
+					else {
+						Novice::DrawQuad((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockHeight_ / 2),
+							(int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)(screenPosition_.x + kBlockWidth_ / 2), (int)(screenPosition_.y + kBlockHeight_ / 2),
+							(int)kBlockWidth_ * (magicCircleAnimationTimer / 10), 0, (int)kBlockWidth_, (int)kBlockWidth_, topMagicCircleTexture,
+							WHITE);
+					}
 					break;
 
 				case MapChipType::kWallTop:
