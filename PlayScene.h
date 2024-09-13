@@ -5,6 +5,8 @@
 #include "PlayerTop.h"
 #include "PlayerBottom.h"
 #include "MapChipManager.h"
+#include "Fade.h"
+
 
 class PlayScene :public IScene
 {
@@ -40,6 +42,8 @@ private:
 
 	//現在のステージ
 	uint32_t stageNo_ = 0;
+
+	Fade* fade_ = nullptr;
 
 	//現在のフェーズ
 	Phase phase = Phase::kMovePlayerGirlTop;

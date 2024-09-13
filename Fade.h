@@ -13,7 +13,9 @@ public:
 		FadeOut, // フェードアウト中
 	};
 	// 色
-	Vector4 color_ = { 1, 1, 1, 1 };
+	unsigned int color = 0x0000000;
+
+	unsigned int transparency;
 
 	Vector2 size_ = { 100.0f, 100.0f };
 
@@ -29,10 +31,6 @@ public:
 
 	bool IsFinished() const;
 
-	void SetColor(const Vector4& color) { color_ = color; };
-
-	const Vector4& GetColor() const { return color_; }
-
 	void SetSize(const Vector2& size);
 
 	const Vector2& GetSize() const { return size_; }
@@ -42,8 +40,6 @@ public:
 private:
 
 	int fadeTexture = Novice::LoadTexture("./Resources./Title./fade.png");
-
-	Fade* fadeTexture_ = nullptr;
 
 	Status status_ = Status::None;
 

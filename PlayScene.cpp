@@ -2,6 +2,8 @@
 
 PlayScene::PlayScene()
 {
+	delete fade_;
+
 }
 
 PlayScene::~PlayScene()
@@ -9,15 +11,26 @@ PlayScene::~PlayScene()
 	delete playerGirl_;
 	delete playerBoy_;
 	delete cameraManager_;
+	delete mapChipField_;
 }
 
 void PlayScene::Initialize()
 {
+	delete playerGirl_;
+	delete playerBoy_;
+	delete cameraManager_;
+	delete mapChipField_;
+
 	//プレイヤーの初期化
 	playerGirl_ = new PlayerTop;
 	playerGirl_->Initialize();
 	playerBoy_ = new PlayerBottom;
 	playerBoy_->Initialize();
+
+	//フェード
+	fade_ = new Fade;
+
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
 	//カメラの初期化
 	cameraManager_ = new CameraManager;
@@ -31,6 +44,20 @@ void PlayScene::Initialize()
 
 	//ステージ読み込み
 	stageNo_++;
+
+	//ブロック
+	for (int i = 0; i < 10; i++) {
+
+	blockTop_[i] = {};
+	blockBottom_[i] = {};
+
+	//落とし穴
+	fallAABB_[i] = {};
+
+	//壁
+	wallAABB_[i] = {};
+
+	}
 
 	switch (stageNo_)
 	{
@@ -135,6 +162,8 @@ void PlayScene::Update()
 	// キー入力を受け取る
 	memcpy(preKeys, keys, 256);
 	Novice::GetHitKeyStateAll(keys);
+
+	fade_->Update();
 
 	playerGirl_->SetCamera(cameraManager_->GetCamera());
 
@@ -333,9 +362,6 @@ void PlayScene::Update()
 				playerBoy_->SetIsChanged(true);
 				playerGirl_->SetIsChanged(false);
 
-				//スクロールの値の共有
-				playerBoy_->SetFrontTreeScroll(playerGirl_->GetFrontTreeScroll());
-				playerBoy_->SetBackTreeScroll(playerGirl_->GetBackTreeScroll());
 			}
 
 			break;
@@ -395,13 +421,15 @@ void PlayScene::Update()
 				phase = Phase::kMovePlayerGirlTop;
 				playerGirl_->SetIsChanged(true);
 				playerBoy_->SetIsChanged(false);
-				//スクロールの値の共有
-				playerGirl_->SetFrontTreeScroll(playerBoy_->GetFrontTreeScroll());
-				playerGirl_->SetBackTreeScroll(playerBoy_->GetBackTreeScroll());
 
 			}
 
 			break;
+	}
+
+	if (keys[DIK_R] && !preKeys[DIK_R]) {
+		stageNo_--;
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
 	}
 
 	//当たり判定をとる
@@ -414,7 +442,7 @@ void PlayScene::Update()
 	}
 
 	//playerが二人ともゴールしたか
-	if (playerGirl_->IsGoal() && playerBoy_->IsGoal()) {
+	if (fade_->GetStatus() == Fade::Status::FadeOut && fade_->IsFinished()) {
 		if (stageNo_ == 2) {
 			sceneNo = kClear;
 			stageNo_ = 0;
@@ -422,6 +450,9 @@ void PlayScene::Update()
 		else {
 			isStageClear = true;
 		}
+	}
+	else if (playerGirl_->IsGoal() && playerBoy_->IsGoal() && fade_->IsFinished()) {
+		fade_->Start(Fade::Status::FadeOut, 1.0f);
 	}
 
 	//プレイヤーを最終的に移動させる
@@ -474,6 +505,7 @@ void PlayScene::Draw()
 		drawChar();
 	}
 
+	fade_->Draw();
 }
 
 void PlayScene::CheckCollision()
@@ -657,7 +689,7 @@ void PlayScene::DrawMap()
 
 				case MapChipType::kGround_:
 					Novice::DrawBox((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), (int)kBlockWidth_, (int)kBlockHeight_, 0.0f, GREEN, kFillModeSolid);
-					
+
 					if (screenPosition_.y > kWindowHeight / 2) {
 						Novice::DrawSprite((int)(screenPosition_.x - kBlockWidth_ / 2), (int)(screenPosition_.y - kBlockWidth_ / 2), underGroundTexture, 1.0f, 1.0f, 0.0f, WHITE);
 					}

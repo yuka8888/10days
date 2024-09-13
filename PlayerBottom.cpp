@@ -240,13 +240,15 @@ void PlayerBottom::Move()
 
 	//移動処理
 	if (Novice::CheckHitKey(DIK_A) || Novice::CheckHitKey(DIK_LEFTARROW)) {
-		direction = Direction::kLeft;
-		velocity_.x = -2.0f;
-		//スクロール
-		frontTreeScroll_ += 0.2f;
-		backTreeScroll_ += 0.05f;
+		if (translation_.x - kWidth_ / 2.0f >= 0) {
+			direction = Direction::kLeft;
+			velocity_.x = -2.0f;
+			//スクロール
+			frontTreeScroll_ += 0.2f;
+			backTreeScroll_ += 0.05f;
 
-		MapCollisionLeft();
+			MapCollisionLeft();
+		}
 	}
 	else if (Novice::CheckHitKey(DIK_D) || Novice::CheckHitKey(DIK_RIGHTARROW)) {
 		direction = Direction::kRight;

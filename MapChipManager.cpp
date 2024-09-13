@@ -167,3 +167,4 @@ IndexSet MapChipManager::GetMapChipIndexSetByPosition(const Vector2& position) {
 	indexSet.yIndex = uint32_t(yIndex);
 	return indexSet;
 }
+

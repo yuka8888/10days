@@ -1,10 +1,6 @@
 #include "Fade.h"
 
 void Fade::Initialize() {
-
-	fadeTexture_ = new Fade;
-	fadeTexture_->SetSize({ kWindowWidth, kWindowHeight });
-	fadeTexture_->SetColor({ 0, 0, 0, 1 });
 }
 
 void Fade::Update() {
@@ -21,8 +17,9 @@ void Fade::Update() {
 				counter_ = duration_;
 			}
 			// 0.0fから1.0fの間で、経過時間がフェード継続時間に近づくほどアルファ地を大きくする
-			fadeTexture_->SetColor(Vector4(0, 0, 0, std::clamp((duration_ - counter_) / duration_, 0.0f, 1.0f)));
+			transparency = int(std::clamp((duration_ - counter_) / duration_, 0.0f, 1.0f) * 256.0f);
 
+			color = transparency;
 			break;
 		case Status::FadeOut:
 			// 1フレーム文の秒数をカウントアップ
@@ -33,7 +30,9 @@ void Fade::Update() {
 				counter_ = duration_;
 			}
 			// 0.0fから1.0fの間で、経過時間がフェード継続時間に近づくほどアルファ地を大きくする
-			fadeTexture_->SetColor(Vector4(0, 0, 0, std::clamp(counter_ / duration_, 0.0f, 1.0f)));
+			transparency = int(std::clamp(counter_ / duration_, 0.0f, 1.0f) * 255.0f);
+
+			color = transparency;
 
 			break;
 	}
@@ -43,13 +42,19 @@ void Fade::Draw() {
 	if (status_ == Status::None) {
 		return;
 	}
-	fadeTexture_->Draw();
+	Novice::DrawSprite(0, 0, fadeTexture, 1.0f, 1.0f, 0.0f, color);
 }
 
 void Fade::Start(Status status, float duration) {
 	status_ = status;
 	duration_ = duration;
 	counter_ = 0.0f;
+	if (status_ == Status::FadeIn) {
+		color = 0x000000FF;
+	}
+	else if (status_ == Status::FadeOut) {
+		color = 0x00000000;
+	}
 }
 
 void Fade::Stop() { status_ = Status::None; }
