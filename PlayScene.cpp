@@ -861,7 +861,8 @@ void PlayScene::draw1stageChar()
 
 void PlayScene::draw2stageChar()
 {
-
+	Novice::DrawSprite(50, 50, resetTexture, 1.0f, 1.0f, 0.0f, WHITE);
+	
 	if (Novice::CheckHitKey(DIK_SPACE)) {
 		Novice::DrawQuad(220, 300, 300, 300, 220, 380, 300, 380, 80, 0, 80, 80, spaceTexture, WHITE);
 	}

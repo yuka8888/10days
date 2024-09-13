@@ -169,7 +169,7 @@ private:
 	int dTexture = Novice::LoadTexture("./Resources./char./D.png");
 	int wTexture = Novice::LoadTexture("./Resources./char./W.png");
 	int spaceTexture = Novice::LoadTexture("./Resources./char./space.png");
-
+	int resetTexture= Novice::LoadTexture("./Resources./char./reset.png");
 	//音
 	//BGM
 	///鍵取得SE読み込み
